@@ -1,0 +1,56 @@
+---
+const PROJECTS = [
+ 	{
+ 		title: 'Multiplayer Card Game',
+ 		description: 'Unity project simulating a card game with Unity NetCode Multiplayer.',
+ 		link: '/project_01',
+        github: '#',
+        image: 'src/assets/background.svg',
+        tags: ['Unity','C#','VS Community']
+ 	},
+    {
+ 		title: 'Multiplayer Card Game',
+ 		description: 'Unity project simulating a card game with Unity NetCode Multiplayer.',
+ 		link: '#',
+        github: '#',
+        image: 'src/assets/background.svg',
+        tags: ['Unity','C#','VS Community']
+ 	},
+ 	{
+ 		title: 'Project Three',
+ 		description: 'Description for project three.',
+ 		link: '#',
+        github: '#',
+        image: 'src/assets/background.svg',
+        tags: ['Astro','Tailwind CSS','HTML']
+ 	},
+    {
+ 		title: 'Project Fourth',
+ 		description: 'Description for project fourth.',
+ 		link: '#',
+        github: '#',
+        image: 'src/assets/background.svg',
+        tags: ['Unreal Engine 5','C++','Blueprints']
+ 	}
+ ];
+---
+<section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    {PROJECTS.map((project) => (
+        <article class="border rounded-lg overflow-hidden bg-neutral-900/40 p-0">
+            <img src={`/${project.image}`} alt={project.title} class="w-full h-48 object-cover" />
+            <div class="p-4">
+                <h3 class="text-xl font-semibold mb-2">{project.title}</h3>
+                <p class="text-sm opacity-80 mb-2">{project.description}</p>
+                <ul class="flex flex-wrap gap-2">
+                    {project.tags.map((tag) => (
+                        <li class="text-xs px-2 py-1 bg-neutral-800 rounded">{tag}</li>
+                    ))}
+                </ul>
+                <a href={project.link} class="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-white text-black text-sm rounded-md 
+                    shadow hover:opacity-90">View Project</a>
+            </div>
+        </article>
+    ))}
+</section>
+
+<!-- class="inline-block text-sm text-indigo-400 hover:underline mb-3" -->

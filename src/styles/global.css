@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+@keyframes infinite-scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-100%); }
+}
+
+.animate-infinite-scroll {
+    animation: infinite-scroll 25s linear infinite;
+}
+.skill-item {
+    transition: all 0.3s ease;
+}
+.skill-item:hover {
+    transform: translateY(-4px) scale(1.05);
+    filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.6));
+}

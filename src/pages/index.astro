@@ -1,11 +1,159 @@
 ---
-import Welcome from '../components/Welcome.astro';
+// Component Imports
 import Layout from '../layouts/Layout.astro';
+import Socials from '../components/Socials.astro';
+import Experience from '../components/Experience.astro';
+import SectionContainer from '../components/SectionContainer.astro';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+// Icon Imports
+import GitHub from '../icons/GitHub.astro';
+import LinkedIn from '../icons/LinkedIn.astro';
+import Gmail from '../icons/Gmail.astro';
+import Projects from '../components/Projects.astro';
+import HTML5 from '../icons/HTML5.astro';
+import CPlusPlus from '../icons/CPlusPlus.astro';
+import Godot from '../icons/Godot.astro';
+import UnrealEngine from '../icons/UnrealEngine.astro';
+import AstroIcon from '../icons/AstroIcon.astro';
+import CSharp from '../icons/CSharp.astro';
+import CSS from '../icons/CSS.astro';
+import Unity from '../icons/Unity.astro';
+import Tailwind from '../icons/Tailwind.astro';
+import HorizontalScroll from '../components/HorizontalScroll.astro';
+import ScrollItem from '../components/ScrollItem.astro';
 ---
 
-<Layout>
-	<Welcome />
+<Layout 
+	title="Jose Veiga - Unity Developer" 
+	description="Unity Developer Portfolio">
+	<main class="">
+	<SectionContainer class="py-10 lg:w-full md:h-[740px] lg:h-[960px] relative z-0">
+		<video
+		class="absolute inset-0 w-full h-full object-cover"
+		src="/videos/Movie_002.webm"
+		autoplay
+		muted
+		loop
+		playsinline
+		fetch-priority="high"
+		></video>
+		<!-- 🌫 Gradient Fade Overlay -->
+  		<div class="absolute inset-0 bg-linear-to-t from-black/80 via-black/40 to-transparent"></div>
+		<!-- ✨ Foreground Content -->
+		<div class="relative flex flex-col justify-center items-center text-center h-full text-white px-6 py-20 md:py-0">
+			<h1 class="text-4xl lg:text-6xl mb-4">Jose Veiga</h1>
+			<h2 class="text-4xl lg:text-6xl font-bold mb-4 text-sky-400">Unity Developer</h2>
+			<p class="max-w-2xl text-lg opacity-90 text-pretty">
+				Explore my Unity projects, guides, and detailed development notes — all in one place
+			</p>
+			<a href="/guides" class="mt-4 items-center gap-2 px-6 py-2 bg-white text-black text-sm rounded-md 
+				shadow hover:opacity-90">Explore</a>
+
+			<div class="mt-40">
+				<h2 class="text-2xl font-bold">Technical Skills</h2>
+				<!-- Component: Logo Scroll Animation -->
+				<HorizontalScroll>
+					<ScrollItem>
+						<HTML5 class="size-6"/>
+						<span>HTML5</span>
+					</ScrollItem>
+					<ScrollItem>
+						<CSS class="size-6"/>
+						<span>CSS</span>
+					</ScrollItem>
+					<ScrollItem>
+						<Tailwind class="size-6"/>
+						<span>Tailwind</span>
+					</ScrollItem>
+					<ScrollItem>
+						<AstroIcon class="size-6"/>
+						<span>Astro</span>
+					</ScrollItem>
+					<ScrollItem>
+						<Unity class="size-6"/>
+						<span>Unity</span>
+					</ScrollItem>
+					<ScrollItem>
+						<UnrealEngine class="size-6"/>
+						<span>Unreal</span>
+					</ScrollItem>
+					<ScrollItem>
+						<Godot class="size-6"/>
+						<span>Godot</span>
+					</ScrollItem>
+					<!-- <ScrollItem>
+						<CPlusPlus class="size-6"/>
+						<span>C++</span>
+					</ScrollItem>
+					<ScrollItem>
+						<CSharp class="size-6"/>
+						<span>C#</span>
+					</ScrollItem> -->
+				</HorizontalScroll>
+			</div>
+		</div>
+		</SectionContainer>
+
+		<SectionContainer class="py-20" id="about">
+			<h1 class="text-white md:text-3xl text-3xl font-bold pb-4 lg:pb-6">
+				About me
+			</h1>
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-10 justify-items-center md:justify-items-stretch">
+				<img 
+					src="img/profile_photo.webp" 
+					alt="Profile Photo" 
+					class="size-42 lg:size-64 object-cover rounded-full mx-auto md:mx-0"
+				/>
+				<div class="text-center md:text-left">
+					<h2 class="text-white text-2xl font-bold pb-2">	
+						Jose Veiga
+					</h2>
+					<p class="mt-2 text-[18px] opacity-80 max-w-[740px] text-pretty">
+						+5 years of experience. Experience on different companies
+						developing games and interactive applications, while applying
+						agile methodologies. Proficient in C# programming, Unity engine, 
+						and game design principles.
+					</p>
+					<nav class="flex gap-2 mt-8 text-wrap justify-center md:justify-start">
+						<!-- GitHub -->
+						<Socials href="https://github.com/joseveigac">
+							<GitHub class="size-4 lg:size-6"/>
+							<span>GitHub</span>
+						</Socials>
+						<!-- LinkedIn -->
+						<Socials href="https://www.linkedin.com/in/joseveigac/">
+							<LinkedIn class="size-4 lg:size-6"/>
+							<span>LinkedIn</span>
+						</Socials>
+						<!-- Gmail -->
+						<Socials href="mailto:jveigacaminos@gmail.com">
+							<Gmail class="size-4 lg:size-6"/>
+							<span>Gmail</span>
+						</Socials>
+					</nav>
+				</div>
+			</div>
+		</SectionContainer>
+
+		<SectionContainer id="projects" class="py-10">
+			<h2 class="text-white text-3xl font-bold pb-12">
+				Projects
+			</h2>
+			<Projects />
+		</SectionContainer>
+
+		<SectionContainer class="py-30" id="experience">
+			<h2 class="text-white text-3xl font-bold pb-12">
+				Experience
+			</h2>
+			<Experience />
+		</SectionContainer>
+	</main>
 </Layout>
+
+<style is:global>
+@keyframes mergeFade {
+	from { opacity: 0 }
+	to   { opacity: 1 }
+}
+</style>
