@@ -1,0 +1,177 @@
+---
+// src/pages/resources/[slug].astro
+import { getCollection, type CollectionEntry } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+	const resources = await getCollection('resources');
+	return resources.map((resource) => ({
+		params: { slug: resource.slug },
+		props: resource,
+	}));
+}
+
+type Props = CollectionEntry<'resources'>;
+const resource = Astro.props;
+const { Content, headings } = await resource.render();
+
+const difficultyColors: Record<string, string> = {
+	'Beginner': 'bg-emerald-500',
+	'Intermediate': 'bg-amber-500',
+	'Advanced': 'bg-rose-500'
+};
+
+// Agrupar headings por sección (h2) con sus subsecciones (h3)
+const groupedHeadings = headings.reduce((acc: any[], heading) => {
+	if (heading.depth === 2) {
+		acc.push({ ...heading, children: [] });
+	} else if (heading.depth === 3 && acc.length > 0) {
+		acc[acc.length - 1].children.push(heading);
+	}
+	return acc;
+}, []);
+---
+
+<Layout title={`${resource.data.title} - Jose Veiga`} description={resource.data.description}>
+	<!-- Hero Image (sin nada encima) -->
+	<div class="w-full h-64 md:h-96">
+		<img 
+			src={resource.data.image} 
+			alt={resource.data.title} 
+			class="w-full h-full object-cover"
+		/>
+	</div>
+
+	<div class="max-w-7xl mx-auto px-4 py-10">
+		<div class="grid grid-cols-1 lg:grid-cols-4 gap-10">
+			
+			<!-- Contenido principal -->
+			<article class="lg:col-span-3">
+				<header class="mb-10">
+					<!-- Título -->
+					<h1 class="text-3xl md:text-4xl font-bold text-white mb-6">{resource.data.title}</h1>
+					
+					<!-- Info box -->
+					<div class="bg-neutral-900/60 border border-neutral-700/50 rounded-xl p-6 space-y-4">
+						<!-- Badges -->
+						<div class="flex flex-wrap gap-2">
+							<span class="text-xs px-3 py-1 bg-sky-500 text-white rounded-full font-medium">
+								{resource.data.category}
+							</span>
+							<span class={`text-xs px-3 py-1 text-white rounded-full font-medium ${difficultyColors[resource.data.difficulty]}`}>
+								{resource.data.difficulty}
+							</span>
+						</div>
+
+						<!-- Meta grid -->
+						<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+							<!-- Date -->
+							<div class="flex items-center gap-2">
+								<svg class="size-4 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+								</svg>
+								<span class="text-neutral-400">{resource.data.date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
+							</div>
+
+							<!-- Read time -->
+							<div class="flex items-center gap-2">
+								<svg class="size-4 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+								</svg>
+								<span class="text-neutral-400">{resource.data.readTime} min read</span>
+							</div>
+
+							<!-- Prerequisites -->
+							{resource.data.prerequisites && resource.data.prerequisites.length > 0 && (
+								<div class="flex items-start gap-2 sm:col-span-2">
+									<svg class="size-4 text-neutral-500 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+									</svg>
+									<div>
+										<span class="text-neutral-300 font-medium">Prerequisites: </span>
+										<span class="text-neutral-400">{resource.data.prerequisites.join(', ')}</span>
+									</div>
+								</div>
+							)}
+
+							<!-- Version -->
+							{resource.data.version && (
+								<div class="flex items-center gap-2">
+									<svg class="size-4 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
+									</svg>
+									<span class="text-neutral-400">{resource.data.version}</span>
+								</div>
+							)}
+						</div>
+
+						<!-- Tags -->
+						<div class="flex flex-wrap gap-2 pt-2 border-t border-neutral-700/50">
+							{resource.data.tags.map((tag: string) => (
+								<span class="text-xs px-2.5 py-1 bg-neutral-800 rounded-md text-neutral-300">{tag}</span>
+							))}
+						</div>
+					</div>
+				</header>
+				
+                <!-- Contenido del markdown -->
+                <div class="resource-content">
+                    <Content />
+                </div>
+			</article>
+
+			<!-- Sidebar - Table of Contents -->
+			<aside class="hidden lg:block">
+				<nav class="sticky top-24 bg-neutral-900/40 border border-neutral-700/50 rounded-xl p-5">
+					<h3 class="text-white font-semibold mb-4 text-sm uppercase tracking-wide">Sections</h3>
+					<ul class="space-y-1 text-sm">
+						{groupedHeadings.map((heading: any) => (
+							<li>
+								{heading.children.length > 0 ? (
+									<details class="group">
+										<summary class="flex items-center justify-between cursor-pointer text-neutral-400 hover:text-sky-400 transition-colors py-1.5 list-none">
+											<a href={`#${heading.slug}`} class="flex-1">{heading.text}</a>
+											<svg class="size-4 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+												<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+											</svg>
+										</summary>
+										<ul class="ml-4 mt-1 space-y-1 border-l border-neutral-700/50 pl-3">
+											{heading.children.map((child: any) => (
+												<li>
+													<a 
+														href={`#${child.slug}`} 
+														class="text-neutral-500 hover:text-sky-400 transition-colors block py-1"
+													>
+														{child.text}
+													</a>
+												</li>
+											))}
+										</ul>
+									</details>
+								) : (
+									<a 
+										href={`#${heading.slug}`} 
+										class="text-neutral-400 hover:text-sky-400 transition-colors block py-1.5"
+									>
+										{heading.text}
+									</a>
+								)}
+							</li>
+						))}
+					</ul>
+				</nav>
+			</aside>
+
+		</div>
+
+		<!-- Back link -->
+		<div class="mt-16 pt-8 border-t border-neutral-800">
+			<a href="/resources" class="inline-flex items-center gap-2 text-neutral-400 hover:text-white transition-colors">
+				<svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+				</svg>
+				Back to Resources
+			</a>
+		</div>
+	</div>
+</Layout>

@@ -1,12 +1,20 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import SectionContainer from '../components/SectionContainer.astro';
+import GuidesContainer from '../components/GuidesContainer.astro';
 ---
 
 <Layout title="Guides" description="Guides description">
     <main class="px-4">
         <div class="bg-black/40 items-center justify-center flex flex-col gap-6 py-20">
 
-            <h1>Guides Page</h1>
+            <SectionContainer id="projects" class="py-10 lg:w-full mx-auto px-16">
+                <h2 class="text-white text-3xl font-bold pb-12">
+                    Guides
+                </h2>
+                <GuidesContainer />
+            </SectionContainer>
+
             <a href="/" class="inline-flex items-center gap-2 px-4 py-2 bg-white text-black rounded-md 
             shadow hover:opacity-90">
                 Back to Home

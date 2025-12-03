@@ -4,6 +4,7 @@ import Layout from '../layouts/Layout.astro';
 import Socials from '../components/Socials.astro';
 import Experience from '../components/Experience.astro';
 import SectionContainer from '../components/SectionContainer.astro';
+import Button from '../components/Button.astro';
 
 // Icon Imports
 import GitHub from '../icons/GitHub.astro';
@@ -11,23 +12,22 @@ import LinkedIn from '../icons/LinkedIn.astro';
 import Gmail from '../icons/Gmail.astro';
 import Projects from '../components/Projects.astro';
 import HTML5 from '../icons/HTML5.astro';
-import CPlusPlus from '../icons/CPlusPlus.astro';
 import Godot from '../icons/Godot.astro';
 import UnrealEngine from '../icons/UnrealEngine.astro';
 import AstroIcon from '../icons/AstroIcon.astro';
-import CSharp from '../icons/CSharp.astro';
 import CSS from '../icons/CSS.astro';
 import Unity from '../icons/Unity.astro';
 import Tailwind from '../icons/Tailwind.astro';
 import HorizontalScroll from '../components/HorizontalScroll.astro';
 import ScrollItem from '../components/ScrollItem.astro';
+import CV from '../icons/CV.astro';
 ---
 
 <Layout 
 	title="Jose Veiga - Unity Developer" 
 	description="Unity Developer Portfolio">
 	<main class="">
-	<SectionContainer class="py-10 lg:w-full md:h-[740px] lg:h-[960px] relative z-0">
+	<SectionContainer class="py-10 lg:w-full md:h-[740px] lg:h-[960px]">
 		<video
 		class="absolute inset-0 w-full h-full object-cover"
 		src="/videos/Movie_002.webm"
@@ -46,8 +46,16 @@ import ScrollItem from '../components/ScrollItem.astro';
 			<p class="max-w-2xl text-lg opacity-90 text-pretty">
 				Explore my Unity projects, guides, and detailed development notes — all in one place
 			</p>
-			<a href="/guides" class="mt-4 items-center gap-2 px-6 py-2 bg-white text-black text-sm rounded-md 
-				shadow hover:opacity-90">Explore</a>
+			<!-- <a href="/guides" class="mt-12 items-center gap-2 px-12 py-2 bg-white text-black text-sm rounded-md 
+				shadow hover:opacity-90">Explore</a> -->
+
+			<div class="mt-16 animate-bounce">
+				<a href="#about" class="text-white/60 hover:text-white transition-colors">
+					<svg class="size-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+					</svg>
+				</a>
+			</div>
 
 			<div class="mt-40">
 				<h2 class="text-2xl font-bold">Technical Skills</h2>
@@ -95,12 +103,13 @@ import ScrollItem from '../components/ScrollItem.astro';
 		</SectionContainer>
 
 		<SectionContainer class="py-20" id="about">
-			<h1 class="text-white md:text-3xl text-3xl font-bold pb-4 lg:pb-6">
-				About me
-			</h1>
+			<div class="mb-12">
+				<h2 class="text-white text-3xl md:text-3xl font-bold">About Me</h2>
+				<div class="w-full h-1 bg-sky-400 mt-4"></div>
+			</div>
 			<div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-10 justify-items-center md:justify-items-stretch">
 				<img 
-					src="img/profile_photo.webp" 
+					src="img/profile_pic.webp" 
 					alt="Profile Photo" 
 					class="size-42 lg:size-64 object-cover rounded-full mx-auto md:mx-0"
 				/>
@@ -109,45 +118,74 @@ import ScrollItem from '../components/ScrollItem.astro';
 						Jose Veiga
 					</h2>
 					<p class="mt-2 text-[18px] opacity-80 max-w-[740px] text-pretty">
-						+5 years of experience. Experience on different companies
+						<span class="text-sky-400 opacity-100">+5 years of experience</span>. 
+						Experience on different companies
 						developing games and interactive applications, while applying
 						agile methodologies. Proficient in C# programming, Unity engine, 
 						and game design principles.
 					</p>
-					<nav class="flex gap-2 mt-8 text-wrap justify-center md:justify-start">
-						<!-- GitHub -->
-						<Socials href="https://github.com/joseveigac">
-							<GitHub class="size-4 lg:size-6"/>
-							<span>GitHub</span>
-						</Socials>
-						<!-- LinkedIn -->
-						<Socials href="https://www.linkedin.com/in/joseveigac/">
-							<LinkedIn class="size-4 lg:size-6"/>
-							<span>LinkedIn</span>
-						</Socials>
-						<!-- Gmail -->
-						<Socials href="mailto:jveigacaminos@gmail.com">
-							<Gmail class="size-4 lg:size-6"/>
-							<span>Gmail</span>
-						</Socials>
-					</nav>
 				</div>
 			</div>
 		</SectionContainer>
 
 		<SectionContainer id="projects" class="py-10">
-			<h2 class="text-white text-3xl font-bold pb-12">
-				Projects
-			</h2>
+			<div class="mb-12">
+				<h2 class="text-white text-3xl md:text-3xl font-bold">Professional Projects</h2>
+				<div class="w-full h-1 bg-sky-400 mt-4"></div>
+			</div>
 			<Projects />
 		</SectionContainer>
 
 		<SectionContainer class="py-30" id="experience">
-			<h2 class="text-white text-3xl font-bold pb-12">
-				Experience
-			</h2>
+			<div class="mb-12">
+				<h2 class="text-white text-3xl md:text-3xl font-bold">Experience</h2>
+				<div class="w-full h-1 bg-sky-400 mt-4"></div>
+			</div>
 			<Experience />
 		</SectionContainer>
+		
+		<SectionContainer class="py-16" id="contact">
+			<div class="mb-12">
+				<h2 class="text-white text-3xl md:text-3xl font-bold">Contact</h2>
+				<div class="w-full h-1 bg-sky-400 mt-4"></div>
+			</div>
+			
+			<div class="max-w-3xl">
+				<div class="relative overflow-hidden rounded-2xl bg-neutral-900/40 border border-neutral-700/50 p-10 md:p-14">
+					<!-- Decorative blur sutil -->
+					<div class="absolute top-0 right-0 w-64 h-64 bg-sky-500/5 rounded-full blur-3xl"></div>
+					<div class="absolute bottom-0 left-0 w-48 h-48 bg-sky-500/5 rounded-full blur-3xl"></div>
+					
+					<div class="relative text-center">
+						<h3 class="text-white text-2xl md:text-3xl font-bold mb-4">
+							Let's Build Something
+						</h3>
+						<p class="text-neutral-400 mb-8 max-w-md mx-auto">
+							Looking for a Unity developer? I'm available for freelance and full-time opportunities.
+						</p>
+						
+						<Button href="mailto:jveigacaminos@gmail.com" variant="primary" size="lg">
+							<Gmail class="size-5"/>
+							Get in Touch
+						</Button>
+						
+						<!-- Secondary links -->
+						<nav class="flex justify-center gap-6 mt-8">
+							<a href="https://github.com/joseveigac" class="text-neutral-400 hover:text-white hover:scale-120 transition-all">
+								<GitHub class="size-6"/>
+							</a>
+							<a href="https://www.linkedin.com/in/joseveigac/" class="text-neutral-400 hover:text-white hover:scale-120 transition-all">
+								<LinkedIn class="size-6"/>
+							</a>
+							<a href="/public/files/CV_JoseVeiga.pdf" download class="text-neutral-400 hover:text-white hover:scale-120 transition-all">
+								<CV class="size-6"/>
+							</a>
+						</nav>
+					</div>
+				</div>
+			</div>
+		</SectionContainer>
+
 	</main>
 </Layout>
 

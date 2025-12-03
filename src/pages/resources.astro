@@ -1,0 +1,64 @@
+---
+// src/pages/resources.astro
+import { getCollection } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+import Button from '../components/Button.astro';
+
+const resources = await getCollection('resources');
+const sortedResources = resources.sort((a: any, b: any) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const difficultyColors: Record<string, string> = {
+	'Beginner': 'bg-emerald-500/90',
+	'Intermediate': 'bg-amber-500/90',
+	'Advanced': 'bg-rose-500/90'
+};
+---
+
+<Layout title="Resources - Jose Veiga" description="Guides, tutorials and development notes">
+	<main class="pt-24 pb-16 px-4 max-w-6xl mx-auto">
+		<div class="mb-12">
+			<h1 class="text-white text-3xl md:text-4xl font-bold">Resources</h1>
+			<div class="w-full h-1 bg-sky-400 mt-4"></div>
+			<p class="text-neutral-400 mt-4">Guides, tutorials, and development notes to help other developers</p>
+		</div>
+
+		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
+			{sortedResources.map((resource: any) => (
+				<article class="border border-neutral-700/50 rounded-lg overflow-hidden bg-neutral-900/40 hover:border-neutral-600 transition-colors group">
+					<div class="relative overflow-hidden">
+						<img 
+							src={resource.data.image} 
+							alt={resource.data.title}
+							class="w-full h-44 object-cover group-hover:scale-105 transition-transform duration-300"
+						/>
+						<!-- Category badge (izquierda) -->
+						<span class="absolute top-3 left-3 text-xs px-2 py-1 bg-sky-500/90 text-white rounded-md font-medium">
+							{resource.data.category}
+						</span>
+						<!-- Difficulty badge (derecha) -->
+						<span class={`absolute top-3 right-3 text-xs px-2 py-1 text-white rounded-md font-medium ${difficultyColors[resource.data.difficulty]}`}>
+							{resource.data.difficulty}
+						</span>
+					</div>
+					<div class="p-5">
+						<div class="flex items-center gap-2 text-xs text-neutral-500 mb-2">
+							<span>{resource.data.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+							<span>·</span>
+							<span>{resource.data.readTime} min read</span>
+						</div>
+						<h3 class="text-lg font-semibold mb-2 group-hover:text-sky-400 transition-colors">{resource.data.title}</h3>
+						<p class="text-sm text-neutral-400 mb-4 line-clamp-2">{resource.data.description}</p>
+						<ul class="flex flex-wrap gap-2 mb-4">
+							{resource.data.tags.slice(0, 3).map((tag: string) => (
+								<li class="text-xs px-2 py-1 bg-neutral-800 rounded-md text-neutral-300">{tag}</li>
+							))}
+						</ul>
+						<Button href={`/resources/${resource.slug}`} variant="ghost" size="sm" rounded="md">
+							Read More
+						</Button>
+					</div>
+				</article>
+			))}
+		</div>
+	</main>
+</Layout>

@@ -1,0 +1,38 @@
+---
+const GUIDES = [
+ 	{
+ 		title: 'Monster Hunter World: Modding',
+ 		description: 'Detailed guide on how to start modding MHW.',
+ 		link: '/guide_01',
+        github: '#',
+        image: 'img/background.svg',
+        tags: ['Unity','C#','VS Community']
+ 	},
+    {
+ 		title: 'Multiplayer Card Game',
+ 		description: 'Unity guide simulating a card game with Unity NetCode Multiplayer.',
+ 		link: '#',
+        github: '#',
+        image: 'img/background.svg',
+        tags: ['Unity','C#','VS Community']
+ 	}
+ ];
+---
+<section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    {GUIDES.map((guide) => (
+        <article class="border rounded-lg overflow-hidden bg-neutral-900/40 p-0">
+            <img src={`/${guide.image}`} alt={guide.title} class="w-full h-48 object-cover" />
+            <div class="p-4">
+                <h3 class="text-xl font-semibold mb-2">{guide.title}</h3>
+                <p class="text-sm opacity-80 mb-2">{guide.description}</p>
+                <ul class="flex flex-wrap gap-2">
+                    {guide.tags.map((tag) => (
+                        <li class="text-xs px-2 py-1 bg-neutral-800 rounded">{tag}</li>
+                    ))}
+                </ul>
+                <a href={guide.link} class="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-white text-black text-sm rounded-md 
+                    shadow hover:opacity-90">View guide</a>
+            </div>
+        </article>
+    ))}
+</section>

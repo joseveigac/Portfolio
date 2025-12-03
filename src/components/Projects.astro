@@ -1,43 +1,75 @@
 ---
 const PROJECTS = [
  	{
- 		title: 'Multiplayer Card Game',
- 		description: 'Unity project simulating a card game with Unity NetCode Multiplayer.',
- 		link: '/project_01',
+ 		title: 'Trainpunk Run',
+ 		description: `Unity project I contributed to during my time at Jellyworld Games,
+            collaborating  within the team.`,
+ 		link: 'https://store.steampowered.com/app/819470/Trainpunk_Run/',
         github: '#',
-        image: 'img/background.svg',
-        tags: ['Unity','C#','VS Community']
+        image: 'img/trainpunk_run.webp',
+        tags: ['Steam','Unity','C#','Jellyworld Games']
  	},
     {
- 		title: 'Multiplayer Card Game',
- 		description: 'Unity project simulating a card game with Unity NetCode Multiplayer.',
- 		link: '#',
+ 		title: 'My Daily Pets',
+ 		description: `Unity project developed at Jellyworld Games, where I assisted 
+            in programming tasks and team production workflows.`,
+ 		link: 'https://store.steampowered.com/app/2223760/My_Daily_Pets/',
         github: '#',
-        image: 'img/background.svg',
-        tags: ['Unity','C#','VS Community']
- 	},
- 	{
- 		title: 'Project Three',
- 		description: 'Description for project three.',
- 		link: '#',
-        github: '#',
-        image: 'img/background.svg',
-        tags: ['Astro','Tailwind CSS','HTML']
- 	},
-    {
- 		title: 'Project Fourth',
- 		description: 'Description for project fourth.',
- 		link: '#',
-        github: '#',
-        image: 'img/background.svg',
-        tags: ['Unreal Engine 5','C++','Blueprints']
- 	}
+        image: 'img/mydailypets.webp',
+        tags: ['Steam','Unity','C#','Jellyworld Games']
+ 	}//,
+ 	// {
+ 	// 	title: 'ShaperBattle - WIP',
+ 	// 	description: 'Android singleplayer tower defense game under development using Unity.',
+ 	// 	link: '#',
+    //     github: '#',
+    //     image: 'img/ShaperBattle.webp',
+    //     tags: ['Android','Unity','C#', 'PlayStore']
+ 	// },
+    // {
+ 	// 	title: 'Project Fourth',
+ 	// 	description: 'Description for project fourth.',
+ 	// 	link: '#',
+    //     github: '#',
+    //     image: 'img/background.svg',
+    //     tags: ['Unreal Engine 5','C++','Blueprints']
+ 	// }
  ];
 ---
 <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+	{PROJECTS.map((project) => (
+		<article class="border border-neutral-700/50 rounded-lg overflow-hidden bg-neutral-900/40 flex flex-col h-full hover:border-neutral-600 transition-colors">
+			<div class="w-full h-52 bg-neutral-800/50 flex items-center justify-center overflow-hidden">
+				<img 
+					src={`/${project.image}`} 
+					alt={project.title} 
+					class="w-full h-full object-cover" 
+				/>
+			</div>
+			<div class="p-5 flex flex-col grow">
+				<h3 class="text-xl font-semibold mb-2">{project.title}</h3>
+				<p class="text-sm text-neutral-300 mb-4 leading-relaxed">{project.description}</p>
+				<ul class="flex flex-wrap gap-2 mb-4">
+					{project.tags.map((tag) => (
+						<li class="text-xs px-2.5 py-1 bg-neutral-800 rounded-md text-neutral-300">{tag}</li>
+					))}
+				</ul>
+				<div class="mt-auto pt-2">
+					<a 
+						href={project.link} 
+						class="inline-flex items-center gap-2 px-4 py-2 border border-neutral-600 text-white text-sm rounded-md hover:bg-neutral-800 transition-colors"
+					>
+						View Project
+					</a>
+				</div>
+			</div>
+		</article>
+	))}
+</section>
+<!-- <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
     {PROJECTS.map((project) => (
         <article class="border rounded-lg overflow-hidden bg-neutral-900/40 p-0">
-            <img src={`/${project.image}`} alt={project.title} class="w-full h-48 object-cover" />
+            <img src={`/${project.image}`} alt={project.title} class="w-full h-48 object-cover object-scale-down" />
             <div class="p-4">
                 <h3 class="text-xl font-semibold mb-2">{project.title}</h3>
                 <p class="text-sm opacity-80 mb-2">{project.description}</p>
@@ -51,6 +83,6 @@ const PROJECTS = [
             </div>
         </article>
     ))}
-</section>
+</section> -->
 
 <!-- class="inline-block text-sm text-indigo-400 hover:underline mb-3" -->
