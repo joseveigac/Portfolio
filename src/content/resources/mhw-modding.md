@@ -6,10 +6,10 @@ image: "/img/MHW_Mod_GUIDE.webp"
 category: "Guide"
 difficulty: "Intermediate"
 tags: ["C#", "Modding", "SharpPluginLoader"]
-date: 2025-01-15
+date: 2025-12-08
 readTime: 60
 prerequisites: ["Windows", "Purchased: MHWI"]
-version: "Phaser 3.55.2"
+version: "SharpPluginLoader 0.0.7.2"
 ---
 
 ## Introduction
