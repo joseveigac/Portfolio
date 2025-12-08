@@ -89,14 +89,6 @@ import CV from '../icons/CV.astro';
 						<Godot class="size-6"/>
 						<span>Godot</span>
 					</ScrollItem>
-					<!-- <ScrollItem>
-						<CPlusPlus class="size-6"/>
-						<span>C++</span>
-					</ScrollItem>
-					<ScrollItem>
-						<CSharp class="size-6"/>
-						<span>C#</span>
-					</ScrollItem> -->
 				</HorizontalScroll>
 			</div>
 		</div>
@@ -179,7 +171,7 @@ import CV from '../icons/CV.astro';
 							class="text-neutral-400 hover:text-white hover:scale-120 transition-all">
 								<LinkedIn class="size-8"/>
 							</a>
-							<a href="/public/files/CV_JoseVeiga.pdf" download
+							<a href={`${import.meta.env.BASE_URL}files/CV_JoseVeiga.pdf`} download
 							class="text-neutral-400 hover:text-white hover:scale-120 transition-all">
 								<CV class="size-8"/>
 							</a>
