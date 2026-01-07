@@ -1,0 +1,43 @@
+---
+const MODS = [
+ 	{
+ 		title: 'Idle Ore Generator',
+ 		description: `Addon designed for Minecraft Bedrock 1.21.130 providing 
+        generator blocks with passive resource generation`,
+ 		link: 'https://www.curseforge.com/minecraft-bedrock/addons/idle-ore-generators',
+        github: '#',
+        image: 'img/Logo_IdleOreGenerator.webp',
+        tags: ['Minecraft Bedrock','JS','TypeScript','CurseForge', 'Addon' ]
+ 	}
+ ];
+---
+<section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+	{MODS.map((mod) => (
+		<article class="border border-neutral-700/50 rounded-lg overflow-hidden bg-neutral-900/40 flex flex-col h-full hover:border-neutral-600 transition-colors">
+			<div class="w-full h-52 bg-neutral-800/50 flex items-center justify-center overflow-hidden">
+				<img 
+					src={`/${mod.image}`} 
+					alt={mod.title} 
+					class="w-full h-full object-cover" 
+				/>
+			</div>
+			<div class="p-5 flex flex-col grow">
+				<h3 class="text-xl font-semibold mb-2">{mod.title}</h3>
+				<p class="text-sm text-neutral-300 mb-4 leading-relaxed">{mod.description}</p>
+				<ul class="flex flex-wrap gap-2 mb-4">
+					{mod.tags.map((tag) => (
+						<li class="text-xs px-2.5 py-1 bg-neutral-800 rounded-md text-neutral-300">{tag}</li>
+					))}
+				</ul>
+				<div class="mt-auto pt-2">
+					<a 
+						href={mod.link} target="_blank" rel="noopener noreferrer"
+						class="inline-flex items-center gap-2 px-4 py-2 border border-neutral-600 text-white text-sm rounded-md hover:bg-neutral-800 transition-colors"
+					>
+						View Project
+					</a>
+				</div>
+			</div>
+		</article>
+	))}
+</section>

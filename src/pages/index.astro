@@ -5,12 +5,13 @@ import Socials from '../components/Socials.astro';
 import Experience from '../components/Experience.astro';
 import SectionContainer from '../components/SectionContainer.astro';
 import Button from '../components/Button.astro';
+import Projects from '../components/Projects.astro';
+import Mods from '../components/Mods.astro';
 
 // Icon Imports
 import GitHub from '../icons/GitHub.astro';
 import LinkedIn from '../icons/LinkedIn.astro';
 import Gmail from '../icons/Gmail.astro';
-import Projects from '../components/Projects.astro';
 import HTML5 from '../icons/HTML5.astro';
 import Godot from '../icons/Godot.astro';
 import UnrealEngine from '../icons/UnrealEngine.astro';
@@ -126,6 +127,14 @@ import CV from '../icons/CV.astro';
 				<div class="w-full h-1 bg-sky-400 mt-4"></div>
 			</div>
 			<Projects />
+		</SectionContainer>
+
+		<SectionContainer id="mods" class="py-10">
+			<div class="mb-12">
+				<h2 class="text-white text-3xl md:text-3xl font-bold">Modding Projects</h2>
+				<div class="w-full h-1 bg-sky-400 mt-4"></div>
+			</div>
+			<Mods />
 		</SectionContainer>
 
 		<SectionContainer class="py-30" id="experience">
