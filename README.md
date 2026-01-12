@@ -27,6 +27,7 @@ This portfolio features my professional projects, work experience, and developme
 ## Contact
 
 - **Website:** [joseveiga.dev](https://joseveiga.dev)
+- **CurseForge:** [Ghozix](https://www.curseforge.com/members/ghozix/projects)
 - **LinkedIn:** [joseveigac](https://www.linkedin.com/in/joseveigac/)
 - **GitHub:** [joseveigac](https://github.com/joseveigac)
 - **Email:** jveigacaminos@gmail.com
