@@ -1,7 +1,6 @@
 ---
 // Component Imports
 import Layout from '../layouts/Layout.astro';
-import Socials from '../components/Socials.astro';
 import Experience from '../components/Experience.astro';
 import SectionContainer from '../components/SectionContainer.astro';
 import Button from '../components/Button.astro';
@@ -19,9 +18,18 @@ import AstroIcon from '../icons/AstroIcon.astro';
 import CSS from '../icons/CSS.astro';
 import Unity from '../icons/Unity.astro';
 import Tailwind from '../icons/Tailwind.astro';
-import HorizontalScroll from '../components/HorizontalScroll.astro';
 import ScrollItem from '../components/ScrollItem.astro';
+import HorizontalScroll from '../components/HorizontalScroll.astro';
 import CV from '../icons/CV.astro';
+
+// Resources Imports 
+import ResourceScrollItem from '../components/ResourceScrollItem.astro';
+import { getCollection } from 'astro:content';
+const resources = await getCollection('resources');
+
+const featuredResources = resources
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 6);
 ---
 
 <Layout 
@@ -47,19 +55,48 @@ import CV from '../icons/CV.astro';
 			<p class="max-w-2xl text-lg opacity-90 text-pretty">
 				Explore my Unity projects, guides, and detailed development notes — all in one place
 			</p>
-			<!-- <a href="/guides" class="mt-12 items-center gap-2 px-12 py-2 bg-white text-black text-sm rounded-md 
-				shadow hover:opacity-90">Explore</a> -->
 
-			<div class="mt-16 animate-bounce">
-				<a href="#about" class="text-white/60 hover:text-white transition-colors">
-					<svg class="size-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+			<!-- Resources Button -->
+			<div class=" mt-8 text-center">
+				<a
+					href="/resources"
+					class="inline-flex items-center gap-2 px-6 py-3 rounded-lg
+						bg-sky-500/90 text-white font-medium
+						hover:bg-sky-400 transition-colors"
+				>
+					View resources
+					<svg
+					class="w-4 h-4"
+					fill="none"
+					stroke="currentColor"
+					viewBox="0 0 24 24"
+					>
+					<path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						stroke-width="2"
+						d="M9 5l7 7-7 7"
+					/>
 					</svg>
 				</a>
 			</div>
 
-			<div class="mt-16 md:mt-26">
-				<h2 class="text-2xl font-bold">Technical Skills</h2>
+			<!-- Featured Resources Scroll -->
+			<div class="mt-4">
+				<HorizontalScroll className="[&_li]:mx-4" speed={10}>
+					{featuredResources.map((resource) => (
+					<ResourceScrollItem
+						title={resource.data.title}
+						image={resource.data.image}
+						category={resource.data.category}
+						difficulty={resource.data.difficulty}
+						link={`/resources/${resource.slug}`}
+					/>
+					))}
+				</HorizontalScroll>
+			</div>
+			<!-- Skills Scroll -->
+			<div>
 				<!-- Component: Logo Scroll Animation -->
 				<HorizontalScroll>
 					<ScrollItem>
@@ -93,6 +130,9 @@ import CV from '../icons/CV.astro';
 				</HorizontalScroll>
 			</div>
 		</div>
+
+
+
 		</SectionContainer>
 
 		<SectionContainer class="py-20" id="about">

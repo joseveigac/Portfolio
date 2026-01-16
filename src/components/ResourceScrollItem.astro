@@ -1,0 +1,49 @@
+---
+// src/components/ResourceScrollItem.astro
+export interface Props {
+  title: string;
+  image: string;
+  category: string;
+  difficulty: string;
+  link: string;
+}
+
+const { title, image, category, difficulty, link } = Astro.props;
+---
+
+<li class="w-62 shrink-0">
+  <a
+    href={link}
+    class="group block h-50 rounded-xl overflow-hidden
+           bg-neutral-900/50 border border-neutral-700/50
+           hover:border-sky-400/50 transition-colors"
+  >
+    <!-- Image (fixed height) -->
+    <div class="relative h-32 overflow-hidden">
+      <img
+        src={image}
+        alt={title}
+        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+      />
+
+      <!-- Category -->
+      <span class="absolute top-2 left-2 text-xs px-2 py-1 rounded-md bg-sky-500/90 text-white">
+        {category}
+      </span>
+
+      <!-- Difficulty -->
+      <span class="absolute top-2 right-2 text-xs px-2 py-1 rounded-md bg-emerald-500/90 text-white">
+        {difficulty}
+      </span>
+    </div>
+
+    <!-- Content (fills remaining space) -->
+    <div class="h-[calc(100%-8rem)] p-4 flex items-start">
+      <h4 class="text-sm font-semibold text-white
+                 group-hover:text-sky-400 transition-colors
+                 line-clamp-2">
+        {title}
+      </h4>
+    </div>
+  </a>
+</li>
