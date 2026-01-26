@@ -3,7 +3,7 @@ export interface Props {
   title: string;
   description: string;
   date: string;
-  link?: string;   // único link (empresa)
+  link?: string;
   icon?: string;
   company?: string;
 }
@@ -12,55 +12,73 @@ const { title, description, date, icon, link, company } = Astro.props;
 ---
 
 <!-- Timeline dot -->
-<div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -start-1.5 border border-white dark:border-gray-900 dark:bg-gray-200"></div>
+<div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-2 -start-1.5 border border-white dark:border-gray-900 dark:bg-gray-200"></div>
 
 <!-- Date -->
 <time class="mb-1 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">
   {date}
 </time>
 
-<!-- Title + Icon -->
-<h3 class="mt-2 mb-3 flex items-center gap-2 text-lg font-semibold text-sky-300">
+<!-- Header row: Logo + Company + Title -->
+<div class="mt-2 mb-3 flex items-start gap-4">
   {icon && (
     link ? (
       <a
         href={link}
         target="_blank"
         rel="noopener noreferrer"
-        aria-label={`${title} website`}
-        class="flex items-center justify-center size-8 rounded-full overflow-hidden bg-gray-800
+        aria-label={`${company ?? title} website`}
+        class="flex items-center justify-center w-12 h-12 rounded-xl bg-gray-800
+               border border-gray-700
                transition hover:scale-105 hover:ring-2 hover:ring-sky-300/40
                focus:outline-none focus:ring-2 focus:ring-sky-300/50"
       >
+      <div class="flex items-center justify-center w-12 h-12 rounded-xl
+                  bg-gray-800/90
+                  ring-1 ring-white/10
+                  shadow-sm overflow-hidden">
         <img
           src={icon}
           alt=""
-          class="w-full h-full object-cover"
           loading="lazy"
+          class="w-16 h-16 object-contain"
         />
+      </div>
       </a>
     ) : (
-      <span class="flex items-center justify-center size-8 rounded-full overflow-hidden bg-gray-800">
+      <div class="flex items-center justify-center w-12 h-12 rounded-xl bg-gray-800 border border-gray-700">
         <img
           src={icon}
           alt=""
-          class="w-full h-full object-cover"
+          class="w-9 h-9 object-contain"
           loading="lazy"
         />
-      </span>
+      </div>
     )
   )}
 
-  {title}
-</h3>
+  <div class="flex flex-col">
+    {company && (
+      <span class={`text-sm font-medium ${
+        company.includes('Partner') ? 'text-emerald-400' : 'text-sky-300'
+      }`}>
+        {company}
+      </span>
+    )}
+
+    <h3 class="text-lg font-semibold text-white leading-tight">
+      {title}
+    </h3>
+  </div>
+</div>
 
 <!-- Description -->
 <p class="text-base font-normal text-gray-500 dark:text-gray-400 whitespace-pre-line leading-relaxed">
   {description}
 </p>
 
-<!-- Company website link (NEW DESIGN) -->
-{link && (
+<!-- Company website link -->
+<!-- {link && (
   <a
     href={link}
     target="_blank"
@@ -84,4 +102,4 @@ const { title, description, date, icon, link, company } = Astro.props;
       />
     </svg>
   </a>
-)}
+)} -->
