@@ -1,0 +1,214 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { PRICING, type ServiceKey } from '../../config/pricing';
+import { PRICING_ES } from '../../config/pricing.es';
+import { serviceColors } from '../../lib/theme';
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import { getLangFromUrl } from '../../i18n/utils';
+
+import Unity          from '../../icons/Unity.astro';
+import Flutter        from '../../icons/Flutter.astro';
+import AstroIcon      from '../../icons/AstroIcon.astro';
+import MinecraftWhite from '../../icons/MinecraftWhite.astro';
+
+export function getStaticPaths() {
+    return [{ params: { lang: 'es' } }, { params: { lang: 'en' } }];
+}
+
+const lang = getLangFromUrl(Astro.url);
+
+const T = {
+    en: {
+        title: 'Services - Jose Veiga',
+        description: 'Bedrock add-ons, Unity games, Flutter apps, and websites. Solo, senior, direct.',
+        heading: 'Services',
+        sub: 'Four areas, one developer. Pick the area that fits and read the detail before reaching out.',
+        from: 'from',
+        projectSize: 'Project size',
+        seeDetails: 'See details →',
+    },
+    es: {
+        title: 'Servicios - Jose Veiga',
+        description: 'Add-ons de Bedrock, juegos Unity, apps Flutter y webs. Solo, senior, directo.',
+        heading: 'Servicios',
+        sub: 'Cuatro áreas, un desarrollador. Elige la que encaje y lee el detalle antes de escribirme.',
+        from: 'desde',
+        projectSize: 'Tamaño del proyecto',
+        seeDetails: 'Ver detalles →',
+    },
+}[lang];
+
+interface ServiceCard {
+    slug: ServiceKey;
+    type: string;
+    kind: string;
+    title: { en: string; es: string };
+    tagline: { en: string; es: string };
+    bullets: { en: string[]; es: string[] };
+}
+
+const CARDS: ServiceCard[] = [
+    {
+        slug: 'bedrock',
+        type: 'bedrock',
+        kind: 'cube',
+        title: { en: 'Bedrock Add-ons', es: 'Add-ons de Bedrock' },
+        tagline: {
+            en: 'Custom add-ons for servers, communities, and creators. Script API v2 + TypeScript.',
+            es: 'Add-ons a medida para servidores, comunidades y creadores. Script API v2 + TypeScript.',
+        },
+        bullets: {
+            en: [
+                'Blocks, items, entities, custom UI, server-form overrides',
+                'Script API v2 (@minecraft/server 2.x) + TypeScript',
+                'Optional Marketplace-ready tier — you publish on your Partner account',
+                'Compatible with current Bedrock release',
+            ],
+            es: [
+                'Bloques, objetos, entidades, UI personalizada, server-forms',
+                'Script API v2 (@minecraft/server 2.x) + TypeScript',
+                'Nivel opcional listo para Marketplace — publicas en tu cuenta de Partner',
+                'Compatible con la versión actual de Bedrock',
+            ],
+        },
+    },
+    {
+        slug: 'unity',
+        type: 'unity',
+        kind: 'unity',
+        title: { en: 'Unity development', es: 'Desarrollo en Unity' },
+        tagline: {
+            en: 'Game programming and production. Steam-shipped contributor.',
+            es: 'Programación y producción de juegos. Contribuidor con títulos en Steam.',
+        },
+        bullets: {
+            en: [
+                'Gameplay systems, tooling, level scripting',
+                '2D / 3D, mobile / PC builds',
+                'Android API upgrades, backend integration',
+                'Agile sprints, cross-discipline collaboration',
+            ],
+            es: [
+                'Sistemas de juego, herramientas, scripting de niveles',
+                '2D / 3D, builds para móvil / PC',
+                'Actualizaciones de API de Android, integración de backend',
+                'Sprints ágiles, colaboración multidisciplinar',
+            ],
+        },
+    },
+    {
+        slug: 'flutter',
+        type: 'flutter',
+        kind: 'flutter',
+        title: { en: 'Flutter apps', es: 'Apps Flutter' },
+        tagline: {
+            en: 'Cross-platform mobile from a single codebase. iOS + Android.',
+            es: 'Móvil multiplataforma desde un único código. iOS + Android.',
+        },
+        bullets: {
+            en: [
+                'iOS + Android from a single Dart codebase',
+                'Native builds, store deployment',
+                'Firebase / REST backends, push, offline',
+                'Native plugins where the product needs them',
+            ],
+            es: [
+                'iOS + Android desde un único código Dart',
+                'Builds nativas, publicación en stores',
+                'Backends Firebase / REST, push, offline',
+                'Plugins nativos donde el producto los necesite',
+            ],
+        },
+    },
+    {
+        slug: 'websites',
+        type: 'web',
+        kind: 'astro',
+        title: { en: 'Websites', es: 'Webs' },
+        tagline: {
+            en: 'Portfolios, landing pages, marketing sites — with optional Storyblok headless CMS.',
+            es: 'Porfolios, landing pages y webs de marketing — con CMS headless Storyblok opcional.',
+        },
+        bullets: {
+            en: [
+                'Astro + Tailwind, deployed to your hosting',
+                'Optional headless CMS — Astro + Storyblok, edit content yourself',
+                'Mobile-responsive, Lighthouse ≥ 90',
+                'SEO basics + 30 days post-launch support',
+            ],
+            es: [
+                'Astro + Tailwind, desplegado en tu hosting',
+                'CMS headless opcional — Astro + Storyblok, edita el contenido tú mismo',
+                'Responsive en móvil, Lighthouse ≥ 90',
+                'SEO básico + 30 días de soporte tras el lanzamiento',
+            ],
+        },
+    },
+];
+
+const SERVICES = CARDS.map(card => ({
+    ...card,
+    startingFrom: `${T.from} €${PRICING[card.slug].scale[0].range[0].toLocaleString('en-US')}`,
+    timeline: lang === 'es' ? PRICING_ES[card.slug].cardTimeline : PRICING[card.slug].cardTimeline,
+}));
+---
+
+<Layout title={T.title} description={T.description}>
+    <main class="pt-24 pb-10 px-4 max-w-6xl mx-auto">
+        <div class="mb-6">
+            <h1 class="text-white text-2xl md:text-3xl font-bold">{T.heading}</h1>
+            <div class="w-full h-1 bg-sky-400 mt-3"></div>
+            <p class="text-neutral-400 mt-3 text-sm max-w-2xl">{T.sub}</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+            {SERVICES.map((s) => (
+                <a
+                    href={getRelativeLocaleUrl(lang, `/services/${s.slug}`)}
+                    class="group flex flex-row rounded-xl border border-neutral-800 bg-neutral-900 overflow-hidden hover:border-sky-500/40 hover:-translate-y-0.5 transition duration-150"
+                >
+                    <div class={`relative w-32 md:w-40 shrink-0 flex items-center justify-center overflow-hidden ${serviceColors[s.type]}`}>
+                        <div
+                            class="absolute inset-0 opacity-25 mix-blend-overlay"
+                            style="background-image: url('/img/background.svg'); background-size: cover; background-position: center;"
+                        ></div>
+                        {s.type === 'bedrock' && (
+                            <div class="absolute inset-0 opacity-15" style="background-image: repeating-linear-gradient(0deg, transparent, transparent 31px, rgba(255,255,255,0.18) 31px, rgba(255,255,255,0.18) 32px), repeating-linear-gradient(90deg, transparent, transparent 31px, rgba(255,255,255,0.18) 31px, rgba(255,255,255,0.18) 32px);"></div>
+                        )}
+                        {s.type === 'unity' && (
+                            <div class="absolute inset-0 opacity-15" style="background-image: radial-gradient(circle, rgba(255,255,255,0.35) 1px, transparent 1.5px); background-size: 24px 24px;"></div>
+                        )}
+                        {s.type === 'flutter' && (
+                            <div class="absolute inset-0 opacity-25" style="background-image: repeating-linear-gradient(45deg, transparent, transparent 18px, rgba(125,211,252,0.28) 18px, rgba(125,211,252,0.28) 19px, transparent 19px, transparent 38px);"></div>
+                        )}
+                        {s.type === 'web' && (
+                            <div class="absolute inset-0 opacity-50" style="background-image: radial-gradient(ellipse at 100% 0%, rgba(251,146,60,0.40), transparent 55%), radial-gradient(ellipse at 15% 90%, rgba(180,83,9,0.30), transparent 55%);"></div>
+                        )}
+                        <div class="relative size-12 md:size-14 text-neutral-50 drop-shadow-lg">
+                            {s.kind === 'cube'    && <MinecraftWhite class="w-full h-full" />}
+                            {s.kind === 'unity'   && <Unity     class="w-full h-full" />}
+                            {s.kind === 'flutter' && <Flutter   class="w-full h-full" />}
+                            {s.kind === 'astro'   && <AstroIcon class="w-full h-full" />}
+                        </div>
+                    </div>
+                    <div class="flex flex-col grow min-w-0 p-5">
+                        <h2 class="text-white text-lg font-bold mb-1 tracking-tight">{s.title[lang]}</h2>
+                        <p class="text-neutral-400 text-[13px] leading-snug font-sans mb-3">{s.tagline[lang]}</p>
+                        <ul class="space-y-1 text-neutral-300 text-[12px] font-sans mb-3">
+                            {s.bullets[lang].map((b) => (
+                                <li class="flex gap-2"><span class="text-sky-400 mt-0.5">✓</span>{b}</li>
+                            ))}
+                        </ul>
+                        <div class="mt-auto flex items-center justify-between border-t border-neutral-800 pt-3">
+                            <div>
+                                <p class="text-neutral-500 text-[10px] uppercase tracking-wider">{T.projectSize}</p>
+                                <p class="text-white text-[13px] font-semibold leading-tight">{s.startingFrom} <span class="text-neutral-500 font-normal">· {s.timeline}</span></p>
+                            </div>
+                            <span class="text-sky-400 text-xs shrink-0 ml-2">{T.seeDetails}</span>
+                        </div>
+                    </div>
+                </a>
+            ))}
+        </div>
+    </main>
+</Layout>

@@ -1,0 +1,37 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import ServicePage from '../../../components/services/ServicePage.astro';
+import type { ServiceKey } from '../../../config/pricing';
+import { getLangFromUrl } from '../../../i18n/utils';
+
+export function getStaticPaths() {
+    const langs = ['es', 'en'];
+    const services = ['bedrock', 'unity', 'flutter', 'websites'];
+    return langs.flatMap((lang) =>
+        services.map((service) => ({ params: { lang, service } }))
+    );
+}
+
+const { service } = Astro.params as { service: ServiceKey };
+const lang = getLangFromUrl(Astro.url);
+
+const META = {
+    en: {
+        bedrock:  { title: 'Bedrock add-ons - Jose Veiga', description: 'Configure your Bedrock add-on: pick the scope, see the indicative range in real time, send the brief in one click.' },
+        unity:    { title: 'Unity development - Jose Veiga', description: 'Configure your Unity project: pick the scope, see the indicative range in real time, send the brief in one click.' },
+        flutter:  { title: 'Flutter apps - Jose Veiga',    description: 'Configure your Flutter app: pick the scope, see the indicative range in real time, send the brief in one click.' },
+        websites: { title: 'Websites - Jose Veiga',        description: 'Configure your website: pick the scope, see the indicative range in real time, send the brief in one click.' },
+    },
+    es: {
+        bedrock:  { title: 'Add-ons de Bedrock - Jose Veiga', description: 'Configura tu add-on de Bedrock: elige el alcance, mira el rango orientativo en tiempo real y envía el brief en un clic.' },
+        unity:    { title: 'Desarrollo en Unity - Jose Veiga', description: 'Configura tu proyecto Unity: elige el alcance, mira el rango orientativo en tiempo real y envía el brief en un clic.' },
+        flutter:  { title: 'Apps Flutter - Jose Veiga',       description: 'Configura tu app Flutter: elige el alcance, mira el rango orientativo en tiempo real y envía el brief en un clic.' },
+        websites: { title: 'Webs - Jose Veiga',               description: 'Configura tu web: elige el alcance, mira el rango orientativo en tiempo real y envía el brief en un clic.' },
+    },
+}[lang];
+const meta = META[service];
+---
+
+<Layout title={meta.title} description={meta.description}>
+    <ServicePage service={service} />
+</Layout>

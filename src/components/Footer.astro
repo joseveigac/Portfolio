@@ -1,0 +1,9 @@
+---
+import { getLangFromUrl, useTranslations } from "../i18n/utils";
+
+const t = useTranslations(getLangFromUrl(Astro.url));
+---
+
+<footer class="py-20 justify-center flex">
+    {t("footer.developedBy")} &copy; {new Date().getFullYear()}
+</footer>

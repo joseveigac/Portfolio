@@ -1,0 +1,152 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getLangFromUrl } from '../../i18n/utils';
+
+import FloatingCardsHero   from '../../components/FloatingCardsHero.astro';
+import TrustedBy           from '../../components/TrustedBy.astro';
+import WhatIDo             from '../../components/WhatIDo.astro';
+import ResourcesFeatured   from '../../components/ResourcesFeatured.astro';
+import SelectedWork        from '../../components/SelectedWork.astro';
+
+import ContactIcon from '../../icons/ContactIcon.astro';
+import GitHub      from '../../icons/GitHub.astro';
+import LinkedIn    from '../../icons/LinkedIn.astro';
+import Gmail       from '../../icons/Gmail.astro';
+
+export function getStaticPaths() {
+    return [{ params: { lang: 'es' } }, { params: { lang: 'en' } }];
+}
+
+const lang = getLangFromUrl(Astro.url);
+
+const COPY = {
+    en: {
+        title: 'Jose Veiga - Developer',
+        description: 'Software that ships — across Games, Apps and Webs.  Unity games, Flutter apps, Bedrock add-ons and Websites.',
+        kickerRole: 'solo developer',
+        kickerScope: 'software end-to-end',
+        aboutEyebrow: 'About',
+        aboutHeading: 'About me.',
+        aboutAccent: '+5 years of experience',
+        aboutBody: ' shipping games, tools, and web. Independent developer working with studios on Bedrock Marketplace add-ons, with game teams on Unity production work, with founders on Flutter mobile apps, and with small businesses on websites. Direct contact, end-to-end.',
+        contactEyebrow: 'Contact',
+        contactHeading: "Let's build something.",
+        contactLead: 'Have a project in mind? Get in touch.',
+        contactNote: 'Reply within 48h. Direct contact, end-to-end.',
+        socialLabel: 'Social links',
+        emailLabel: 'Email',
+    },
+    es: {
+        title: 'Jose Veiga - Desarrollador',
+        description: 'Desarrollo de software de principio a fin — juegos Unity, apps Flutter, add-ons de Bedrock y webs.',
+        kickerRole: 'solo developer',
+        kickerScope: 'software de principio a fin',
+        aboutEyebrow: 'Sobre mí',
+        aboutHeading: 'Sobre mí.',
+        aboutAccent: '+5 años de experiencia',
+        aboutBody: ' publicando juegos, herramientas y webs. Trabajo con estudios de Minecraft Bedrock para el Marketplace, con equipos de desarrollo en Unity, con fundadores en apps Flutter y con negocios pequeños en su web. Trato directo, sin intermediarios.',
+        contactEyebrow: 'Contacto',
+        contactHeading: 'Construyamos algo.',
+        contactLead: '¿Tienes un proyecto en mente? Hablemos.',
+        contactNote: 'Respondo en 48h. Trato directo, sin intermediarios.',
+        socialLabel: 'Redes sociales',
+        emailLabel: 'Correo electrónico',
+    },
+}[lang];
+---
+
+<Layout title={COPY.title} description={COPY.description}>
+
+    <main>
+        <!-- ====== HERO ====== -->
+        <FloatingCardsHero>
+            <div slot="kicker" class="flex flex-wrap items-center gap-2 text-[12.5px] font-mono">
+                <span class="text-sky-400">&gt;</span>
+                <span class="text-neutral-300">{COPY.kickerRole}</span>
+                <span class="text-neutral-600">·</span>
+                <span class="text-neutral-300">{COPY.kickerScope}</span>
+                <span class="kicker-cursor inline-block w-1.75 h-3.25 bg-sky-400 align-middle ml-0.5"></span>
+            </div>
+        </FloatingCardsHero>
+
+        <!-- ====== TRUSTED BY ====== -->
+        <TrustedBy />
+
+        <!-- ====== WHAT I DO ====== -->
+        <WhatIDo />
+
+        <!-- ====== RESOURCES ====== -->
+        <ResourcesFeatured />
+
+        <!-- ====== SELECTED WORK ====== -->
+        <SelectedWork />
+
+        <!-- ====== ABOUT ====== -->
+        <section id="about" class="w-full bg-neutral-950 py-24">
+            <div class="mx-auto max-w-6xl px-6">
+                <div class="flex items-center gap-2 mb-3 text-sky-400/85">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="size-4">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M16 14a4 4 0 10-8 0M12 11a3 3 0 100-6 3 3 0 000 6zM5 21a7 7 0 0114 0"/>
+                    </svg>
+                    <span class="text-[11px] tracking-[0.16em] uppercase font-semibold">{COPY.aboutEyebrow}</span>
+                </div>
+                <h2 class="text-white text-3xl md:text-[32px] font-bold tracking-tight">{COPY.aboutHeading}</h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-8 md:gap-12 pt-10 items-center md:items-start">
+                    <img src="/img/profile_pic.webp" alt="Jose Veiga" class="size-40 md:size-48 object-cover rounded-full mx-auto md:mx-0"/>
+                    <div>
+                        <h3 class="text-white text-xl font-bold pb-2">Jose Veiga</h3>
+                        <p class="text-neutral-300 text-[17px] leading-relaxed font-sans max-w-160">
+                            <span class="text-sky-400">{COPY.aboutAccent}</span>{COPY.aboutBody}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ====== CONTACT ====== -->
+        <section id="contact" class="w-full bg-neutral-950 py-16 border-b border-neutral-800/60">
+            <div class="mx-auto max-w-6xl px-6">
+                <div class="flex items-center justify-center gap-2 mb-3 text-sky-400/85">
+                    <ContactIcon class="size-4"/>
+                    <span class="text-[11px] tracking-[0.16em] uppercase font-semibold">{COPY.contactEyebrow}</span>
+                </div>
+                <h2 class="text-white text-3xl md:text-[32px] font-bold tracking-tight text-center">{COPY.contactHeading}</h2>
+
+                <div class="relative overflow-hidden rounded-2xl bg-linear-to-br from-neutral-900/60 to-neutral-950 border border-neutral-800 p-8 md:p-10 mt-10 max-w-3xl mx-auto">
+                    <div class="absolute top-0 right-0 w-64 h-64 bg-sky-500/5 rounded-full blur-3xl"></div>
+                    <div class="absolute bottom-0 left-0 w-48 h-48 bg-sky-500/5 rounded-full blur-3xl"></div>
+
+                    <div class="relative text-center">
+                        <p class="text-neutral-300 max-w-md mx-auto font-sans">{COPY.contactLead}</p>
+                        <p class="text-neutral-500 text-xs font-sans mt-2">{COPY.contactNote}</p>
+
+                        <nav class="flex justify-center gap-6 mt-8" aria-label={COPY.socialLabel}>
+                            <a href="mailto:contact@joseveiga.dev" class="text-neutral-400 hover:text-white hover:scale-110 transition-all" aria-label={COPY.emailLabel}>
+                                <Gmail class="size-7"/>
+                            </a>
+                            <a href="https://github.com/joseveigac" target="_blank" rel="noopener noreferrer" class="text-neutral-400 hover:text-white hover:scale-110 transition-all" aria-label="GitHub">
+                                <GitHub class="size-7"/>
+                            </a>
+                            <a href="https://www.linkedin.com/in/joseveigac/" target="_blank" rel="noopener noreferrer" class="text-neutral-400 hover:text-white hover:scale-110 transition-all" aria-label="LinkedIn">
+                                <LinkedIn class="size-7"/>
+                            </a>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</Layout>
+
+<style>
+    .kicker-cursor {
+        animation: kicker-blink 1s steps(2) infinite;
+    }
+    @keyframes kicker-blink {
+        50% { opacity: 0; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        .kicker-cursor { animation: none; }
+    }
+</style>

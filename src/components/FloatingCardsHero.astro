@@ -1,0 +1,215 @@
+---
+// Shared hero body — typography column (kicker via named slot) + animated floating code cards.
+// Used by the 4 hero-preview-* pages so each can swap only the kicker treatment.
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { getLangFromUrl } from "../i18n/utils";
+
+const lang = getLangFromUrl(Astro.url);
+
+const COPY = {
+    en: {
+        titlePre: 'that',
+        titleAccent: 'ships',
+        sub: 'I build Bedrock add-ons, Unity games, Flutter apps and websites — solo, end-to-end. Direct contact, 48h reply.',
+        ctaPrimary: 'Start a project →',
+        ctaSecondary: 'Read resources',
+        badge1: '5+ years',
+        badge2: 'Steam-shipped',
+        badge3: 'Marketplace-ready',
+    },
+    es: {
+        titlePre: 'a',
+        titleAccent: 'producción',
+        sub: 'Desarrollo de add-ons de Bedrock, Unity, apps Flutter y webs — solo, de principio a fin. Contacto directo, respuesta en 48h.',
+        ctaPrimary: 'Empieza un proyecto →',
+        ctaSecondary: 'Ver recursos',
+        badge1: '+5 años',
+        badge2: 'Publicado en Steam',
+        badge3: 'Listo para Marketplace',
+    },
+}[lang];
+
+const CARDS = [
+    {
+        i: 0,
+        file: 'addon.ts',
+        dot: 'bg-emerald-400',
+        position: 'top-[5%] left-[3%] w-[58%]',
+        rotation: -5,
+        code: `<span class="text-neutral-600">// Bedrock — speed boost on use</span>
+<span class="text-emerald-300">world</span>.afterEvents.itemUse.subscribe(({ source }) =&gt; {
+  source.runCommand(<span class="text-orange-300">"effect @s speed 30 2"</span>);
+});`,
+    },
+    {
+        i: 1,
+        file: 'Player.cs',
+        dot: 'bg-slate-300',
+        position: 'top-[28%] right-[2%] w-[60%]',
+        rotation: 3,
+        code: `<span class="text-neutral-600">// Unity — Update</span>
+<span class="text-fuchsia-400">void</span> <span class="text-sky-300">Update</span>() {
+  <span class="text-emerald-300">transform</span>.Translate(speed * <span class="text-emerald-300">Time</span>.deltaTime, <span class="text-orange-300">0</span>, <span class="text-orange-300">0</span>);
+}`,
+    },
+    {
+        i: 2,
+        file: 'main.dart',
+        dot: 'bg-sky-400',
+        position: 'bottom-[24%] left-[2%] w-[56%]',
+        rotation: 2,
+        code: `<span class="text-neutral-600">// Flutter — root build</span>
+<span class="text-fuchsia-400">Widget</span> <span class="text-sky-300">build</span>(<span class="text-emerald-300">BuildContext</span> ctx) {
+  <span class="text-fuchsia-400">return</span> <span class="text-emerald-300">Scaffold</span>(body: HomeView());
+}`,
+    },
+    {
+        i: 3,
+        file: 'Hero.astro',
+        dot: 'bg-orange-400',
+        position: 'bottom-[3%] right-[4%] w-[58%]',
+        rotation: -3,
+        code: `<span class="text-neutral-600">&lt;!-- Astro — hero --&gt;</span>
+<span class="text-sky-300">&lt;Layout</span> <span class="text-emerald-300">title</span>=<span class="text-orange-300">"Hero"</span><span class="text-sky-300">&gt;</span>
+  <span class="text-sky-300">&lt;Hero /&gt;</span>
+<span class="text-sky-300">&lt;/Layout&gt;</span>`,
+    },
+] as const;
+---
+
+<section class="relative min-h-screen bg-neutral-950 overflow-hidden flex items-center border-b border-neutral-800/60">
+    <div class="absolute inset-0 opacity-[0.35]" style="background-image: radial-gradient(ellipse at 80% 20%, rgba(56,189,248,0.18), transparent 55%), radial-gradient(ellipse at 10% 90%, rgba(56,189,248,0.08), transparent 50%);"></div>
+    <div class="absolute inset-0" style="background-image: radial-gradient(circle, rgba(255,255,255,0.04) 1px, transparent 1.5px); background-size: 32px 32px;"></div>
+
+    <div class="relative w-full min-w-0 max-w-7xl mx-auto px-6 lg:px-10 py-24 lg:py-0">
+        <div class="grid grid-cols-1 lg:grid-cols-[1.05fr_1fr] gap-12 lg:gap-16 items-center min-w-0">
+
+            <!-- LEFT: typography -->
+            <div>
+                <div class="mb-7">
+                    <slot name="kicker" />
+                </div>
+
+                <h1 class="text-white font-bold tracking-tight leading-[1.02] text-[44px] md:text-[64px] lg:text-[76px]">
+                    Software<br/>
+                    {COPY.titlePre} <span class="text-sky-400">{COPY.titleAccent}</span>.
+                </h1>
+
+                <p class="text-neutral-400 text-base md:text-lg leading-relaxed max-w-130 mt-7 font-sans">
+                    {COPY.sub}
+                </p>
+
+                <div class="mt-10 flex flex-wrap items-center gap-3">
+                    <a href={getRelativeLocaleUrl(lang, "/services")} class="inline-flex items-center gap-2 px-6 py-3.5 rounded-md bg-sky-400 text-neutral-950 font-semibold text-sm hover:bg-sky-300 transition-colors shadow-[0_0_40px_rgba(56,189,248,0.3)]">
+                        {COPY.ctaPrimary}
+                    </a>
+                    <a href={getRelativeLocaleUrl(lang, "/resources")} class="inline-flex items-center gap-2 px-6 py-3.5 rounded-md border border-neutral-700 text-neutral-200 font-semibold text-sm hover:bg-neutral-900 transition-colors">
+                        {COPY.ctaSecondary}
+                    </a>
+                </div>
+
+                <div class="mt-12 flex flex-wrap items-center gap-x-6 gap-y-2 text-[11px] text-neutral-500 uppercase tracking-[0.14em] font-sans">
+                    <span>{COPY.badge1}</span>
+                    <span class="size-1 rounded-full bg-neutral-700"></span>
+                    <span>{COPY.badge2}</span>
+                    <span class="size-1 rounded-full bg-neutral-700"></span>
+                    <span>{COPY.badge3}</span>
+                </div>
+            </div>
+
+            <!-- RIGHT: floating code cards in perspective space -->
+            <div class="relative">
+                <div class="absolute -inset-8 bg-linear-to-br from-sky-500/15 via-sky-500/5 to-transparent rounded-3xl blur-2xl"></div>
+                <div class="relative aspect-square rounded-2xl border border-neutral-800 bg-neutral-950/40 backdrop-blur p-2 overflow-hidden shadow-[0_30px_80px_-20px_rgba(0,0,0,0.8)]" style="perspective: 1400px;">
+                    {CARDS.map((card) => (
+                        <div
+                            class:list={['code-card-wrap absolute', card.position]}
+                            style={`--i: ${card.i}; --base-rotate: ${card.rotation}deg;`}
+                        >
+                            <div class="code-card relative">
+                                <div class="code-card-shimmer pointer-events-none absolute inset-0 rounded-lg z-10"></div>
+                                <div class="rounded-lg border border-neutral-800 bg-neutral-950/95 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.9)] overflow-hidden backdrop-blur">
+                                    <div class="flex items-center gap-2 px-3 py-2 border-b border-neutral-800/80 bg-neutral-950/95">
+                                        <span class:list={['size-1.5 rounded-full', card.dot]}></span>
+                                        <span class="text-[10.5px] font-mono text-neutral-400">{card.file}</span>
+                                    </div>
+                                    <pre class="px-3 py-2.5 font-mono text-[10.5px] leading-[1.65] text-neutral-300 overflow-hidden"><code set:html={card.code}></code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<style>
+    /* ---------- LAYER 1: wrapper — base rotation + slow rotation drift ---------- */
+    .code-card-wrap {
+        transform: rotate(var(--base-rotate));
+        animation: rotate-drift 11s ease-in-out infinite;
+        animation-delay: calc(var(--i) * -2.7s);
+        transform-origin: center;
+        will-change: transform;
+    }
+
+    @keyframes rotate-drift {
+        0%, 100% { transform: rotate(var(--base-rotate)); }
+        50%      { transform: rotate(calc(var(--base-rotate) + 1.8deg)); }
+    }
+
+    /* ---------- LAYER 2: inner card — vertical float + spotlight pulse ---------- */
+    .code-card {
+        animation:
+            card-float 7s ease-in-out infinite,
+            card-spotlight 10s ease-in-out infinite;
+        animation-delay:
+            calc(var(--i) * -1.6s),
+            calc(var(--i) * -2.5s);
+        will-change: transform, filter;
+    }
+
+    @keyframes card-float {
+        0%, 100% { transform: translateY(0); }
+        50%      { transform: translateY(-10px); }
+    }
+
+    @keyframes card-spotlight {
+        0%, 100% { filter: brightness(0.92) drop-shadow(0 0 0 transparent); }
+        7%       { filter: brightness(1.18) drop-shadow(0 0 22px rgba(56, 189, 248, 0.5)); }
+        22%      { filter: brightness(0.92) drop-shadow(0 0 0 transparent); }
+    }
+
+    /* ---------- LAYER 3: shimmer overlay — diagonal light pass ---------- */
+    .code-card-shimmer {
+        background: linear-gradient(105deg,
+            transparent 30%,
+            rgba(56, 189, 248, 0.16) 47%,
+            rgba(125, 211, 252, 0.20) 50%,
+            rgba(56, 189, 248, 0.16) 53%,
+            transparent 70%
+        );
+        background-size: 220% 100%;
+        background-position: -110% 0;
+        mix-blend-mode: screen;
+        animation: shimmer-sweep 9s ease-in-out infinite;
+        animation-delay: calc(var(--i) * -2.2s);
+        will-change: background-position;
+    }
+
+    @keyframes shimmer-sweep {
+        0%, 100% { background-position: -110% 0; }
+        40%, 55% { background-position: 210% 0; }
+    }
+
+    /* ---------- Accessibility ---------- */
+    @media (prefers-reduced-motion: reduce) {
+        .code-card-wrap,
+        .code-card,
+        .code-card-shimmer { animation: none; }
+        .code-card-wrap { transform: rotate(var(--base-rotate)); }
+        .code-card-shimmer { background-position: -110% 0; }
+    }
+</style>

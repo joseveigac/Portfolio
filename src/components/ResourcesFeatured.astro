@@ -1,0 +1,93 @@
+---
+import { getCollection } from 'astro:content';
+import ResourcesIcon from '../icons/ResourcesIcon.astro';
+import { difficultyColors, categoryLabels, difficultyLabels } from '../lib/theme';
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import { getLangFromUrl } from '../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const dateLocale = lang === 'es' ? 'es-ES' : 'en-US';
+
+const T = {
+    en: {
+        eyebrow: 'Resources',
+        heading: 'Latest from the dev.',
+        sub: "Guides, articles, notes, news, and opinions — whatever's worth writing down. New posts land here as they go up.",
+        empty: 'No resources yet — content collection is empty.',
+        preview: 'Preview',
+        minRead: 'min read',
+        readMore: 'Read more →',
+    },
+    es: {
+        eyebrow: 'Recursos',
+        heading: 'Lo último del dev.',
+        sub: 'Guías, artículos, notas, novedades y opiniones — lo que merezca la pena anotar. Las nuevas publicaciones aparecen aquí según las subo.',
+        empty: 'Aún no hay recursos — la colección está vacía.',
+        preview: 'Vista previa',
+        minRead: 'min de lectura',
+        readMore: 'Leer más →',
+    },
+}[lang];
+
+const all = await getCollection('resources');
+const featured = all
+    .filter((r) => r.id.startsWith(`${lang}/`))
+    .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+    .slice(0, 3);
+---
+
+<section id="resources" class="w-full bg-neutral-950 py-24 border-b border-neutral-800/60">
+    <div class="mx-auto max-w-6xl px-6">
+        <div class="flex items-center gap-2 mb-3 text-sky-400/85">
+            <ResourcesIcon class="size-4"/>
+            <span class="text-[11px] tracking-[0.16em] uppercase font-semibold">{T.eyebrow}</span>
+        </div>
+        <h2 class="text-white text-3xl md:text-[32px] font-bold tracking-tight">{T.heading}</h2>
+        <p class="text-neutral-400 text-sm mt-2 font-sans max-w-2xl">{T.sub}</p>
+
+        {featured.length === 0 ? (
+            <p class="text-neutral-500 text-sm mt-12">{T.empty}</p>
+        ) : (
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
+                {featured.map((resource) => (
+                    <article class="relative rounded-lg border border-neutral-800 bg-neutral-950/40 overflow-hidden hover:border-neutral-700 transition-colors group cursor-pointer">
+                        <a href={getRelativeLocaleUrl(lang, `/resources/${resource.id.slice(lang.length + 1)}`)} class="absolute inset-0 z-10" aria-label={resource.data.title}></a>
+                        <div class="relative overflow-hidden">
+                            <img
+                                src={resource.data.image}
+                                alt={resource.data.title}
+                                class="w-full h-44 object-cover group-hover:scale-105 transition-transform duration-300"
+                            />
+                            <span class="absolute top-3 left-3 text-xs px-2 py-1 bg-sky-500/90 text-white rounded-md font-medium">
+                                {categoryLabels[lang][resource.data.category]}
+                            </span>
+                            <span class={`absolute top-3 right-3 text-xs px-2 py-1 text-white rounded-md font-medium ${difficultyColors[resource.data.difficulty]}`}>
+                                {difficultyLabels[lang][resource.data.difficulty]}
+                            </span>
+                            {resource.data.wip && (
+                                <span class="absolute bottom-3 left-3 z-10 text-[11px] px-2.5 py-1 bg-amber-500/18 text-amber-300 rounded-full font-semibold backdrop-blur-md">
+                                    {T.preview}
+                                </span>
+                            )}
+                        </div>
+                        <div class="p-5">
+                            <div class="flex items-center gap-2 text-xs text-neutral-500 mb-2">
+                                <span>{resource.data.date.toLocaleDateString(dateLocale, { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                                <span>·</span>
+                                <span>{resource.data.readTime} {T.minRead}</span>
+                            </div>
+                            <h3 class="text-white text-lg font-semibold mb-2 group-hover:text-sky-400 transition-colors">{resource.data.title}</h3>
+                            <p class="text-sm text-neutral-400 mb-4 line-clamp-2 font-sans">{resource.data.description}</p>
+                            <ul class="flex flex-wrap gap-2 mb-4">
+                                {resource.data.tags.slice(0, 3).map((tag) => (
+                                    <li class="text-xs px-2 py-1 bg-neutral-800 rounded-md text-neutral-300">{tag}</li>
+                                ))}
+                            </ul>
+                            <span class="text-sky-400 text-sm">{T.readMore}</span>
+                        </div>
+                    </article>
+                ))}
+            </div>
+        )}
+    </div>
+</section>

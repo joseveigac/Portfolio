@@ -1,0 +1,852 @@
+<!doctype html>
+<html lang="en" class="bg-neutral-950">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Projects section — design variants · Jose Veiga</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <style>
+    :root {
+      --sky: #38bdf8;
+      --sky-soft: rgba(56, 189, 248, 0.18);
+    }
+    html, body { background: #0a0a0a; }
+    body {
+      font-family: "JetBrains Mono", ui-monospace, monospace;
+      color: #fff;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+    .font-sans { font-family: "Inter", ui-sans-serif, system-ui, sans-serif; }
+
+    /* very subtle grain overlay on each variant container */
+    .grain { position: relative; }
+    .grain::after {
+      content: ""; position: absolute; inset: 0; pointer-events: none;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.06 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+      mix-blend-mode: overlay; opacity: 0.5;
+    }
+
+    /* spine pulse */
+    @keyframes spinePulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.45); }
+      50%      { box-shadow: 0 0 0 6px rgba(56, 189, 248, 0); }
+    }
+    .spine-node { animation: spinePulse 2.6s ease-in-out infinite; }
+
+    /* ledger row left-bar reveal */
+    .ledger-row { position: relative; }
+    .ledger-row::before {
+      content: ""; position: absolute; left: 0; top: 8px; bottom: 8px; width: 2px;
+      background: var(--sky); transform: scaleY(0); transform-origin: top;
+      transition: transform 240ms cubic-bezier(.2,.7,.2,1);
+    }
+    .ledger-row:hover::before { transform: scaleY(1); }
+
+    /* mosaic card lift */
+    .mosaic-card { transition: transform 280ms cubic-bezier(.2,.7,.2,1), border-color 280ms; }
+    .mosaic-card:hover { transform: translateY(-4px); }
+
+    /* utility — scrollbar tint */
+    ::-webkit-scrollbar { width: 10px; height: 10px; }
+    ::-webkit-scrollbar-track { background: #0a0a0a; }
+    ::-webkit-scrollbar-thumb { background: #262626; border-radius: 6px; }
+    ::-webkit-scrollbar-thumb:hover { background: #404040; }
+
+    /* anchor scroll offset (fixed nav) */
+    section[id^="variant-"] { scroll-margin-top: 80px; }
+  </style>
+</head>
+<body class="bg-neutral-950 text-white">
+
+  <!-- ====== STICKY NAV ====== -->
+  <header class="sticky top-0 z-40 border-b border-neutral-900/80 bg-neutral-950/85 backdrop-blur-md">
+    <div class="mx-auto max-w-6xl px-6 h-14 flex items-center justify-between gap-6">
+      <div class="flex items-center gap-3 min-w-0">
+        <span class="size-2 rounded-full bg-sky-400 shadow-[0_0_10px_var(--sky)]"></span>
+        <span class="text-[11px] tracking-[0.22em] uppercase text-neutral-400">Projects · design variants</span>
+      </div>
+      <nav class="flex items-center gap-1 text-[11px] tracking-widest uppercase">
+        <a href="#variant-a" class="px-3 py-1.5 rounded-md text-neutral-400 hover:text-white hover:bg-neutral-900 transition-colors">A · Spine</a>
+        <a href="#variant-b" class="px-3 py-1.5 rounded-md text-neutral-400 hover:text-white hover:bg-neutral-900 transition-colors">B · Mosaic</a>
+        <a href="#variant-c" class="px-3 py-1.5 rounded-md text-neutral-400 hover:text-white hover:bg-neutral-900 transition-colors">C · Ledger</a>
+        <a href="#variant-d" class="px-3 py-1.5 rounded-md text-neutral-400 hover:text-white hover:bg-neutral-900 transition-colors">D · Bento</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ====== INTRO ====== -->
+  <section class="mx-auto max-w-6xl px-6 pt-16 pb-10">
+    <div class="flex items-center gap-2 mb-3 text-sky-400/85">
+      <span class="text-[11px] tracking-[0.22em] uppercase font-semibold">/preview/projects-variants</span>
+    </div>
+    <h1 class="text-white text-3xl md:text-4xl font-bold tracking-tight leading-tight max-w-[820px]">
+      Four ways to compress the <span class="text-sky-400">Projects</span> section
+      without losing the showcase.
+    </h1>
+    <p class="text-neutral-400 text-sm mt-4 max-w-[680px] font-sans leading-relaxed">
+      Same six entries across all variants. Each cuts the current ~2,200px section to
+      somewhere between ~400px (Ledger) and ~1,300px (Spine). Pick a direction, mix details,
+      or use this as a jumping-off point for a hybrid.
+    </p>
+
+    <ul class="mt-8 grid grid-cols-2 md:grid-cols-4 gap-3 text-[11px]">
+      <li class="border border-neutral-800 rounded-md p-3 bg-neutral-900/40">
+        <div class="text-sky-400 tracking-widest uppercase">A · Spine</div>
+        <div class="text-neutral-400 mt-1 font-sans">Central axis, alternating chips. Your idea.</div>
+      </li>
+      <li class="border border-neutral-800 rounded-md p-3 bg-neutral-900/40">
+        <div class="text-sky-400 tracking-widest uppercase">B · Mosaic</div>
+        <div class="text-neutral-400 mt-1 font-sans">3-col image-led grid. Visual.</div>
+      </li>
+      <li class="border border-neutral-800 rounded-md p-3 bg-neutral-900/40">
+        <div class="text-sky-400 tracking-widest uppercase">C · Ledger</div>
+        <div class="text-neutral-400 mt-1 font-sans">Typographic index. Most compact.</div>
+      </li>
+      <li class="border border-neutral-800 rounded-md p-3 bg-neutral-900/40">
+        <div class="text-sky-400 tracking-widest uppercase">D · Bento</div>
+        <div class="text-neutral-400 mt-1 font-sans">2 hero + 4 chips. Hierarchical.</div>
+      </li>
+    </ul>
+  </section>
+
+  <!-- ====================================================================== -->
+  <!-- VARIANT A — THE SPINE                                                   -->
+  <!-- ====================================================================== -->
+  <section id="variant-a" class="border-t border-neutral-900 bg-neutral-950">
+    <div class="mx-auto max-w-6xl px-6 pt-16 pb-8">
+      <div class="flex items-baseline justify-between gap-6 flex-wrap">
+        <div>
+          <span class="text-sky-400 text-[11px] tracking-[0.22em] uppercase">Variant A</span>
+          <h2 class="text-white text-2xl md:text-[28px] font-bold tracking-tight mt-1">The Spine</h2>
+        </div>
+        <p class="text-neutral-500 text-xs font-sans max-w-[420px]">
+          Central vertical axis with pulsing nodes. Compact chip-cards alternate left/right,
+          each connected by a short line. Reads like a timeline / git log.
+        </p>
+      </div>
+    </div>
+
+    <!-- the rendered section -->
+    <div class="grain bg-neutral-950 border-y border-neutral-900">
+      <section class="w-full py-20">
+        <div class="mx-auto max-w-6xl px-6">
+
+          <div class="flex items-center gap-2 mb-3 text-sky-400/85">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="size-4">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"/>
+            </svg>
+            <span class="text-[11px] tracking-[0.16em] uppercase font-semibold">Projects</span>
+          </div>
+          <h3 class="text-white text-3xl md:text-[32px] font-bold tracking-tight">Recent projects and partners.</h3>
+          <p class="text-neutral-500 text-sm mt-2 font-sans">Real work, real partners.</p>
+
+          <!-- spine container -->
+          <div class="relative mt-14 max-w-[940px] mx-auto">
+            <!-- gradient center line -->
+            <div class="hidden md:block absolute left-1/2 -translate-x-px top-2 bottom-2 w-px bg-gradient-to-b from-transparent via-neutral-700 to-transparent"></div>
+            <!-- mobile left line -->
+            <div class="md:hidden absolute left-4 top-2 bottom-2 w-px bg-gradient-to-b from-transparent via-neutral-700 to-transparent"></div>
+
+            <ol class="space-y-5">
+              <!-- 1 — Aurrora — right -->
+              <li class="relative md:grid md:grid-cols-2 md:gap-0 pl-10 md:pl-0">
+                <div class="hidden md:block"></div>
+                <div class="relative md:pl-10">
+                  <span class="spine-node absolute md:left-0 -left-[26px] top-1/2 -translate-y-1/2 md:-translate-x-1/2 size-3 rounded-full bg-sky-400 ring-4 ring-neutral-950"></span>
+                  <span class="hidden md:block absolute left-1.5 top-1/2 -translate-y-px h-px w-8 bg-neutral-800"></span>
+                  <a href="https://aurrora.net/" target="_blank" rel="noopener" class="group flex items-center gap-4 max-w-[440px] rounded-2xl border border-neutral-800 bg-neutral-900/55 px-4 py-3.5 hover:border-sky-400/45 hover:bg-neutral-900 transition-colors">
+                    <div class="size-14 rounded-xl bg-neutral-950 border border-neutral-800 p-2 flex items-center justify-center shrink-0">
+                      <img src="/img/aurrora_logo.svg" alt="Aurrora Studios" class="max-w-full max-h-full object-contain"/>
+                    </div>
+                    <div class="min-w-0 flex-1">
+                      <div class="text-[10px] tracking-[0.2em] uppercase text-sky-400/85">Aurrora Studios · 2026 →</div>
+                      <h4 class="text-white text-[15px] font-bold truncate mt-0.5">Minecraft Marketplace add-ons</h4>
+                      <div class="flex gap-1 mt-1.5 flex-wrap">
+                        <span class="text-[10px] px-1.5 py-0.5 bg-neutral-800/80 text-neutral-300 rounded">Bedrock</span>
+                        <span class="text-[10px] px-1.5 py-0.5 bg-neutral-800/80 text-neutral-300 rounded">Script API v2</span>
+                        <span class="text-[10px] px-1.5 py-0.5 bg-neutral-800/80 text-neutral-300 rounded">TypeScript</span>
+                      </div>
+                    </div>
+                    <span class="text-sky-400 text-sm shrink-0 group-hover:translate-x-0.5 transition-transform">→</span>
+                  </a>
+                </div>
+              </li>
+
+              <!-- 2 — Pathway — left -->
+              <li class="relative md:grid md:grid-cols-2 md:gap-0 pl-10 md:pl-0">
+                <div class="relative md:pr-10 md:flex md:justify-end">
+                  <span class="spine-node absolute md:right-0 -left-[26px] md:left-auto top-1/2 -translate-y-1/2 md:translate-x-1/2 size-3 rounded-full bg-sky-400 ring-4 ring-neutral-950"></span>
+                  <span class="hidden md:block absolute right-1.5 top-1/2 -translate-y-px h-px w-8 bg-neutral-800"></span>
+                  <a href="https://www.pathway.studio/" target="_blank" rel="noopener" class="group flex items-center gap-4 max-w-[440px] rounded-2xl border border-neutral-800 bg-neutral-900/55 px-4 py-3.5 hover:border-sky-400/45 hover:bg-neutral-900 transition-colors">
+                    <div class="size-14 rounded-xl bg-neutral-950 border border-neutral-800 p-2 flex items-center justify-center shrink-0">
+                      <img src="/img/pathway_logo.webp" alt="Pathway Studios" class="max-w-full max-h-full object-contain"/>
+                    </div>
+                    <div class="min-w-0 flex-1">
+                      <div class="text-[10px] tracking-[0.2em] uppercase text-sky-400/85">Pathway Studios · 2026 →</div>
+                      <h4 class="text-white text-[15px] font-bold truncate mt-0.5">Marketplace-ready Bedrock content</h4>
+                      <div class="flex gap-1 mt-1.5 flex-wrap">
+                        <span class="text-[10px] px-1.5 py-0.5 bg-neutral-800/80 text-neutral-300 rounded">Bedrock</span>
+                        <span class="text-[10px] px-1.5 py-0.5 bg-neutral-800/80 text-neutral-300 rounded">NDA</span>
+                        <span class="text-[10px] px-1.5 py-0.5 bg-neutral-800/80 text-neutral-300 rounded">TypeScript</span>
+                      </div>
+                    </div>
+                    <span class="text-sky-400 text-sm shrink-0 group-hover:translate-x-0.5 transition-transform">→</span>
+                  </a>
+                </div>
+                <div class="hidden md:block"></div>
+              </li>
+
+              <!-- 3 — Trainpunk Run — right -->
+              <li class="relative md:grid md:grid-cols-2 md:gap-0 pl-10 md:pl-0">
+                <div class="hidden md:block"></div>
+                <div class="relative md:pl-10">
+                  <span class="spine-node absolute md:left-0 -left-[26px] top-1/2 -translate-y-1/2 md:-translate-x-1/2 size-3 rounded-full bg-sky-400 ring-4 ring-neutral-950"></span>
+                  <span class="hidden md:block absolute left-1.5 top-1/2 -translate-y-px h-px w-8 bg-neutral-800"></span>
+                  <a href="https://store.steampowered.com/app/819470/Trainpunk_Run/" target="_blank" rel="noopener" class="group flex items-center gap-4 max-w-[440px] rounded-2xl border border-neutral-800 bg-neutral-900/55 px-4 py-3.5 hover:border-sky-400/45 hover:bg-neutral-900 transition-colors">
+                    <div class="size-14 rounded-xl bg-neutral-950 border border-neutral-800 overflow-hidden shrink-0">
+                      <img src="/img/trainpunk_run.webp" alt="Trainpunk Run" class="w-full h-full object-cover"/>
+                    </div>
+                    <div class="min-w-0 flex-1">
+                      <div class="text-[10px] tracking-[0.2em] uppercase text-sky-400/85">Jellyworld Games · 2021–22</div>
+                      <h4 class="text-white text-[15px] font-bold truncate mt-0.5">Trainpunk Run — Steam release</h4>
+                      <div class="flex gap-1 mt-1.5 flex-wrap">
+                        <span class="text-[10px] px-1.5 py-0.5 bg-neutral-800/80 text-neutral-300 rounded">Unity</span>
+                        <span class="text-[10px] px-1.5 py-0.5 bg-neutral-800/80 text-neutral-300 rounded">C#</span>
+                        <span class="text-[10px] px-1.5 py-0.5 bg-neutral-800/80 text-neutral-300 rounded">Steam</span>
+                      </div>
+                    </div>
+                    <span class="text-sky-400 text-sm shrink-0 group-hover:translate-x-0.5 transition-transform">→</span>
+                  </a>
+                </div>
+              </li>
+
+              <!-- 4 — My Daily Pets — left -->
+              <li class="relative md:grid md:grid-cols-2 md:gap-0 pl-10 md:pl-0">
+                <div class="relative md:pr-10 md:flex md:justify-end">
+                  <span class="spine-node absolute md:right-0 -left-[26px] md:left-auto top-1/2 -translate-y-1/2 md:translate-x-1/2 size-3 rounded-full bg-sky-400 ring-4 ring-neutral-950"></span>
+                  <span class="hidden md:block absolute right-1.5 top-1/2 -translate-y-px h-px w-8 bg-neutral-800"></span>
+                  <a href="https://store.steampowered.com/app/2223760/My_Daily_Pets/" target="_blank" rel="noopener" class="group flex items-center gap-4 max-w-[440px] rounded-2xl border border-neutral-800 bg-neutral-900/55 px-4 py-3.5 hover:border-sky-400/45 hover:bg-neutral-900 transition-colors">
+                    <div class="size-14 rounded-xl bg-neutral-950 border border-neutral-800 overflow-hidden shrink-0">
+                      <img src="/img/mydailypets.webp" alt="My Daily Pets" class="w-full h-full object-cover"/>
+                    </div>
+                    <div class="min-w-0 flex-1">
+                      <div class="text-[10px] tracking-[0.2em] uppercase text-sky-400/85">Jellyworld Games · 2021–22</div>
+                      <h4 class="text-white text-[15px] font-bold truncate mt-0.5">My Daily Pets — Steam release</h4>
+                      <div class="flex gap-1 mt-1.5 flex-wrap">
+                        <span class="text-[10px] px-1.5 py-0.5 bg-neutral-800/80 text-neutral-300 rounded">Unity</span>
+                        <span class="text-[10px] px-1.5 py-0.5 bg-neutral-800/80 text-neutral-300 rounded">C#</span>
+                        <span class="text-[10px] px-1.5 py-0.5 bg-neutral-800/80 text-neutral-300 rounded">Steam</span>
+                      </div>
+                    </div>
+                    <span class="text-sky-400 text-sm shrink-0 group-hover:translate-x-0.5 transition-transform">→</span>
+                  </a>
+                </div>
+                <div class="hidden md:block"></div>
+              </li>
+
+              <!-- 5 — BrainVT — right -->
+              <li class="relative md:grid md:grid-cols-2 md:gap-0 pl-10 md:pl-0">
+                <div class="hidden md:block"></div>
+                <div class="relative md:pl-10">
+                  <span class="spine-node absolute md:left-0 -left-[26px] top-1/2 -translate-y-1/2 md:-translate-x-1/2 size-3 rounded-full bg-sky-400 ring-4 ring-neutral-950"></span>
+                  <span class="hidden md:block absolute left-1.5 top-1/2 -translate-y-px h-px w-8 bg-neutral-800"></span>
+                  <a href="https://www.brainvt.com/" target="_blank" rel="noopener" class="group flex items-center gap-4 max-w-[440px] rounded-2xl border border-neutral-800 bg-neutral-900/55 px-4 py-3.5 hover:border-sky-400/45 hover:bg-neutral-900 transition-colors">
+                    <div class="size-14 rounded-xl bg-neutral-950 border border-neutral-800 p-2 flex items-center justify-center shrink-0">
+                      <img src="/img/brainvt_logo.webp" alt="BrainVT" class="max-w-full max-h-full object-contain"/>
+                    </div>
+                    <div class="min-w-0 flex-1">
+                      <div class="text-[10px] tracking-[0.2em] uppercase text-sky-400/85">BrainVT · 2024</div>
+                      <h4 class="text-white text-[15px] font-bold truncate mt-0.5">Android API upgrade & backend stability</h4>
+                      <div class="flex gap-1 mt-1.5 flex-wrap">
+                        <span class="text-[10px] px-1.5 py-0.5 bg-neutral-800/80 text-neutral-300 rounded">Unity</span>
+                        <span class="text-[10px] px-1.5 py-0.5 bg-neutral-800/80 text-neutral-300 rounded">Android</span>
+                        <span class="text-[10px] px-1.5 py-0.5 bg-neutral-800/80 text-neutral-300 rounded">AWS</span>
+                      </div>
+                    </div>
+                    <span class="text-sky-400 text-sm shrink-0 group-hover:translate-x-0.5 transition-transform">→</span>
+                  </a>
+                </div>
+              </li>
+
+              <!-- 6 — Idle Ore Generator — left -->
+              <li class="relative md:grid md:grid-cols-2 md:gap-0 pl-10 md:pl-0">
+                <div class="relative md:pr-10 md:flex md:justify-end">
+                  <span class="spine-node absolute md:right-0 -left-[26px] md:left-auto top-1/2 -translate-y-1/2 md:translate-x-1/2 size-3 rounded-full bg-sky-400 ring-4 ring-neutral-950"></span>
+                  <span class="hidden md:block absolute right-1.5 top-1/2 -translate-y-px h-px w-8 bg-neutral-800"></span>
+                  <a href="https://www.curseforge.com/minecraft-bedrock/addons/idle-ore-generators" target="_blank" rel="noopener" class="group flex items-center gap-4 max-w-[440px] rounded-2xl border border-neutral-800 bg-neutral-900/55 px-4 py-3.5 hover:border-sky-400/45 hover:bg-neutral-900 transition-colors">
+                    <div class="size-14 rounded-xl bg-neutral-950 border border-neutral-800 p-1.5 flex items-center justify-center shrink-0">
+                      <img src="/img/Logo_IdleOreGenerator.webp" alt="Idle Ore Generator" class="max-w-full max-h-full object-contain"/>
+                    </div>
+                    <div class="min-w-0 flex-1">
+                      <div class="text-[10px] tracking-[0.2em] uppercase text-sky-400/85">Self-published · CurseForge</div>
+                      <h4 class="text-white text-[15px] font-bold truncate mt-0.5">Idle Ore Generator</h4>
+                      <div class="flex gap-1 mt-1.5 flex-wrap">
+                        <span class="text-[10px] px-1.5 py-0.5 bg-neutral-800/80 text-neutral-300 rounded">Bedrock</span>
+                        <span class="text-[10px] px-1.5 py-0.5 bg-neutral-800/80 text-neutral-300 rounded">TypeScript</span>
+                        <span class="text-[10px] px-1.5 py-0.5 bg-neutral-800/80 text-neutral-300 rounded">CurseForge</span>
+                      </div>
+                    </div>
+                    <span class="text-sky-400 text-sm shrink-0 group-hover:translate-x-0.5 transition-transform">→</span>
+                  </a>
+                </div>
+                <div class="hidden md:block"></div>
+              </li>
+            </ol>
+          </div>
+
+          <div class="flex justify-center mt-14">
+            <a href="#contact" class="text-neutral-400 text-sm hover:text-white transition-colors font-sans">
+              Looking for something else? <span class="text-sky-400">Tell me about your project →</span>
+            </a>
+          </div>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <!-- ====================================================================== -->
+  <!-- VARIANT B — MOSAIC GRID                                                 -->
+  <!-- ====================================================================== -->
+  <section id="variant-b" class="border-t border-neutral-900 bg-neutral-950">
+    <div class="mx-auto max-w-6xl px-6 pt-16 pb-8">
+      <div class="flex items-baseline justify-between gap-6 flex-wrap">
+        <div>
+          <span class="text-sky-400 text-[11px] tracking-[0.22em] uppercase">Variant B</span>
+          <h2 class="text-white text-2xl md:text-[28px] font-bold tracking-tight mt-1">Mosaic Grid</h2>
+        </div>
+        <p class="text-neutral-500 text-xs font-sans max-w-[420px]">
+          3-column image-led grid. Each card leads with the visual, with company chip overlaid.
+          Hover lifts the card and previews a description. Most "portfolio-like".
+        </p>
+      </div>
+    </div>
+
+    <div class="grain bg-neutral-950 border-y border-neutral-900">
+      <section class="w-full py-20">
+        <div class="mx-auto max-w-6xl px-6">
+
+          <div class="flex items-center gap-2 mb-3 text-sky-400/85">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="size-4">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"/>
+            </svg>
+            <span class="text-[11px] tracking-[0.16em] uppercase font-semibold">Projects</span>
+          </div>
+          <h3 class="text-white text-3xl md:text-[32px] font-bold tracking-tight">Recent projects and partners.</h3>
+          <p class="text-neutral-500 text-sm mt-2 font-sans">Real work, real partners.</p>
+
+          <div class="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+
+            <!-- card: Trainpunk Run -->
+            <a href="https://store.steampowered.com/app/819470/Trainpunk_Run/" target="_blank" rel="noopener" class="mosaic-card group relative flex flex-col rounded-xl border border-neutral-800 bg-neutral-900/40 overflow-hidden hover:border-sky-400/40">
+              <div class="aspect-[16/10] relative overflow-hidden">
+                <img src="/img/trainpunk_run.webp" alt="" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
+                <div class="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/30 to-transparent"></div>
+                <span class="absolute top-3 left-3 text-[10px] tracking-[0.2em] uppercase text-sky-300 bg-neutral-950/85 backdrop-blur-sm px-2 py-1 rounded border border-neutral-800">Unity</span>
+                <div class="absolute bottom-3 left-3 flex items-center gap-2">
+                  <div class="size-7 rounded-md bg-neutral-950/85 backdrop-blur-sm border border-neutral-800 p-1 flex items-center justify-center">
+                    <img src="/img/jellyworld_logo.webp" alt="" class="max-w-full max-h-full object-contain"/>
+                  </div>
+                  <span class="text-[11px] text-white/90 font-sans">Jellyworld Games</span>
+                </div>
+              </div>
+              <div class="p-4 flex flex-col gap-2 flex-1">
+                <div class="text-[10px] tracking-[0.18em] uppercase text-neutral-500">2021–2022</div>
+                <h4 class="text-white text-[15px] font-bold leading-snug">Trainpunk Run — Steam release</h4>
+                <div class="flex flex-wrap gap-1.5 mt-auto pt-2">
+                  <span class="text-[10px] px-1.5 py-0.5 bg-neutral-800/80 text-neutral-300 rounded">Unity</span>
+                  <span class="text-[10px] px-1.5 py-0.5 bg-neutral-800/80 text-neutral-300 rounded">C#</span>
+                  <span class="text-[10px] px-1.5 py-0.5 bg-neutral-800/80 text-neutral-300 rounded">Steam</span>
+                </div>
+              </div>
+            </a>
+
+            <!-- card: My Daily Pets -->
+            <a href="https://store.steampowered.com/app/2223760/My_Daily_Pets/" target="_blank" rel="noopener" class="mosaic-card group relative flex flex-col rounded-xl border border-neutral-800 bg-neutral-900/40 overflow-hidden hover:border-sky-400/40">
+              <div class="aspect-[16/10] relative overflow-hidden">
+                <img src="/img/mydailypets.webp" alt="" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
+                <div class="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/30 to-transparent"></div>
+                <span class="absolute top-3 left-3 text-[10px] tracking-[0.2em] uppercase text-sky-300 bg-neutral-950/85 backdrop-blur-sm px-2 py-1 rounded border border-neutral-800">Unity</span>
+                <div class="absolute bottom-3 left-3 flex items-center gap-2">
+                  <div class="size-7 rounded-md bg-neutral-950/85 backdrop-blur-sm border border-neutral-800 p-1 flex items-center justify-center">
+                    <img src="/img/jellyworld_logo.webp" alt="" class="max-w-full max-h-full object-contain"/>
+                  </div>
+                  <span class="text-[11px] text-white/90 font-sans">Jellyworld Games</span>
+                </div>
+              </div>
+              <div class="p-4 flex flex-col gap-2 flex-1">
+                <div class="text-[10px] tracking-[0.18em] uppercase text-neutral-500">2021–2022</div>
+                <h4 class="text-white text-[15px] font-bold leading-snug">My Daily Pets — Steam release</h4>
+                <div class="flex flex-wrap gap-1.5 mt-auto pt-2">
+                  <span class="text-[10px] px-1.5 py-0.5 bg-neutral-800/80 text-neutral-300 rounded">Unity</span>
+                  <span class="text-[10px] px-1.5 py-0.5 bg-neutral-800/80 text-neutral-300 rounded">C#</span>
+                  <span class="text-[10px] px-1.5 py-0.5 bg-neutral-800/80 text-neutral-300 rounded">Steam</span>
+                </div>
+              </div>
+            </a>
+
+            <!-- card: Aurrora (placeholder bg style) -->
+            <a href="https://aurrora.net/" target="_blank" rel="noopener" class="mosaic-card group relative flex flex-col rounded-xl border border-neutral-800 bg-neutral-900/40 overflow-hidden hover:border-sky-400/40">
+              <div class="aspect-[16/10] relative overflow-hidden bg-gradient-to-br from-emerald-900 via-emerald-950 to-neutral-950">
+                <div class="absolute inset-0 opacity-15" style="background-image: repeating-linear-gradient(0deg, transparent, transparent 23px, rgba(255,255,255,0.18) 23px, rgba(255,255,255,0.18) 24px), repeating-linear-gradient(90deg, transparent, transparent 23px, rgba(255,255,255,0.18) 23px, rgba(255,255,255,0.18) 24px);"></div>
+                <div class="absolute inset-0 flex items-center justify-center">
+                  <img src="/img/aurrora_logo.svg" alt="" class="w-44 drop-shadow-xl"/>
+                </div>
+                <div class="absolute inset-0 bg-gradient-to-t from-neutral-950 via-transparent to-transparent"></div>
+                <span class="absolute top-3 left-3 text-[10px] tracking-[0.2em] uppercase text-sky-300 bg-neutral-950/85 backdrop-blur-sm px-2 py-1 rounded border border-neutral-800">Bedrock</span>
+                <div class="absolute bottom-3 left-3 flex items-center gap-2">
+                  <div class="size-7 rounded-md bg-neutral-950/85 backdrop-blur-sm border border-neutral-800 p-1 flex items-center justify-center">
+                    <img src="/img/aurrora_logo.svg" alt="" class="max-w-full max-h-full object-contain"/>
+                  </div>
+                  <span class="text-[11px] text-white/90 font-sans">Aurrora Studios</span>
+                </div>
+              </div>
+              <div class="p-4 flex flex-col gap-2 flex-1">
+                <div class="text-[10px] tracking-[0.18em] uppercase text-neutral-500">2026 → present</div>
+                <h4 class="text-white text-[15px] font-bold leading-snug">Minecraft Marketplace add-ons</h4>
+                <div class="flex flex-wrap gap-1.5 mt-auto pt-2">
+                  <span class="text-[10px] px-1.5 py-0.5 bg-neutral-800/80 text-neutral-300 rounded">Bedrock</span>
+                  <span class="text-[10px] px-1.5 py-0.5 bg-neutral-800/80 text-neutral-300 rounded">Script API v2</span>
+                  <span class="text-[10px] px-1.5 py-0.5 bg-neutral-800/80 text-neutral-300 rounded">TypeScript</span>
+                </div>
+              </div>
+            </a>
+
+            <!-- card: Pathway -->
+            <a href="https://www.pathway.studio/" target="_blank" rel="noopener" class="mosaic-card group relative flex flex-col rounded-xl border border-neutral-800 bg-neutral-900/40 overflow-hidden hover:border-sky-400/40">
+              <div class="aspect-[16/10] relative overflow-hidden bg-gradient-to-br from-emerald-900 via-emerald-950 to-neutral-950">
+                <div class="absolute inset-0 opacity-15" style="background-image: repeating-linear-gradient(0deg, transparent, transparent 23px, rgba(255,255,255,0.18) 23px, rgba(255,255,255,0.18) 24px), repeating-linear-gradient(90deg, transparent, transparent 23px, rgba(255,255,255,0.18) 23px, rgba(255,255,255,0.18) 24px);"></div>
+                <div class="absolute inset-0 flex items-center justify-center">
+                  <img src="/img/pathway_logo.webp" alt="" class="size-28 object-contain drop-shadow-xl"/>
+                </div>
+                <div class="absolute inset-0 bg-gradient-to-t from-neutral-950 via-transparent to-transparent"></div>
+                <span class="absolute top-3 left-3 text-[10px] tracking-[0.2em] uppercase text-sky-300 bg-neutral-950/85 backdrop-blur-sm px-2 py-1 rounded border border-neutral-800">Bedrock</span>
+                <div class="absolute bottom-3 left-3 flex items-center gap-2">
+                  <div class="size-7 rounded-md bg-neutral-950/85 backdrop-blur-sm border border-neutral-800 p-1 flex items-center justify-center">
+                    <img src="/img/pathway_logo.webp" alt="" class="max-w-full max-h-full object-contain"/>
+                  </div>
+                  <span class="text-[11px] text-white/90 font-sans">Pathway Studios</span>
+                </div>
+              </div>
+              <div class="p-4 flex flex-col gap-2 flex-1">
+                <div class="text-[10px] tracking-[0.18em] uppercase text-neutral-500">2026 → present</div>
+                <h4 class="text-white text-[15px] font-bold leading-snug">Marketplace-ready Bedrock content</h4>
+                <div class="flex flex-wrap gap-1.5 mt-auto pt-2">
+                  <span class="text-[10px] px-1.5 py-0.5 bg-neutral-800/80 text-neutral-300 rounded">Bedrock</span>
+                  <span class="text-[10px] px-1.5 py-0.5 bg-neutral-800/80 text-neutral-300 rounded">NDA</span>
+                  <span class="text-[10px] px-1.5 py-0.5 bg-neutral-800/80 text-neutral-300 rounded">TypeScript</span>
+                </div>
+              </div>
+            </a>
+
+            <!-- card: BrainVT -->
+            <a href="https://www.brainvt.com/" target="_blank" rel="noopener" class="mosaic-card group relative flex flex-col rounded-xl border border-neutral-800 bg-neutral-900/40 overflow-hidden hover:border-sky-400/40">
+              <div class="aspect-[16/10] relative overflow-hidden bg-gradient-to-b from-slate-500 via-slate-800 to-neutral-950">
+                <div class="absolute inset-0 opacity-15" style="background-image: radial-gradient(circle, rgba(255,255,255,0.35) 1px, transparent 1.5px); background-size: 18px 18px;"></div>
+                <div class="absolute inset-0 flex items-center justify-center">
+                  <img src="/img/brainvt_logo.webp" alt="" class="size-24 object-contain drop-shadow-xl"/>
+                </div>
+                <div class="absolute inset-0 bg-gradient-to-t from-neutral-950 via-transparent to-transparent"></div>
+                <span class="absolute top-3 left-3 text-[10px] tracking-[0.2em] uppercase text-sky-300 bg-neutral-950/85 backdrop-blur-sm px-2 py-1 rounded border border-neutral-800">Unity</span>
+                <div class="absolute bottom-3 left-3 flex items-center gap-2">
+                  <div class="size-7 rounded-md bg-neutral-950/85 backdrop-blur-sm border border-neutral-800 p-1 flex items-center justify-center">
+                    <img src="/img/brainvt_logo.webp" alt="" class="max-w-full max-h-full object-contain"/>
+                  </div>
+                  <span class="text-[11px] text-white/90 font-sans">BrainVT</span>
+                </div>
+              </div>
+              <div class="p-4 flex flex-col gap-2 flex-1">
+                <div class="text-[10px] tracking-[0.18em] uppercase text-neutral-500">Jun → Aug 2024</div>
+                <h4 class="text-white text-[15px] font-bold leading-snug">Android API upgrade & backend stability</h4>
+                <div class="flex flex-wrap gap-1.5 mt-auto pt-2">
+                  <span class="text-[10px] px-1.5 py-0.5 bg-neutral-800/80 text-neutral-300 rounded">Unity</span>
+                  <span class="text-[10px] px-1.5 py-0.5 bg-neutral-800/80 text-neutral-300 rounded">Android</span>
+                  <span class="text-[10px] px-1.5 py-0.5 bg-neutral-800/80 text-neutral-300 rounded">AWS</span>
+                </div>
+              </div>
+            </a>
+
+            <!-- card: Idle Ore Generator -->
+            <a href="https://www.curseforge.com/minecraft-bedrock/addons/idle-ore-generators" target="_blank" rel="noopener" class="mosaic-card group relative flex flex-col rounded-xl border border-neutral-800 bg-neutral-900/40 overflow-hidden hover:border-sky-400/40">
+              <div class="aspect-[16/10] relative overflow-hidden bg-gradient-to-br from-emerald-900 via-emerald-950 to-neutral-950">
+                <div class="absolute inset-0 opacity-15" style="background-image: repeating-linear-gradient(0deg, transparent, transparent 23px, rgba(255,255,255,0.18) 23px, rgba(255,255,255,0.18) 24px), repeating-linear-gradient(90deg, transparent, transparent 23px, rgba(255,255,255,0.18) 23px, rgba(255,255,255,0.18) 24px);"></div>
+                <div class="absolute inset-0 flex items-center justify-center">
+                  <img src="/img/Logo_IdleOreGenerator.webp" alt="" class="size-28 object-contain drop-shadow-xl"/>
+                </div>
+                <div class="absolute inset-0 bg-gradient-to-t from-neutral-950 via-transparent to-transparent"></div>
+                <span class="absolute top-3 left-3 text-[10px] tracking-[0.2em] uppercase text-sky-300 bg-neutral-950/85 backdrop-blur-sm px-2 py-1 rounded border border-neutral-800">Bedrock</span>
+                <div class="absolute bottom-3 left-3 flex items-center gap-2">
+                  <div class="size-7 rounded-md bg-neutral-950/85 backdrop-blur-sm border border-neutral-800 p-1 flex items-center justify-center">
+                    <img src="/img/curseforge_logo.svg" alt="" class="max-w-full max-h-full object-contain"/>
+                  </div>
+                  <span class="text-[11px] text-white/90 font-sans">CurseForge</span>
+                </div>
+              </div>
+              <div class="p-4 flex flex-col gap-2 flex-1">
+                <div class="text-[10px] tracking-[0.18em] uppercase text-neutral-500">Published · 1.21.130</div>
+                <h4 class="text-white text-[15px] font-bold leading-snug">Idle Ore Generator</h4>
+                <div class="flex flex-wrap gap-1.5 mt-auto pt-2">
+                  <span class="text-[10px] px-1.5 py-0.5 bg-neutral-800/80 text-neutral-300 rounded">Bedrock</span>
+                  <span class="text-[10px] px-1.5 py-0.5 bg-neutral-800/80 text-neutral-300 rounded">TypeScript</span>
+                  <span class="text-[10px] px-1.5 py-0.5 bg-neutral-800/80 text-neutral-300 rounded">CurseForge</span>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <div class="flex justify-center mt-12">
+            <a href="#contact" class="text-neutral-400 text-sm hover:text-white transition-colors font-sans">
+              Looking for something else? <span class="text-sky-400">Tell me about your project →</span>
+            </a>
+          </div>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <!-- ====================================================================== -->
+  <!-- VARIANT C — STUDIO LEDGER                                               -->
+  <!-- ====================================================================== -->
+  <section id="variant-c" class="border-t border-neutral-900 bg-neutral-950">
+    <div class="mx-auto max-w-6xl px-6 pt-16 pb-8">
+      <div class="flex items-baseline justify-between gap-6 flex-wrap">
+        <div>
+          <span class="text-sky-400 text-[11px] tracking-[0.22em] uppercase">Variant C</span>
+          <h2 class="text-white text-2xl md:text-[28px] font-bold tracking-tight mt-1">Studio Ledger</h2>
+        </div>
+        <p class="text-neutral-500 text-xs font-sans max-w-[420px]">
+          Typographic index. One line per project on desktop, with terminal-style column labels.
+          Hover reveals a sky-blue left bar. Most compact, most developer-coded.
+        </p>
+      </div>
+    </div>
+
+    <div class="grain bg-neutral-950 border-y border-neutral-900">
+      <section class="w-full py-20">
+        <div class="mx-auto max-w-6xl px-6">
+
+          <div class="flex items-center gap-2 mb-3 text-sky-400/85">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="size-4">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"/>
+            </svg>
+            <span class="text-[11px] tracking-[0.16em] uppercase font-semibold">Projects</span>
+          </div>
+          <h3 class="text-white text-3xl md:text-[32px] font-bold tracking-tight">Recent projects and partners.</h3>
+          <p class="text-neutral-500 text-sm mt-2 font-sans">Real work, real partners.</p>
+
+          <!-- ledger -->
+          <div class="mt-12 rounded-xl border border-neutral-800 bg-neutral-900/30 overflow-hidden">
+            <!-- header (terminal-style) -->
+            <div class="hidden md:grid grid-cols-[36px_2fr_3fr_2fr_90px_44px] gap-4 items-center px-5 py-3 bg-neutral-900/70 border-b border-neutral-800 text-[10px] tracking-[0.22em] uppercase text-neutral-500">
+              <span>#</span>
+              <span>Partner</span>
+              <span>Project</span>
+              <span>Stack</span>
+              <span>Year</span>
+              <span></span>
+            </div>
+
+            <!-- row 1 -->
+            <a href="https://aurrora.net/" target="_blank" rel="noopener" class="ledger-row group grid grid-cols-[28px_1fr] md:grid-cols-[36px_2fr_3fr_2fr_90px_44px] gap-x-4 gap-y-1 items-center px-5 py-4 border-b border-neutral-800/60 hover:bg-neutral-900/50 transition-colors">
+              <span class="text-neutral-600 text-xs font-mono">01</span>
+              <div class="flex items-center gap-3 min-w-0">
+                <div class="size-7 rounded-md bg-neutral-950 border border-neutral-800 p-1 flex items-center justify-center shrink-0">
+                  <img src="/img/aurrora_logo.svg" alt="" class="max-w-full max-h-full object-contain"/>
+                </div>
+                <span class="text-white text-sm font-bold truncate">Aurrora Studios</span>
+              </div>
+              <div class="text-neutral-300 text-sm font-sans truncate col-span-2 md:col-span-1">Minecraft Marketplace add-ons</div>
+              <div class="flex gap-1 flex-wrap col-span-2 md:col-span-1">
+                <span class="text-[10px] px-1.5 py-0.5 bg-neutral-800/80 text-neutral-300 rounded">Bedrock</span>
+                <span class="text-[10px] px-1.5 py-0.5 bg-neutral-800/80 text-neutral-300 rounded">TS</span>
+              </div>
+              <span class="text-neutral-500 text-xs col-start-2 md:col-start-auto">2026 →</span>
+              <span class="text-sky-400 text-sm justify-self-end group-hover:translate-x-1 transition-transform">→</span>
+            </a>
+
+            <!-- row 2 -->
+            <a href="https://www.pathway.studio/" target="_blank" rel="noopener" class="ledger-row group grid grid-cols-[28px_1fr] md:grid-cols-[36px_2fr_3fr_2fr_90px_44px] gap-x-4 gap-y-1 items-center px-5 py-4 border-b border-neutral-800/60 hover:bg-neutral-900/50 transition-colors">
+              <span class="text-neutral-600 text-xs font-mono">02</span>
+              <div class="flex items-center gap-3 min-w-0">
+                <div class="size-7 rounded-md bg-neutral-950 border border-neutral-800 p-1 flex items-center justify-center shrink-0">
+                  <img src="/img/pathway_logo.webp" alt="" class="max-w-full max-h-full object-contain"/>
+                </div>
+                <span class="text-white text-sm font-bold truncate">Pathway Studios</span>
+              </div>
+              <div class="text-neutral-300 text-sm font-sans truncate col-span-2 md:col-span-1">Marketplace-ready Bedrock content</div>
+              <div class="flex gap-1 flex-wrap col-span-2 md:col-span-1">
+                <span class="text-[10px] px-1.5 py-0.5 bg-neutral-800/80 text-neutral-300 rounded">Bedrock</span>
+                <span class="text-[10px] px-1.5 py-0.5 bg-neutral-800/80 text-neutral-300 rounded">NDA</span>
+              </div>
+              <span class="text-neutral-500 text-xs col-start-2 md:col-start-auto">2026 →</span>
+              <span class="text-sky-400 text-sm justify-self-end group-hover:translate-x-1 transition-transform">→</span>
+            </a>
+
+            <!-- row 3 -->
+            <a href="https://store.steampowered.com/app/819470/Trainpunk_Run/" target="_blank" rel="noopener" class="ledger-row group grid grid-cols-[28px_1fr] md:grid-cols-[36px_2fr_3fr_2fr_90px_44px] gap-x-4 gap-y-1 items-center px-5 py-4 border-b border-neutral-800/60 hover:bg-neutral-900/50 transition-colors">
+              <span class="text-neutral-600 text-xs font-mono">03</span>
+              <div class="flex items-center gap-3 min-w-0">
+                <div class="size-7 rounded-md bg-neutral-950 border border-neutral-800 p-1 flex items-center justify-center shrink-0">
+                  <img src="/img/jellyworld_logo.webp" alt="" class="max-w-full max-h-full object-contain"/>
+                </div>
+                <span class="text-white text-sm font-bold truncate">Jellyworld Games</span>
+              </div>
+              <div class="text-neutral-300 text-sm font-sans truncate col-span-2 md:col-span-1">Trainpunk Run — Steam release</div>
+              <div class="flex gap-1 flex-wrap col-span-2 md:col-span-1">
+                <span class="text-[10px] px-1.5 py-0.5 bg-neutral-800/80 text-neutral-300 rounded">Unity</span>
+                <span class="text-[10px] px-1.5 py-0.5 bg-neutral-800/80 text-neutral-300 rounded">C#</span>
+              </div>
+              <span class="text-neutral-500 text-xs col-start-2 md:col-start-auto">2021–22</span>
+              <span class="text-sky-400 text-sm justify-self-end group-hover:translate-x-1 transition-transform">→</span>
+            </a>
+
+            <!-- row 4 -->
+            <a href="https://store.steampowered.com/app/2223760/My_Daily_Pets/" target="_blank" rel="noopener" class="ledger-row group grid grid-cols-[28px_1fr] md:grid-cols-[36px_2fr_3fr_2fr_90px_44px] gap-x-4 gap-y-1 items-center px-5 py-4 border-b border-neutral-800/60 hover:bg-neutral-900/50 transition-colors">
+              <span class="text-neutral-600 text-xs font-mono">04</span>
+              <div class="flex items-center gap-3 min-w-0">
+                <div class="size-7 rounded-md bg-neutral-950 border border-neutral-800 p-1 flex items-center justify-center shrink-0">
+                  <img src="/img/jellyworld_logo.webp" alt="" class="max-w-full max-h-full object-contain"/>
+                </div>
+                <span class="text-white text-sm font-bold truncate">Jellyworld Games</span>
+              </div>
+              <div class="text-neutral-300 text-sm font-sans truncate col-span-2 md:col-span-1">My Daily Pets — Steam release</div>
+              <div class="flex gap-1 flex-wrap col-span-2 md:col-span-1">
+                <span class="text-[10px] px-1.5 py-0.5 bg-neutral-800/80 text-neutral-300 rounded">Unity</span>
+                <span class="text-[10px] px-1.5 py-0.5 bg-neutral-800/80 text-neutral-300 rounded">C#</span>
+              </div>
+              <span class="text-neutral-500 text-xs col-start-2 md:col-start-auto">2021–22</span>
+              <span class="text-sky-400 text-sm justify-self-end group-hover:translate-x-1 transition-transform">→</span>
+            </a>
+
+            <!-- row 5 -->
+            <a href="https://www.brainvt.com/" target="_blank" rel="noopener" class="ledger-row group grid grid-cols-[28px_1fr] md:grid-cols-[36px_2fr_3fr_2fr_90px_44px] gap-x-4 gap-y-1 items-center px-5 py-4 border-b border-neutral-800/60 hover:bg-neutral-900/50 transition-colors">
+              <span class="text-neutral-600 text-xs font-mono">05</span>
+              <div class="flex items-center gap-3 min-w-0">
+                <div class="size-7 rounded-md bg-neutral-950 border border-neutral-800 p-1 flex items-center justify-center shrink-0">
+                  <img src="/img/brainvt_logo.webp" alt="" class="max-w-full max-h-full object-contain"/>
+                </div>
+                <span class="text-white text-sm font-bold truncate">BrainVT</span>
+              </div>
+              <div class="text-neutral-300 text-sm font-sans truncate col-span-2 md:col-span-1">Android API upgrade & backend stability</div>
+              <div class="flex gap-1 flex-wrap col-span-2 md:col-span-1">
+                <span class="text-[10px] px-1.5 py-0.5 bg-neutral-800/80 text-neutral-300 rounded">Unity</span>
+                <span class="text-[10px] px-1.5 py-0.5 bg-neutral-800/80 text-neutral-300 rounded">AWS</span>
+              </div>
+              <span class="text-neutral-500 text-xs col-start-2 md:col-start-auto">2024</span>
+              <span class="text-sky-400 text-sm justify-self-end group-hover:translate-x-1 transition-transform">→</span>
+            </a>
+
+            <!-- row 6 -->
+            <a href="https://www.curseforge.com/minecraft-bedrock/addons/idle-ore-generators" target="_blank" rel="noopener" class="ledger-row group grid grid-cols-[28px_1fr] md:grid-cols-[36px_2fr_3fr_2fr_90px_44px] gap-x-4 gap-y-1 items-center px-5 py-4 hover:bg-neutral-900/50 transition-colors">
+              <span class="text-neutral-600 text-xs font-mono">06</span>
+              <div class="flex items-center gap-3 min-w-0">
+                <div class="size-7 rounded-md bg-neutral-950 border border-neutral-800 p-1 flex items-center justify-center shrink-0">
+                  <img src="/img/Logo_IdleOreGenerator.webp" alt="" class="max-w-full max-h-full object-contain"/>
+                </div>
+                <span class="text-white text-sm font-bold truncate">Idle Ore Generator</span>
+              </div>
+              <div class="text-neutral-300 text-sm font-sans truncate col-span-2 md:col-span-1">Published on CurseForge · 1.21.130</div>
+              <div class="flex gap-1 flex-wrap col-span-2 md:col-span-1">
+                <span class="text-[10px] px-1.5 py-0.5 bg-neutral-800/80 text-neutral-300 rounded">Bedrock</span>
+                <span class="text-[10px] px-1.5 py-0.5 bg-neutral-800/80 text-neutral-300 rounded">TS</span>
+              </div>
+              <span class="text-neutral-500 text-xs col-start-2 md:col-start-auto">2024</span>
+              <span class="text-sky-400 text-sm justify-self-end group-hover:translate-x-1 transition-transform">→</span>
+            </a>
+          </div>
+
+          <div class="flex justify-between items-center mt-6 px-1">
+            <span class="text-[10px] tracking-[0.22em] uppercase text-neutral-600">6 entries · sorted by recency</span>
+            <a href="#contact" class="text-neutral-400 text-sm hover:text-white transition-colors font-sans">
+              <span class="text-sky-400">Tell me about your project →</span>
+            </a>
+          </div>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <!-- ====================================================================== -->
+  <!-- VARIANT D — BENTO FEATURED                                              -->
+  <!-- ====================================================================== -->
+  <section id="variant-d" class="border-t border-neutral-900 bg-neutral-950">
+    <div class="mx-auto max-w-6xl px-6 pt-16 pb-8">
+      <div class="flex items-baseline justify-between gap-6 flex-wrap">
+        <div>
+          <span class="text-sky-400 text-[11px] tracking-[0.22em] uppercase">Variant D</span>
+          <h2 class="text-white text-2xl md:text-[28px] font-bold tracking-tight mt-1">Bento Featured</h2>
+        </div>
+        <p class="text-neutral-500 text-xs font-sans max-w-[420px]">
+          Two featured projects (current studio partnerships) in hero cards, the rest
+          as four compact chips in a row. Hierarchical — tells the visitor what to look at first.
+        </p>
+      </div>
+    </div>
+
+    <div class="grain bg-neutral-950 border-y border-neutral-900">
+      <section class="w-full py-20">
+        <div class="mx-auto max-w-6xl px-6">
+
+          <div class="flex items-center gap-2 mb-3 text-sky-400/85">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="size-4">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"/>
+            </svg>
+            <span class="text-[11px] tracking-[0.16em] uppercase font-semibold">Projects</span>
+          </div>
+          <h3 class="text-white text-3xl md:text-[32px] font-bold tracking-tight">Recent projects and partners.</h3>
+          <p class="text-neutral-500 text-sm mt-2 font-sans">Real work, real partners.</p>
+
+          <!-- featured row -->
+          <div class="mt-12 grid grid-cols-1 lg:grid-cols-2 gap-4">
+
+            <!-- featured 1: Aurrora -->
+            <a href="https://aurrora.net/" target="_blank" rel="noopener" class="mosaic-card group relative aspect-[16/10] rounded-2xl border border-neutral-800 overflow-hidden bg-gradient-to-br from-emerald-900 via-emerald-950 to-neutral-950 hover:border-sky-400/40">
+              <div class="absolute inset-0 opacity-15" style="background-image: repeating-linear-gradient(0deg, transparent, transparent 31px, rgba(255,255,255,0.18) 31px, rgba(255,255,255,0.18) 32px), repeating-linear-gradient(90deg, transparent, transparent 31px, rgba(255,255,255,0.18) 31px, rgba(255,255,255,0.18) 32px);"></div>
+              <div class="absolute inset-0 flex items-center justify-center">
+                <img src="/img/aurrora_logo.svg" alt="" class="w-64 drop-shadow-2xl"/>
+              </div>
+              <div class="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/40 to-transparent"></div>
+              <div class="absolute inset-0 p-6 md:p-7 flex flex-col justify-between">
+                <div class="flex items-center justify-between">
+                  <span class="text-[10px] tracking-[0.22em] uppercase text-sky-300 bg-neutral-950/85 backdrop-blur-sm px-2 py-1 rounded border border-neutral-800">Featured · Bedrock</span>
+                  <span class="text-sky-400 text-sm group-hover:translate-x-1 transition-transform">→</span>
+                </div>
+                <div>
+                  <div class="flex items-center gap-2.5 mb-2.5">
+                    <div class="size-8 rounded-md bg-neutral-950/85 backdrop-blur-sm border border-neutral-800 p-1 flex items-center justify-center">
+                      <img src="/img/aurrora_logo.svg" alt="" class="max-w-full max-h-full object-contain"/>
+                    </div>
+                    <span class="text-[11px] text-white/90 font-sans">Aurrora Studios · 2026 → present</span>
+                  </div>
+                  <h4 class="text-white text-xl md:text-2xl font-bold leading-tight">Minecraft Marketplace add-ons</h4>
+                  <p class="text-neutral-300 text-sm font-sans leading-relaxed mt-2 max-w-md">
+                    Production-ready Bedrock add-on projects for the Minecraft Marketplace. Script API v2 + TypeScript, delivered under Aurrora Studios.
+                  </p>
+                  <div class="flex flex-wrap gap-1.5 mt-3">
+                    <span class="text-[10px] px-1.5 py-0.5 bg-neutral-800/80 text-neutral-200 rounded">Bedrock</span>
+                    <span class="text-[10px] px-1.5 py-0.5 bg-neutral-800/80 text-neutral-200 rounded">Script API v2</span>
+                    <span class="text-[10px] px-1.5 py-0.5 bg-neutral-800/80 text-neutral-200 rounded">TypeScript</span>
+                  </div>
+                </div>
+              </div>
+            </a>
+
+            <!-- featured 2: Trainpunk Run -->
+            <a href="https://store.steampowered.com/app/819470/Trainpunk_Run/" target="_blank" rel="noopener" class="mosaic-card group relative aspect-[16/10] rounded-2xl border border-neutral-800 overflow-hidden hover:border-sky-400/40">
+              <img src="/img/trainpunk_run.webp" alt="" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"/>
+              <div class="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/55 to-neutral-950/15"></div>
+              <div class="absolute inset-0 p-6 md:p-7 flex flex-col justify-between">
+                <div class="flex items-center justify-between">
+                  <span class="text-[10px] tracking-[0.22em] uppercase text-sky-300 bg-neutral-950/85 backdrop-blur-sm px-2 py-1 rounded border border-neutral-800">Featured · Unity</span>
+                  <span class="text-sky-400 text-sm group-hover:translate-x-1 transition-transform">→</span>
+                </div>
+                <div>
+                  <div class="flex items-center gap-2.5 mb-2.5">
+                    <div class="size-8 rounded-md bg-neutral-950/85 backdrop-blur-sm border border-neutral-800 p-1 flex items-center justify-center">
+                      <img src="/img/jellyworld_logo.webp" alt="" class="max-w-full max-h-full object-contain"/>
+                    </div>
+                    <span class="text-[11px] text-white/90 font-sans">Jellyworld Games · 2021–22</span>
+                  </div>
+                  <h4 class="text-white text-xl md:text-2xl font-bold leading-tight">Trainpunk Run — Steam release</h4>
+                  <p class="text-neutral-300 text-sm font-sans leading-relaxed mt-2 max-w-md">
+                    Contributed to the Steam release as Unity developer. Cross-discipline collaboration, Agile sprints, gameplay systems.
+                  </p>
+                  <div class="flex flex-wrap gap-1.5 mt-3">
+                    <span class="text-[10px] px-1.5 py-0.5 bg-neutral-800/80 text-neutral-200 rounded">Unity</span>
+                    <span class="text-[10px] px-1.5 py-0.5 bg-neutral-800/80 text-neutral-200 rounded">C#</span>
+                    <span class="text-[10px] px-1.5 py-0.5 bg-neutral-800/80 text-neutral-200 rounded">Steam</span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <!-- chip row -->
+          <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+
+            <a href="https://www.pathway.studio/" target="_blank" rel="noopener" class="group flex items-center gap-3 rounded-xl border border-neutral-800 bg-neutral-900/40 px-4 py-3.5 hover:border-sky-400/40 transition-colors">
+              <div class="size-11 rounded-lg bg-neutral-950 border border-neutral-800 p-1.5 flex items-center justify-center shrink-0">
+                <img src="/img/pathway_logo.webp" alt="" class="max-w-full max-h-full object-contain"/>
+              </div>
+              <div class="min-w-0 flex-1">
+                <div class="text-[10px] tracking-[0.18em] uppercase text-sky-400/85">Bedrock · 2026 →</div>
+                <h4 class="text-white text-sm font-bold truncate mt-0.5">Pathway Studios</h4>
+                <div class="text-neutral-500 text-[11px] font-sans truncate">Marketplace partnership</div>
+              </div>
+              <span class="text-sky-400 text-sm shrink-0 group-hover:translate-x-0.5 transition-transform">→</span>
+            </a>
+
+            <a href="https://store.steampowered.com/app/2223760/My_Daily_Pets/" target="_blank" rel="noopener" class="group flex items-center gap-3 rounded-xl border border-neutral-800 bg-neutral-900/40 px-4 py-3.5 hover:border-sky-400/40 transition-colors">
+              <div class="size-11 rounded-lg bg-neutral-950 border border-neutral-800 overflow-hidden shrink-0">
+                <img src="/img/mydailypets.webp" alt="" class="w-full h-full object-cover"/>
+              </div>
+              <div class="min-w-0 flex-1">
+                <div class="text-[10px] tracking-[0.18em] uppercase text-sky-400/85">Unity · 2021–22</div>
+                <h4 class="text-white text-sm font-bold truncate mt-0.5">My Daily Pets</h4>
+                <div class="text-neutral-500 text-[11px] font-sans truncate">Jellyworld · Steam</div>
+              </div>
+              <span class="text-sky-400 text-sm shrink-0 group-hover:translate-x-0.5 transition-transform">→</span>
+            </a>
+
+            <a href="https://www.brainvt.com/" target="_blank" rel="noopener" class="group flex items-center gap-3 rounded-xl border border-neutral-800 bg-neutral-900/40 px-4 py-3.5 hover:border-sky-400/40 transition-colors">
+              <div class="size-11 rounded-lg bg-neutral-950 border border-neutral-800 p-1.5 flex items-center justify-center shrink-0">
+                <img src="/img/brainvt_logo.webp" alt="" class="max-w-full max-h-full object-contain"/>
+              </div>
+              <div class="min-w-0 flex-1">
+                <div class="text-[10px] tracking-[0.18em] uppercase text-sky-400/85">Unity · 2024</div>
+                <h4 class="text-white text-sm font-bold truncate mt-0.5">BrainVT</h4>
+                <div class="text-neutral-500 text-[11px] font-sans truncate">Android upgrade · AWS</div>
+              </div>
+              <span class="text-sky-400 text-sm shrink-0 group-hover:translate-x-0.5 transition-transform">→</span>
+            </a>
+
+            <a href="https://www.curseforge.com/minecraft-bedrock/addons/idle-ore-generators" target="_blank" rel="noopener" class="group flex items-center gap-3 rounded-xl border border-neutral-800 bg-neutral-900/40 px-4 py-3.5 hover:border-sky-400/40 transition-colors">
+              <div class="size-11 rounded-lg bg-neutral-950 border border-neutral-800 p-1 flex items-center justify-center shrink-0">
+                <img src="/img/Logo_IdleOreGenerator.webp" alt="" class="max-w-full max-h-full object-contain"/>
+              </div>
+              <div class="min-w-0 flex-1">
+                <div class="text-[10px] tracking-[0.18em] uppercase text-sky-400/85">Bedrock · 2024</div>
+                <h4 class="text-white text-sm font-bold truncate mt-0.5">Idle Ore Generator</h4>
+                <div class="text-neutral-500 text-[11px] font-sans truncate">CurseForge · self-published</div>
+              </div>
+              <span class="text-sky-400 text-sm shrink-0 group-hover:translate-x-0.5 transition-transform">→</span>
+            </a>
+          </div>
+
+          <div class="flex justify-center mt-12">
+            <a href="#contact" class="text-neutral-400 text-sm hover:text-white transition-colors font-sans">
+              Looking for something else? <span class="text-sky-400">Tell me about your project →</span>
+            </a>
+          </div>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <!-- ====== FOOTER ====== -->
+  <footer class="border-t border-neutral-900 bg-neutral-950">
+    <div class="mx-auto max-w-6xl px-6 py-12">
+      <div class="flex items-start justify-between flex-wrap gap-6">
+        <div>
+          <div class="text-[11px] tracking-[0.22em] uppercase text-neutral-500">Preview file</div>
+          <div class="text-white text-sm font-bold mt-1 font-sans">/preview/projects-variants.html</div>
+          <p class="text-neutral-500 text-xs font-sans mt-2 max-w-md">
+            Standalone preview — not wired into the site. Once you pick a direction, the chosen
+            variant gets implemented as <span class="text-neutral-300">src/components/SelectedWork.astro</span>.
+          </p>
+        </div>
+        <nav class="flex items-center gap-1 text-[11px] tracking-widest uppercase">
+          <a href="#variant-a" class="px-3 py-1.5 rounded-md text-neutral-400 hover:text-white hover:bg-neutral-900 transition-colors">A · Spine</a>
+          <a href="#variant-b" class="px-3 py-1.5 rounded-md text-neutral-400 hover:text-white hover:bg-neutral-900 transition-colors">B · Mosaic</a>
+          <a href="#variant-c" class="px-3 py-1.5 rounded-md text-neutral-400 hover:text-white hover:bg-neutral-900 transition-colors">C · Ledger</a>
+          <a href="#variant-d" class="px-3 py-1.5 rounded-md text-neutral-400 hover:text-white hover:bg-neutral-900 transition-colors">D · Bento</a>
+        </nav>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

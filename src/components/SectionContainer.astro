@@ -1,0 +1,7 @@
+---
+const { class: className, id, fullWidth } = Astro.props;
+---
+
+<section id={id} class={`w-full ${fullWidth ? '' : 'max-w-[860px] mx-auto px-4'} ${className ?? ''}`}>
+    <slot />
+</section>

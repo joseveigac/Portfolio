@@ -1,0 +1,48 @@
+---
+import ExperienceIcon from "../icons/ExperienceIcon.astro";
+import ResourcesIcon from "../icons/ResourcesIcon.astro";
+import ProjectsIcon from "../icons/ProjectsIcon.astro";
+import ContactIcon from "../icons/ContactIcon.astro";
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { getLangFromUrl, useTranslations } from "../i18n/utils";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const home = getRelativeLocaleUrl(lang, "/");
+const other = lang === "es" ? "en" : "es";
+const rest = Astro.url.pathname.replace(/^\/(es|en)(?=\/|$)/, "") || "/";
+const switchUrl = getRelativeLocaleUrl(other, rest);
+---
+
+<header class="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-2xl">
+    <nav class="flex items-center justify-center gap-3 md:gap-1.5 px-4 py-2.5 md:py-3 bg-neutral-900/80 backdrop-blur-md rounded-full md:rounded-2xl border border-white/10 shadow-lg">
+        <a href={home} class="shrink-0 pr-2 md:pl-1.5 md:pr-1.5" title={t("nav.home")}>
+            <img class="h-6 md:h-7 w-auto object-contain" src="/img/Logo_dark.svg" alt="JV"/>
+        </a>
+
+        <a href={`${home}#projects`} class="p-2 md:px-4 md:py-2 rounded-full hover:bg-white/10 transition-colors flex items-center gap-2" title={t("nav.projects")}>
+            <ProjectsIcon class="size-5 md:size-4"/>
+            <span class="hidden md:inline text-sm">{t("nav.projects")}</span>
+        </a>
+
+        <a href={getRelativeLocaleUrl(lang, "/services")} class="p-2 md:px-4 md:py-2 rounded-full hover:bg-white/10 transition-colors flex items-center gap-2" title={t("nav.services")}>
+            <ExperienceIcon class="size-5 md:size-4"/>
+            <span class="hidden md:inline text-sm">{t("nav.services")}</span>
+        </a>
+
+        <a href={getRelativeLocaleUrl(lang, "/resources")} class="p-2 md:px-4 md:py-2 rounded-full hover:bg-white/10 transition-colors flex items-center gap-2" title={t("nav.resources")}>
+            <ResourcesIcon class="size-5 md:size-4"/>
+            <span class="hidden md:inline text-sm">{t("nav.resources")}</span>
+        </a>
+
+        <a href={`${home}#contact`} class="p-2 md:px-5 md:py-2 bg-sky-500 hover:bg-sky-400 rounded-full transition-colors flex items-center gap-2 md:font-medium" title={t("nav.contact")}>
+            <ContactIcon class="size-5 md:size-4"/>
+            <span class="hidden md:inline text-sm">{t("nav.contact")}</span>
+        </a>
+
+        <a href={switchUrl} class="ml-1 md:ml-auto px-2.5 py-1.5 rounded-full text-xs font-medium border border-white/10 hover:bg-white/10 transition-colors" title={t("nav.switchLang")} aria-label={t("nav.switchLang")}>
+            {other.toUpperCase()}
+        </a>
+    </nav>
+</header>

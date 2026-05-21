@@ -1,0 +1,204 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-label="A magnifying glass over a grant application reveals hidden gold coins underneath, illustrating the discovery of funding opportunities">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fdf6e3"/>
+      <stop offset="1" stop-color="#eedfb5"/>
+    </linearGradient>
+    <radialGradient id="warmLight" cx="0.28" cy="0.18" r="0.8">
+      <stop offset="0" stop-color="#fff8e1" stop-opacity="0.75"/>
+      <stop offset="1" stop-color="#fff8e1" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="coinFace" cx="0.35" cy="0.3" r="0.75">
+      <stop offset="0" stop-color="#ffe88a"/>
+      <stop offset="0.65" stop-color="#e6b425"/>
+      <stop offset="1" stop-color="#a87f1c"/>
+    </radialGradient>
+    <radialGradient id="glassTint" cx="0.45" cy="0.4" r="0.55">
+      <stop offset="0" stop-color="#fffaf0" stop-opacity="0.35"/>
+      <stop offset="0.7" stop-color="#fff5d6" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#ffeec8" stop-opacity="0.06"/>
+    </radialGradient>
+    <radialGradient id="revealBg" cx="0.5" cy="0.5" r="0.55">
+      <stop offset="0" stop-color="#fff5b8" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#fff5b8" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="rim" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#3b2a1a"/>
+      <stop offset="0.5" stop-color="#7a5630"/>
+      <stop offset="1" stop-color="#4a3320"/>
+    </linearGradient>
+    <linearGradient id="handle" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#5d3a1f"/>
+      <stop offset="0.45" stop-color="#9b6a45"/>
+      <stop offset="1" stop-color="#4a2d18"/>
+    </linearGradient>
+    <pattern id="grain" width="3" height="3" patternUnits="userSpaceOnUse">
+      <circle cx="1" cy="1" r="0.4" fill="#8b6f47" opacity="0.08"/>
+    </pattern>
+    <clipPath id="glassClip">
+      <circle cx="1050" cy="470" r="172"/>
+    </clipPath>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8"/>
+    </filter>
+  </defs>
+
+  <!-- Warm cream background with grain and soft top-left light -->
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <rect width="1600" height="900" fill="url(#grain)"/>
+  <rect width="1600" height="900" fill="url(#warmLight)"/>
+
+  <!-- Decorative scattered marks (editorial flourish) -->
+  <g fill="#8b6f47" opacity="0.22" font-family="Georgia, serif" font-weight="700">
+    <text x="220" y="180" font-size="38">+</text>
+    <text x="1380" y="220" font-size="44">✦</text>
+    <text x="180" y="780" font-size="34">✦</text>
+    <text x="1450" y="780" font-size="40">+</text>
+    <text x="140" y="460" font-size="30">+</text>
+    <text x="1470" y="500" font-size="28">✦</text>
+  </g>
+
+  <!-- Floating background papers (tilted, semi-transparent) -->
+  <g opacity="0.55">
+    <g transform="translate(280 640) rotate(-12)">
+      <rect x="-60" y="-80" width="120" height="160" rx="4" fill="#fffaef" stroke="#d6c6a0" stroke-width="1"/>
+      <rect x="-44" y="-58" width="64" height="8" rx="2" fill="#5a5444"/>
+      <line x1="-44" y1="-32" x2="44" y2="-32" stroke="#c4b896" stroke-width="2"/>
+      <line x1="-44" y1="-14" x2="30" y2="-14" stroke="#c4b896" stroke-width="2"/>
+      <line x1="-44" y1="4" x2="44" y2="4" stroke="#c4b896" stroke-width="2"/>
+      <line x1="-44" y1="22" x2="38" y2="22" stroke="#c4b896" stroke-width="2"/>
+      <line x1="-44" y1="40" x2="44" y2="40" stroke="#c4b896" stroke-width="2"/>
+    </g>
+    <g transform="translate(1390 620) rotate(16)">
+      <rect x="-50" y="-65" width="100" height="130" rx="4" fill="#fffaef" stroke="#d6c6a0" stroke-width="1"/>
+      <rect x="-36" y="-50" width="50" height="6" rx="2" fill="#5a5444"/>
+      <line x1="-36" y1="-28" x2="36" y2="-28" stroke="#c4b896" stroke-width="2"/>
+      <line x1="-36" y1="-12" x2="20" y2="-12" stroke="#c4b896" stroke-width="2"/>
+      <line x1="-36" y1="4" x2="36" y2="4" stroke="#c4b896" stroke-width="2"/>
+      <line x1="-36" y1="20" x2="28" y2="20" stroke="#c4b896" stroke-width="2"/>
+      <line x1="-36" y1="36" x2="32" y2="36" stroke="#c4b896" stroke-width="2"/>
+    </g>
+  </g>
+
+  <!-- Main document: a grant application form -->
+  <g transform="translate(720 470) rotate(-5)">
+    <!-- shadow -->
+    <rect x="-260" y="-340" width="520" height="680" rx="8" fill="#000" opacity="0.14" filter="url(#softShadow)" transform="translate(12 18)"/>
+    <!-- paper -->
+    <rect x="-260" y="-340" width="520" height="680" rx="8" fill="#fffdf4" stroke="#d6c6a0" stroke-width="1"/>
+    <!-- top banner -->
+    <rect x="-260" y="-340" width="520" height="56" fill="#f4ead0"/>
+    <line x1="-260" y1="-284" x2="260" y2="-284" stroke="#c4ad7a" stroke-width="1.5"/>
+    <!-- form-id stripe on banner -->
+    <rect x="-228" y="-322" width="120" height="6" rx="2" fill="#8a8169"/>
+    <rect x="-228" y="-310" width="76" height="4" rx="2" fill="#b5a884"/>
+
+    <!-- title block -->
+    <rect x="-220" y="-256" width="300" height="22" rx="3" fill="#2d3142"/>
+    <rect x="-220" y="-224" width="200" height="10" rx="2" fill="#8a8169"/>
+
+    <!-- official seal -->
+    <g transform="translate(178 -228)">
+      <circle r="40" fill="none" stroke="#8a3a3a" stroke-width="2.5" opacity="0.75"/>
+      <circle r="33" fill="none" stroke="#8a3a3a" stroke-width="1" opacity="0.7"/>
+      <text text-anchor="middle" y="-6" font-family="Georgia, serif" font-size="9" font-weight="700" fill="#8a3a3a" letter-spacing="1.4" opacity="0.85">OFFICIAL</text>
+      <text text-anchor="middle" y="14" font-family="Georgia, serif" font-size="16" font-weight="700" fill="#8a3a3a" opacity="0.85">★</text>
+    </g>
+
+    <!-- body paragraph -->
+    <g fill="#c4b896">
+      <rect x="-220" y="-170" width="440" height="4" rx="2"/>
+      <rect x="-220" y="-152" width="420" height="4" rx="2"/>
+      <rect x="-220" y="-134" width="440" height="4" rx="2"/>
+      <rect x="-220" y="-116" width="380" height="4" rx="2"/>
+      <rect x="-220" y="-98" width="420" height="4" rx="2"/>
+    </g>
+
+    <!-- subsection title -->
+    <rect x="-220" y="-62" width="170" height="14" rx="3" fill="#5a5444"/>
+
+    <!-- eligibility checkbox list (where the magnifier sits) -->
+    <g transform="translate(-220 -22)">
+      <rect x="0" y="0" width="16" height="16" rx="2" fill="#fff" stroke="#c4b896" stroke-width="2"/>
+      <rect x="28" y="2" width="280" height="6" rx="2" fill="#c4b896"/>
+      <rect x="0" y="32" width="16" height="16" rx="2" fill="#fff" stroke="#c4b896" stroke-width="2"/>
+      <rect x="28" y="34" width="260" height="6" rx="2" fill="#c4b896"/>
+      <rect x="0" y="64" width="16" height="16" rx="2" fill="#fff" stroke="#c4b896" stroke-width="2"/>
+      <rect x="28" y="66" width="300" height="6" rx="2" fill="#c4b896"/>
+      <rect x="0" y="96" width="16" height="16" rx="2" fill="#fff" stroke="#c4b896" stroke-width="2"/>
+      <rect x="28" y="98" width="240" height="6" rx="2" fill="#c4b896"/>
+      <rect x="0" y="128" width="16" height="16" rx="2" fill="#fff" stroke="#c4b896" stroke-width="2"/>
+      <rect x="28" y="130" width="200" height="6" rx="2" fill="#c4b896"/>
+    </g>
+
+    <!-- signature line at bottom -->
+    <line x1="-220" y1="240" x2="100" y2="240" stroke="#5a5444" stroke-width="1.5"/>
+    <rect x="-220" y="250" width="84" height="6" rx="2" fill="#c4b896"/>
+    <!-- date stub -->
+    <line x1="140" y1="240" x2="220" y2="240" stroke="#5a5444" stroke-width="1.5"/>
+    <rect x="140" y="250" width="40" height="6" rx="2" fill="#c4b896"/>
+  </g>
+
+  <!-- Hidden coins revealed only inside the magnifier glass -->
+  <g clip-path="url(#glassClip)">
+    <circle cx="1050" cy="470" r="172" fill="url(#glassTint)"/>
+    <circle cx="1050" cy="470" r="172" fill="url(#revealBg)"/>
+
+    <!-- Coin 1: € (largest, back-left) -->
+    <g transform="translate(1010 490)">
+      <ellipse cx="0" cy="62" rx="58" ry="10" fill="#000" opacity="0.18"/>
+      <circle r="62" fill="url(#coinFace)" stroke="#8a6418" stroke-width="2.5"/>
+      <circle r="54" fill="none" stroke="#c39a32" stroke-width="1.5" opacity="0.55"/>
+      <text text-anchor="middle" dominant-baseline="central" font-family="Georgia, serif" font-size="68" font-weight="700" fill="#6b4d12">€</text>
+    </g>
+    <!-- Coin 2: $ (front-right) -->
+    <g transform="translate(1100 515)">
+      <ellipse cx="0" cy="46" rx="42" ry="8" fill="#000" opacity="0.18"/>
+      <circle r="46" fill="url(#coinFace)" stroke="#8a6418" stroke-width="2.5"/>
+      <circle r="39" fill="none" stroke="#c39a32" stroke-width="1.5" opacity="0.55"/>
+      <text text-anchor="middle" dominant-baseline="central" font-family="Georgia, serif" font-size="50" font-weight="700" fill="#6b4d12">$</text>
+    </g>
+    <!-- Coin 3: £ (top-right, smaller) -->
+    <g transform="translate(1090 410)">
+      <ellipse cx="0" cy="36" rx="32" ry="7" fill="#000" opacity="0.18"/>
+      <circle r="36" fill="url(#coinFace)" stroke="#8a6418" stroke-width="2"/>
+      <circle r="30" fill="none" stroke="#c39a32" stroke-width="1" opacity="0.55"/>
+      <text text-anchor="middle" dominant-baseline="central" font-family="Georgia, serif" font-size="38" font-weight="700" fill="#6b4d12">£</text>
+    </g>
+
+    <!-- Sparkles inside the reveal -->
+    <g fill="#fff5b8">
+      <path d="M 980 400 l 3 -12 l 3 12 l 12 3 l -12 3 l -3 12 l -3 -12 l -12 -3 z"/>
+      <path d="M 1150 460 l 2.5 -9 l 2.5 9 l 9 2.5 l -9 2.5 l -2.5 9 l -2.5 -9 l -9 -2.5 z"/>
+      <path d="M 1040 355 l 2 -7 l 2 7 l 7 2 l -7 2 l -2 7 l -2 -7 l -7 -2 z"/>
+      <path d="M 970 540 l 2 -8 l 2 8 l 8 2 l -8 2 l -2 8 l -2 -8 l -8 -2 z"/>
+    </g>
+  </g>
+
+  <!-- Magnifier rim + glass highlight + handle -->
+  <g transform="translate(1050 470)">
+    <!-- outer faint shadow ring -->
+    <circle r="190" fill="none" stroke="#000" stroke-width="2" opacity="0.08"/>
+    <!-- main brass rim -->
+    <circle r="180" fill="none" stroke="url(#rim)" stroke-width="16"/>
+    <!-- inner dark edge -->
+    <circle r="172" fill="none" stroke="#2a1d12" stroke-width="2" opacity="0.55"/>
+    <!-- glass highlights (top-left arcs) -->
+    <path d="M -110 -90 Q -135 -130 -70 -150" fill="none" stroke="#ffffff" stroke-width="8" stroke-linecap="round" opacity="0.6"/>
+    <path d="M -48 -148 Q -28 -152 -8 -148" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round" opacity="0.45"/>
+
+    <!-- Handle, rotated to point lower-right -->
+    <g transform="rotate(38)">
+      <!-- collar between rim and handle -->
+      <rect x="-24" y="178" width="48" height="34" rx="4" fill="url(#rim)"/>
+      <!-- handle body -->
+      <rect x="-30" y="212" width="60" height="210" rx="16" fill="url(#handle)"/>
+      <!-- handle grip rings -->
+      <rect x="-30" y="252" width="60" height="6" fill="#3b2418" opacity="0.55"/>
+      <rect x="-30" y="284" width="60" height="6" fill="#3b2418" opacity="0.55"/>
+      <rect x="-30" y="316" width="60" height="6" fill="#3b2418" opacity="0.55"/>
+      <!-- handle end cap -->
+      <rect x="-32" y="414" width="64" height="14" rx="7" fill="#2a1d12"/>
+    </g>
+  </g>
+</svg>

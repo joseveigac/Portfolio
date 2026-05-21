@@ -1,0 +1,142 @@
+---
+import { getLangFromUrl } from '../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const eyebrow = lang === 'es' ? 'Con la confianza de' : 'Trusted by';
+
+const PARTNERS = [
+    { name: 'Aurrora Studios',  src: '/img/aurrora_logo.svg' },
+    { name: 'Pathway Studios',  src: '/img/pathway_logo.webp' },
+    { name: 'BrainVT',          src: '/img/brainvt_logo.webp' },
+    { name: 'Jellyworld Games', src: '/img/jellyworld_logo.webp' },
+];
+---
+
+<section aria-labelledby="trusted-by-eyebrow" class="w-full bg-neutral-950 border-b border-neutral-800/60 py-10">
+    <div class="mx-auto max-w-3xl px-6">
+        <p
+            id="trusted-by-eyebrow"
+            class="text-center text-[13px] tracking-[0.18em] uppercase text-neutral-400 mb-10"
+        >
+            {eyebrow}
+        </p>
+        <div class="marquee-wrapper relative overflow-x-clip py-4">
+            <div class="marquee-track flex w-max">
+                <ul class="marquee-set flex items-center gap-24 md:gap-32 pr-24 md:pr-32 list-none p-0 m-0">
+                    {PARTNERS.map((p) => (
+                        <li>
+                            <img
+                                src={p.src}
+                                alt={p.name}
+                                loading="eager"
+                                decoding="async"
+                                class="marquee-logo h-14 md:h-16 w-auto max-w-50 object-contain transition duration-200"
+                            />
+                        </li>
+                    ))}
+                </ul>
+                <ul class="marquee-set flex items-center gap-24 md:gap-32 pr-24 md:pr-32 list-none p-0 m-0" aria-hidden="true">
+                    {PARTNERS.map((p) => (
+                        <li>
+                            <img
+                                src={p.src}
+                                alt=""
+                                loading="eager"
+                                decoding="async"
+                                class="marquee-logo h-14 md:h-16 w-auto max-w-50 object-contain transition duration-200"
+                            />
+                        </li>
+                    ))}
+                </ul>
+                <ul class="marquee-set flex items-center gap-24 md:gap-32 pr-24 md:pr-32 list-none p-0 m-0" aria-hidden="true">
+                    {PARTNERS.map((p) => (
+                        <li>
+                            <img
+                                src={p.src}
+                                alt=""
+                                loading="eager"
+                                decoding="async"
+                                class="marquee-logo h-14 md:h-16 w-auto max-w-50 object-contain transition duration-200"
+                            />
+                        </li>
+                    ))}
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .marquee-track {
+        animation: marquee var(--marquee-duration, 22s) linear infinite;
+        animation-play-state: paused;
+    }
+    .marquee-track.is-ready {
+        animation-play-state: running;
+    }
+    .marquee-wrapper {
+        mask-image: linear-gradient(to right, transparent, black 60px, black calc(100% - 60px), transparent);
+        -webkit-mask-image: linear-gradient(to right, transparent, black 60px, black calc(100% - 60px), transparent);
+    }
+    .marquee-logo {
+        will-change: transform, filter;
+    }
+    .marquee-logo:hover {
+        transform: translateY(-4px);
+        filter: drop-shadow(0 0 12px rgba(56, 189, 248, 0.55));
+    }
+    @keyframes marquee {
+        from { transform: translateX(0); }
+        to   { transform: translateX(var(--marquee-shift, 0px)); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        .marquee-track { animation: none; }
+    }
+</style>
+
+<script>
+    (() => {
+        const init = () => {
+            document.querySelectorAll<HTMLElement>('.marquee-wrapper').forEach((wrapper) => {
+                const track = wrapper.querySelector<HTMLElement>('.marquee-track');
+                const firstSet = wrapper.querySelector<HTMLElement>('.marquee-set');
+                if (!track || !firstSet) return;
+
+                const apply = () => {
+                    const w = Math.round(firstSet.getBoundingClientRect().width);
+                    if (w > 0) {
+                        track.style.setProperty('--marquee-shift', `-${w}px`);
+                        track.classList.add('is-ready');
+                    }
+                };
+
+                const imgs = Array.from(firstSet.querySelectorAll('img'));
+                let pending = imgs.filter((img) => !(img.complete && img.naturalWidth > 0)).length;
+                if (pending === 0) {
+                    apply();
+                } else {
+                    const done = () => { if (--pending === 0) apply(); };
+                    imgs.forEach((img) => {
+                        if (img.complete && img.naturalWidth > 0) return;
+                        img.addEventListener('load', done, { once: true });
+                        img.addEventListener('error', done, { once: true });
+                    });
+                }
+
+                let raf = 0;
+                window.addEventListener('resize', () => {
+                    cancelAnimationFrame(raf);
+                    raf = requestAnimationFrame(() => {
+                        const w = Math.round(firstSet.getBoundingClientRect().width);
+                        if (w > 0) track.style.setProperty('--marquee-shift', `-${w}px`);
+                    });
+                });
+            });
+        };
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init, { once: true });
+        } else {
+            init();
+        }
+    })();
+</script>

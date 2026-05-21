@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="44 60 112 78" width="200" height="139">
+  <defs>
+    <linearGradient id="g" gradientUnits="userSpaceOnUse" x1="44" y1="55" x2="156" y2="145">
+      <stop offset="0%" stop-color="#818cf8"/>
+      <stop offset="100%" stop-color="#22d3ee"/>
+    </linearGradient>
+  </defs>
+
+  <!-- JetBrains Mono Bold — text converted to paths, no external font needed -->
+  <path fill="url(#g)" d="M69.64 134.04Q59.43 134.04 53.49 128.43Q47.56 122.82 47.56 113.25H59.06Q59.06 118.22 61.87 121.11Q64.67 124.01 69.64 124.01Q74.52 124.01 77.37 121.16Q80.22 118.31 80.22 113.34V65.96H91.72V113.34Q91.72 122.91 85.79 128.47Q79.85 134.04 69.64 134.04Z"/>
+  <path fill="url(#g)" d="M120.15 133.12 103.22 65.96H115.09L125.3 109.75Q126.13 112.97 126.82 116.7Q127.51 120.42 127.88 122.63Q128.24 120.42 128.93 116.7Q129.62 112.97 130.45 109.66L140.3 65.96H151.98L135.05 133.12Z"/>
+</svg>

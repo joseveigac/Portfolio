@@ -1,0 +1,848 @@
+---
+import type { ServiceKey } from '../../config/pricing';
+import { PRICING, RUSH_MULTIPLIER } from '../../config/pricing';
+import { PRICING_ES, localizeConfig } from '../../config/pricing.es';
+import { CONTENT_BY_SLUG } from '../../lib/services/content';
+
+import MinecraftWhite from '../../icons/MinecraftWhite.astro';
+import Unity          from '../../icons/Unity.astro';
+import Flutter        from '../../icons/Flutter.astro';
+import AstroIcon      from '../../icons/AstroIcon.astro';
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import { getLangFromUrl } from '../../i18n/utils';
+
+interface Props { service: ServiceKey; }
+const { service } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
+
+const config = lang === 'es' ? localizeConfig(PRICING[service], PRICING_ES[service]) : PRICING[service];
+const content = CONTENT_BY_SLUG[service][lang];
+const defaultScale = config.scale[0];
+const initialMin = defaultScale.range[0];
+const initialMax = defaultScale.range[1];
+const initialTimeline = defaultScale.timeline;
+const formatPrice = (n: number) => `€${n.toLocaleString('en-US')}`;
+const rushPct = Math.round((RUSH_MULTIPLIER - 1) * 100);
+const formId = `estimator-${service}-page`;
+
+// Add-on cards lay out evenly when the column count divides the toggle count:
+// 6 toggles → 2×3, while 4 and 7 stay denser at 4 columns (4, or 4+3).
+const addonCols = config.toggles.length % 3 === 0 ? 'lg:grid-cols-3' : 'lg:grid-cols-4';
+
+// Hero copy + FAQs per service, per locale.
+const HERO_EN_INTRO = "Pick the scope, scale and add-ons below — the indicative range updates live. Send the brief when you're ready and I'll come back with a fixed quote within 48 hours.";
+const HERO_ES_INTRO = "Elige alcance, escala y add-ons abajo; el rango orientativo se actualiza al momento. Mándame el brief cuando quieras y te paso un presupuesto cerrado en 48 horas.";
+const HERO: Record<'en' | 'es', Record<ServiceKey, { eyebrow: string; titleA: string; titleB: string; intro: string }>> = {
+    en: {
+        bedrock:  { eyebrow: 'Minecraft Bedrock · TypeScript',     titleA: 'Configure your', titleB: 'Bedrock add-on.',  intro: HERO_EN_INTRO },
+        unity:    { eyebrow: 'Unity · C# · Multi-platform',        titleA: 'Configure your', titleB: 'Unity project.',   intro: HERO_EN_INTRO },
+        flutter:  { eyebrow: 'Flutter · iOS + Android · Dart',     titleA: 'Configure your', titleB: 'Flutter app.',     intro: HERO_EN_INTRO },
+        websites: { eyebrow: 'Astro · Tailwind · Optional CMS',    titleA: 'Configure your', titleB: 'website.',         intro: HERO_EN_INTRO },
+    },
+    es: {
+        bedrock:  { eyebrow: 'Minecraft Bedrock · TypeScript',     titleA: 'Configura tu', titleB: 'add-on de Bedrock.', intro: HERO_ES_INTRO },
+        unity:    { eyebrow: 'Unity · C# · Multiplataforma',       titleA: 'Configura tu', titleB: 'proyecto Unity.',    intro: HERO_ES_INTRO },
+        flutter:  { eyebrow: 'Flutter · iOS + Android · Dart',     titleA: 'Configura tu', titleB: 'app Flutter.',       intro: HERO_ES_INTRO },
+        websites: { eyebrow: 'Astro · Tailwind · CMS opcional',    titleA: 'Configura tu', titleB: 'web.',               intro: HERO_ES_INTRO },
+    },
+};
+
+const FAQ_PRICE_EN = { q: 'How is the price decided?', a: "You build a live estimate here — that's the indicative range. After a short message exchange I send a fixed written quote, valid for 14 days. No surprises mid-project." };
+const FAQ_PAY_EN   = { q: 'What does payment look like?', a: 'Milestone-based. Small projects upfront, medium projects split start + delivery, large projects split into three. Cancel any phase — you keep the IP for what was paid.' };
+const FAQ_PRICE_ES = { q: '¿Cómo se decide el precio?', a: "Montas la estimación aquí en directo — ese es el rango orientativo. Tras un par de mensajes te paso un presupuesto cerrado por escrito, válido 14 días. Sin sorpresas a mitad de proyecto." };
+const FAQ_PAY_ES   = { q: '¿Cómo son los pagos?', a: 'Por hitos: los pequeños van por adelantado; los medianos, mitad al empezar y mitad al entregar; los grandes, en tres pagos. Puedes parar en cualquier fase y te quedas con lo que ya esté pagado.' };
+
+const FAQS: Record<'en' | 'es', Record<ServiceKey, { q: string; a: string }[]>> = {
+    en: {
+        bedrock: [
+            FAQ_PRICE_EN, FAQ_PAY_EN,
+            { q: 'Do you publish to the Marketplace yourself?', a: 'No — you keep your Partner account and publish under your name. I can join as a developer to help with the submission flow if you want me to.' },
+            { q: 'Will it survive future Bedrock updates?',     a: 'Locked to a chosen stable Bedrock release. I re-test against any 2.x breaking update for 30 days post-launch. After that, an optional maintenance plan keeps it current.' },
+            { q: "What if my project doesn't fit a tier?",      a: "No problem — describe what you want in the notes and I'll quote the closest fit. Most projects don't map perfectly to a pre-set scale." },
+        ],
+        unity: [
+            FAQ_PRICE_EN, FAQ_PAY_EN,
+            { q: 'Do you work alongside our existing team?',    a: 'Yes — happy to plug into an existing Unity project, Slack/Discord, and your sprint cadence. I work as a senior contributor, not a black-box vendor.' },
+            { q: 'What about art, audio, and design?',          a: 'Client-provided or commissioned separately. I cover gameplay engineering, tooling, builds, and integrations — not asset production.' },
+            { q: 'Who publishes to Steam / mobile stores?',     a: "You. Accounts stay under your name. I help with submission flows and can be added as a developer to streamline the release." },
+        ],
+        flutter: [
+            FAQ_PRICE_EN, FAQ_PAY_EN,
+            { q: 'Do I keep the App Store / Play accounts?',    a: 'Yes — they stay with you. Apple Developer ($99/yr) and Google Play ($25 one-time) are on your side. I can be added as a developer to handle signing and submission.' },
+            { q: 'What about native iOS / Android features?',   a: "Flutter covers most things. When a feature isn't in a plugin, I write the minimal native bridge (Swift/Kotlin) inside the project — still one codebase to maintain." },
+            { q: "Can you start from a Figma design?",          a: "Yes — Figma, Sketch, or just references. If you don't have a design, I can mock the screens in the brief notes and we iterate together." },
+        ],
+        websites: [
+            FAQ_PRICE_EN, FAQ_PAY_EN,
+            { q: 'Do I own the code and content?',              a: 'Yes — full source in your GitHub from day one, full IP on final payment. If we use Storyblok, the space gets transferred to your account at handover.' },
+            { q: 'Who pays for hosting and the domain?',        a: 'You. Domain (~€12/yr) and host (Vercel/Netlify/Cloudflare Pages — free for the small sites, ~$20/mo Vercel Pro for commercial use) on your side. I set them up and hand over access.' },
+            { q: "Can I update the content myself after launch?", a: "If you pick the Storyblok CMS option, yes — visual editor, no code. Otherwise content lives in markdown / config files in the repo and changes need a small deploy." },
+        ],
+    },
+    es: {
+        bedrock: [
+            FAQ_PRICE_ES, FAQ_PAY_ES,
+            { q: '¿Publicas tú en el Marketplace?',                a: 'No — tú mantienes tu cuenta de Partner y publicas a tu nombre. Puedo unirme como desarrollador para ayudarte con el proceso de envío si quieres.' },
+            { q: '¿Sobrevivirá a futuras actualizaciones de Bedrock?', a: 'Se fija a una versión estable de Bedrock elegida. Reviso contra cualquier actualización 2.x que rompa algo durante 30 días tras el lanzamiento. Después, un plan de mantenimiento opcional lo mantiene al día.' },
+            { q: '¿Y si mi proyecto no encaja en ningún nivel?',  a: 'Sin problema — describe lo que quieres en las notas y te presupuesto lo más parecido. La mayoría de proyectos no encajan perfectamente en una escala predefinida.' },
+        ],
+        unity: [
+            FAQ_PRICE_ES, FAQ_PAY_ES,
+            { q: '¿Trabajas junto a nuestro equipo actual?',      a: 'Sí — encantado de integrarme en un proyecto Unity existente, en vuestro Slack/Discord y en vuestra cadencia de sprints. Trabajo como un colaborador senior más, no como un proveedor opaco.' },
+            { q: '¿Y el arte, el audio y el diseño?',             a: 'Los aporta el cliente o se encargan aparte. Yo cubro la ingeniería de gameplay, herramientas, builds e integraciones — no la producción de assets.' },
+            { q: '¿Quién publica en Steam / tiendas móviles?',    a: 'Tú. Las cuentas quedan a tu nombre. Ayudo con los procesos de envío y se me puede añadir como desarrollador para agilizar el lanzamiento.' },
+        ],
+        flutter: [
+            FAQ_PRICE_ES, FAQ_PAY_ES,
+            { q: '¿Conservo las cuentas de App Store / Play?',    a: 'Sí — son tuyas. Apple Developer (99$/año) y Google Play (25$ pago único) corren de tu parte. Se me puede añadir como desarrollador para gestionar la firma y el envío.' },
+            { q: '¿Y las funciones nativas de iOS / Android?',    a: 'Flutter cubre la mayoría de cosas. Cuando una función no está en un plugin, escribo el puente nativo mínimo (Swift/Kotlin) dentro del proyecto — sigue siendo un único código que mantener.' },
+            { q: '¿Puedes partir de un diseño en Figma?',         a: 'Sí — Figma, Sketch o solo referencias. Si no tienes diseño, puedo bocetar las pantallas a partir de las notas del brief e iteramos juntos.' },
+        ],
+        websites: [
+            FAQ_PRICE_ES, FAQ_PAY_ES,
+            { q: '¿Soy dueño del código y el contenido?',         a: 'Sí — todo el código en tu GitHub desde el primer día, propiedad intelectual completa al pago final. Si usamos Storyblok, el espacio se transfiere a tu cuenta en la entrega.' },
+            { q: '¿Quién paga el hosting y el dominio?',          a: 'Tú. El dominio (~12€/año) y el hosting (Vercel/Netlify/Cloudflare Pages — gratis para las webs pequeñas, ~20$/mes Vercel Pro para uso comercial) corren de tu parte. Yo los configuro y te entrego los accesos.' },
+            { q: '¿Puedo actualizar el contenido yo mismo tras el lanzamiento?', a: 'Si eliges la opción de CMS Storyblok, sí — editor visual, sin código. Si no, el contenido vive en archivos markdown / config del repo y los cambios requieren un pequeño despliegue.' },
+        ],
+    },
+};
+
+// Service theme — full class strings (kept verbatim so Tailwind's scanner picks them up at build time).
+const THEMES = {
+    bedrock: {
+        // Hero
+        heroBg:           'bg-linear-to-br from-emerald-800 via-emerald-950 to-neutral-950',
+        heroBorder:       'border-emerald-400/15',
+        heroGlow:         'bg-emerald-300/15',
+        heroDot:          'bg-emerald-300',
+        heroBadge:        'text-emerald-200/80',
+        heroIntroText:    'text-emerald-50/85',
+        heroIconBg:       'bg-emerald-700/30',
+        heroIconBorder:   'border-emerald-300/15',
+        // Brief card
+        briefTopLine:     'via-emerald-400/50',
+        briefTopGlow:     'from-emerald-500/[0.05]',
+        briefIconBg:      'bg-emerald-400/15',
+        briefIconRing:    'ring-emerald-400/30',
+        briefIconText:    'text-emerald-100',
+        briefLabel:       'text-emerald-200/70',
+        briefLabelDim:    'text-emerald-200/60',
+        briefDivider:     'border-emerald-400/20',
+        briefScopeBadge:  'bg-emerald-400/12 ring-1 ring-emerald-400/30 text-emerald-200',
+        // Tabs
+        tabActive:        'aria-[selected=true]:bg-emerald-400 aria-[selected=true]:text-emerald-950 aria-[selected=true]:font-semibold',
+        // Form
+        stepNum:          'bg-emerald-400/15 text-emerald-300',
+        cardActive:       'peer-checked:border-emerald-400 peer-checked:bg-emerald-400/10 peer-checked:text-white',
+        radioActiveSolid: 'peer-checked:bg-emerald-400 peer-checked:text-emerald-950 peer-checked:border-emerald-400 peer-checked:font-medium',
+        checkboxBox:      'group-has-checked:bg-emerald-400 group-has-checked:border-emerald-400',
+        checkSvg:         'text-emerald-950',
+        accentColor:      'accent-emerald-400',
+        focusBorder:      'focus:border-emerald-400',
+        // CTA
+        ctaBg:            'bg-emerald-400 hover:bg-emerald-300',
+        ctaText:          'text-emerald-950',
+        // Misc
+        crumb:            'text-emerald-400 hover:text-emerald-300',
+        cardHoverBorder:  'hover:border-emerald-400/30',
+        faqOpen:          'open:border-emerald-400/30',
+        successBorder:    'border-emerald-400/30',
+        successBg:        'bg-linear-to-br from-emerald-900/40 via-neutral-950 to-neutral-950',
+        successIconBg:    'bg-emerald-400/15',
+        successIconText:  'text-emerald-300',
+        bulletCheck:      'text-emerald-400',
+        sectionEyebrow:   'text-emerald-300/80',
+        scopeBadgeJs:     'bg-emerald-400/12 ring-1 ring-emerald-400/30 text-emerald-200',
+        pageEdgeFrom:     'from-emerald-950/30',
+    },
+    unity: {
+        heroBg:           'bg-linear-to-br from-slate-500 via-slate-800 to-neutral-950',
+        heroBorder:       'border-sky-300/15',
+        heroGlow:         'bg-sky-300/10',
+        heroDot:          'bg-sky-300',
+        heroBadge:        'text-sky-200/80',
+        heroIntroText:    'text-sky-50/85',
+        heroIconBg:       'bg-slate-700/40',
+        heroIconBorder:   'border-sky-300/15',
+        briefTopLine:     'via-sky-300/50',
+        briefTopGlow:     'from-sky-400/[0.05]',
+        briefIconBg:      'bg-sky-300/15',
+        briefIconRing:    'ring-sky-300/30',
+        briefIconText:    'text-sky-100',
+        briefLabel:       'text-sky-200/70',
+        briefLabelDim:    'text-sky-200/60',
+        briefDivider:     'border-sky-300/20',
+        briefScopeBadge:  'bg-sky-300/12 ring-1 ring-sky-300/30 text-sky-200',
+        tabActive:        'aria-[selected=true]:bg-sky-300 aria-[selected=true]:text-slate-950 aria-[selected=true]:font-semibold',
+        stepNum:          'bg-sky-300/15 text-sky-200',
+        cardActive:       'peer-checked:border-sky-300 peer-checked:bg-sky-300/10 peer-checked:text-white',
+        radioActiveSolid: 'peer-checked:bg-sky-300 peer-checked:text-slate-950 peer-checked:border-sky-300 peer-checked:font-medium',
+        checkboxBox:      'group-has-checked:bg-sky-300 group-has-checked:border-sky-300',
+        checkSvg:         'text-slate-950',
+        accentColor:      'accent-sky-300',
+        focusBorder:      'focus:border-sky-300',
+        ctaBg:            'bg-sky-300 hover:bg-sky-200',
+        ctaText:          'text-slate-950',
+        crumb:            'text-sky-300 hover:text-sky-200',
+        cardHoverBorder:  'hover:border-sky-300/30',
+        faqOpen:          'open:border-sky-300/30',
+        successBorder:    'border-sky-300/30',
+        successBg:        'bg-linear-to-br from-slate-800/60 via-neutral-950 to-neutral-950',
+        successIconBg:    'bg-sky-300/15',
+        successIconText:  'text-sky-200',
+        bulletCheck:      'text-sky-300',
+        sectionEyebrow:   'text-sky-200/80',
+        scopeBadgeJs:     'bg-sky-300/12 ring-1 ring-sky-300/30 text-sky-200',
+        pageEdgeFrom:     'from-slate-800/35',
+    },
+    flutter: {
+        heroBg:           'bg-linear-to-br from-sky-800 via-blue-950 to-neutral-950',
+        heroBorder:       'border-sky-400/15',
+        heroGlow:         'bg-sky-400/15',
+        heroDot:          'bg-sky-400',
+        heroBadge:        'text-sky-200/80',
+        heroIntroText:    'text-sky-50/85',
+        heroIconBg:       'bg-sky-700/30',
+        heroIconBorder:   'border-sky-400/15',
+        briefTopLine:     'via-sky-400/50',
+        briefTopGlow:     'from-sky-500/[0.05]',
+        briefIconBg:      'bg-sky-400/15',
+        briefIconRing:    'ring-sky-400/30',
+        briefIconText:    'text-sky-100',
+        briefLabel:       'text-sky-200/70',
+        briefLabelDim:    'text-sky-200/60',
+        briefDivider:     'border-sky-400/20',
+        briefScopeBadge:  'bg-sky-400/12 ring-1 ring-sky-400/30 text-sky-200',
+        tabActive:        'aria-[selected=true]:bg-sky-400 aria-[selected=true]:text-sky-950 aria-[selected=true]:font-semibold',
+        stepNum:          'bg-sky-400/15 text-sky-300',
+        cardActive:       'peer-checked:border-sky-400 peer-checked:bg-sky-400/10 peer-checked:text-white',
+        radioActiveSolid: 'peer-checked:bg-sky-400 peer-checked:text-sky-950 peer-checked:border-sky-400 peer-checked:font-medium',
+        checkboxBox:      'group-has-checked:bg-sky-400 group-has-checked:border-sky-400',
+        checkSvg:         'text-sky-950',
+        accentColor:      'accent-sky-400',
+        focusBorder:      'focus:border-sky-400',
+        ctaBg:            'bg-sky-400 hover:bg-sky-300',
+        ctaText:          'text-sky-950',
+        crumb:            'text-sky-400 hover:text-sky-300',
+        cardHoverBorder:  'hover:border-sky-400/30',
+        faqOpen:          'open:border-sky-400/30',
+        successBorder:    'border-sky-400/30',
+        successBg:        'bg-linear-to-br from-sky-900/40 via-neutral-950 to-neutral-950',
+        successIconBg:    'bg-sky-400/15',
+        successIconText:  'text-sky-300',
+        bulletCheck:      'text-sky-400',
+        sectionEyebrow:   'text-sky-300/80',
+        scopeBadgeJs:     'bg-sky-400/12 ring-1 ring-sky-400/30 text-sky-200',
+        pageEdgeFrom:     'from-blue-950/30',
+    },
+    websites: {
+        heroBg:           'bg-linear-to-br from-orange-800 via-orange-950 to-neutral-950',
+        heroBorder:       'border-amber-400/15',
+        heroGlow:         'bg-amber-300/15',
+        heroDot:          'bg-amber-300',
+        heroBadge:        'text-amber-200/80',
+        heroIntroText:    'text-amber-50/85',
+        heroIconBg:       'bg-orange-700/30',
+        heroIconBorder:   'border-amber-300/15',
+        briefTopLine:     'via-amber-400/50',
+        briefTopGlow:     'from-amber-500/[0.05]',
+        briefIconBg:      'bg-amber-400/15',
+        briefIconRing:    'ring-amber-400/30',
+        briefIconText:    'text-amber-100',
+        briefLabel:       'text-amber-200/70',
+        briefLabelDim:    'text-amber-200/60',
+        briefDivider:     'border-amber-400/20',
+        briefScopeBadge:  'bg-amber-400/12 ring-1 ring-amber-400/30 text-amber-200',
+        tabActive:        'aria-[selected=true]:bg-amber-400 aria-[selected=true]:text-amber-950 aria-[selected=true]:font-semibold',
+        stepNum:          'bg-amber-400/15 text-amber-300',
+        cardActive:       'peer-checked:border-amber-400 peer-checked:bg-amber-400/10 peer-checked:text-white',
+        radioActiveSolid: 'peer-checked:bg-amber-400 peer-checked:text-amber-950 peer-checked:border-amber-400 peer-checked:font-medium',
+        checkboxBox:      'group-has-checked:bg-amber-400 group-has-checked:border-amber-400',
+        checkSvg:         'text-amber-950',
+        accentColor:      'accent-amber-400',
+        focusBorder:      'focus:border-amber-400',
+        ctaBg:            'bg-amber-400 hover:bg-amber-300',
+        ctaText:          'text-amber-950',
+        crumb:            'text-amber-400 hover:text-amber-300',
+        cardHoverBorder:  'hover:border-amber-400/30',
+        faqOpen:          'open:border-amber-400/30',
+        successBorder:    'border-amber-400/30',
+        successBg:        'bg-linear-to-br from-orange-900/40 via-neutral-950 to-neutral-950',
+        successIconBg:    'bg-amber-400/15',
+        successIconText:  'text-amber-300',
+        bulletCheck:      'text-amber-400',
+        sectionEyebrow:   'text-amber-300/80',
+        scopeBadgeJs:     'bg-amber-400/12 ring-1 ring-amber-400/30 text-amber-200',
+        pageEdgeFrom:     'from-orange-950/30',
+    },
+} as const;
+
+const theme = THEMES[service];
+const hero = HERO[lang][service];
+const faqs = FAQS[lang][service];
+
+const T = {
+    en: {
+        buildBrief: 'Build your brief.', priceUpdates: '— price updates as you go.',
+        skipHint: "— just leave me your contact and I'll ask the scope questions.",
+        tabConfigure: 'Configure scope', tabSkip: 'Just send details',
+        yourProject: 'Your project', indicativeRange: 'Indicative range', ivaNote: '+ IVA · fixed quote on sign-off.',
+        pricing: 'Pricing', quoteOnReview: 'Quote on review', quoteOnReviewNote: "I'll read your notes and come back with a fixed quote within 48 hours.",
+        version: 'Version', scale: 'Scale', delivery: 'Delivery', rush: '+rush', addons: 'Add-ons', noAddons: 'No add-ons', publishing: 'Publishing', iPublish: 'I publish myself',
+        sendBrief: 'Send brief →', reply48: 'I reply within 48 hours.', emailDirect: 'Email me directly instead →',
+        q1Legend: 'How big is the project?', q1Help: "Pick the closest size — we'll fine-tune in the brief notes.",
+        versionHelp: 'Lock to a specific version if your server is pinned, otherwise leave it on Latest.',
+        addonsLegend: 'Anything to stack on top?', addonsHelp: 'Optional — tick what you need. Each one gets priced into the final quote.',
+        expedited: 'Expedited delivery', expeditedHelp: 'Tick this if you have a hard deadline — same scope, compressed timeline.',
+        yourDetails: 'Your details.', yourDetailsHelp: 'Just what I need to reply with the fixed quote.',
+        yourName: 'Your name', yourEmail: 'Your email', company: 'Company', optional: '(optional)', deadline: 'Target deadline',
+        tellMe: 'Tell me about your project', tellMeHint: '— the more detail, the more accurate the quote.',
+        notesPlaceholder: 'What you want to build and why · target audience · key features · references · existing assets · hard constraints. The more context, the faster I can come back with a precise quote.',
+        briefSent: 'Brief sent.', successLine: "I'll reply within 48 hours to", successCopy: 'A copy is in your inbox as well.', configureAnother: 'Configure another brief',
+        includedEyebrow: "What's included", includedHeading: 'Same baseline in every tier.',
+        includedSub: 'You take all of this home regardless of scope — engineering, content, quality and a clean handover.',
+        notIncluded: 'Not included — quoted separately if you mention them in the brief',
+        commonQuestions: 'Common questions.', allServices: '← All services',
+        emailPlaceholder: 'you@example.com',
+    },
+    es: {
+        buildBrief: 'Construye tu brief.', priceUpdates: '— el precio se actualiza sobre la marcha.',
+        skipHint: '— solo déjame tu contacto y yo te hago las preguntas de alcance.',
+        tabConfigure: 'Configurar alcance', tabSkip: 'Solo enviar datos',
+        yourProject: 'Tu proyecto', indicativeRange: 'Rango orientativo', ivaNote: '+ IVA · presupuesto cerrado al confirmar.',
+        pricing: 'Precio', quoteOnReview: 'Presupuesto al revisar', quoteOnReviewNote: 'Leeré tus notas y te respondo con un presupuesto cerrado en 48 horas.',
+        version: 'Versión', scale: 'Escala', delivery: 'Entrega', rush: '+exprés', addons: 'Add-ons', noAddons: 'Sin extras', publishing: 'Publicación', iPublish: 'Publico yo mismo',
+        sendBrief: 'Enviar brief →', reply48: 'Respondo en 48 horas.', emailDirect: 'Mejor escríbeme directamente →',
+        q1Legend: '¿Qué tamaño tiene el proyecto?', q1Help: 'Elige el tamaño más parecido — lo afinamos en las notas del brief.',
+        versionHelp: 'Fija una versión concreta si tu servidor está anclado; si no, déjalo en Última.',
+        addonsLegend: '¿Algo más que añadir encima?', addonsHelp: 'Opcional — marca lo que necesites. Cada cosa se presupuesta en el precio final.',
+        expedited: 'Entrega exprés', expeditedHelp: 'Marca esto si tienes una fecha límite ajustada — mismo alcance, plazo comprimido.',
+        yourDetails: 'Tus datos.', yourDetailsHelp: 'Solo lo que necesito para responderte con el presupuesto cerrado.',
+        yourName: 'Tu nombre', yourEmail: 'Tu email', company: 'Empresa', optional: '(opcional)', deadline: 'Fecha límite',
+        tellMe: 'Cuéntame tu proyecto', tellMeHint: '— cuanto más detalle, más preciso el presupuesto.',
+        notesPlaceholder: 'Qué quieres construir y por qué · público objetivo · funciones clave · referencias · assets existentes · restricciones. Cuanto más contexto, antes te respondo con un presupuesto preciso.',
+        briefSent: 'Brief enviado.', successLine: 'Te respondo en 48 horas a', successCopy: 'También recibes una copia en tu bandeja.', configureAnother: 'Configurar otro brief',
+        includedEyebrow: 'Qué incluye', includedHeading: 'La misma base en todos los niveles.',
+        includedSub: 'Te llevas todo esto sea cual sea el alcance — ingeniería, contenido, calidad y una entrega limpia.',
+        notIncluded: 'No incluido — se presupuesta aparte si lo mencionas en el brief',
+        commonQuestions: 'Preguntas frecuentes.', allServices: '← Todos los servicios',
+        emailPlaceholder: 'tu@ejemplo.com',
+    },
+}[lang];
+---
+
+<main class="relative isolate pb-32">
+    <!-- Brand-tinted side gradients pinned to the viewport. The service color leaks in from the
+         left and right edges and fades into transparent so the centre stays clean for content.
+         Stays visible during scroll without competing with cards. -->
+    <div aria-hidden="true" class="fixed inset-y-0 left-0 w-[28vw] max-w-105 -z-10 pointer-events-none">
+        <div class={`absolute inset-0 bg-linear-to-r ${theme.pageEdgeFrom} to-transparent`}></div>
+    </div>
+    <div aria-hidden="true" class="fixed inset-y-0 right-0 w-[28vw] max-w-105 -z-10 pointer-events-none">
+        <div class={`absolute inset-0 bg-linear-to-l ${theme.pageEdgeFrom} to-transparent`}></div>
+    </div>
+
+    <!-- HERO -->
+    <section class="relative max-w-6xl mx-auto px-4 pt-24">
+        <div class={`relative overflow-hidden rounded-3xl ${theme.heroBg} border ${theme.heroBorder}`}>
+            <div class="absolute inset-0 opacity-20 mix-blend-overlay" style="background-image: url('/img/background.svg'); background-size: cover; background-position: center;"></div>
+            <div class="absolute inset-0 opacity-[0.10]" style="background-image: repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,255,255,0.5) 39px, rgba(255,255,255,0.5) 40px), repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(255,255,255,0.5) 39px, rgba(255,255,255,0.5) 40px);"></div>
+            <div aria-hidden="true" class={`absolute -top-12 -right-12 size-56 ${theme.heroGlow} blur-3xl rounded-full pointer-events-none`}></div>
+
+            <div class="relative p-6 md:p-8 grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-6 items-center">
+                <div>
+                    <div class={`flex items-center gap-2 ${theme.heroBadge} text-[11px] font-sans font-medium tracking-wide`}>
+                        <span class={`inline-flex items-center justify-center size-1.5 rounded-full ${theme.heroDot}`}></span>
+                        {hero.eyebrow}
+                    </div>
+                    <h1 class="mt-2 text-white text-xl md:text-3xl font-bold tracking-[-0.02em] font-sans leading-[1.1]">
+                        {hero.titleA} {hero.titleB}
+                    </h1>
+                    <p class={`mt-2.5 ${theme.heroIntroText} text-[13.5px] md:text-sm font-sans leading-relaxed max-w-xl`}>
+                        {hero.intro}
+                    </p>
+                </div>
+
+                <div class="relative hidden lg:block">
+                    <div class={`size-28 rounded-2xl ${theme.heroIconBg} backdrop-blur-sm border ${theme.heroIconBorder} flex items-center justify-center`}>
+                        <div class="absolute inset-0 rounded-2xl opacity-30" style="background-image: repeating-linear-gradient(0deg, transparent, transparent 17px, rgba(255,255,255,0.3) 17px, rgba(255,255,255,0.3) 18px), repeating-linear-gradient(90deg, transparent, transparent 17px, rgba(255,255,255,0.3) 17px, rgba(255,255,255,0.3) 18px);"></div>
+                        {service === 'bedrock'  && <MinecraftWhite class="relative size-14 text-white drop-shadow-[0_6px_18px_rgba(0,0,0,0.4)]"/>}
+                        {service === 'unity'    && <Unity          class="relative size-14 text-white drop-shadow-[0_6px_18px_rgba(0,0,0,0.4)]"/>}
+                        {service === 'flutter'  && <Flutter        class="relative size-14 text-white drop-shadow-[0_6px_18px_rgba(0,0,0,0.4)]"/>}
+                        {service === 'websites' && <AstroIcon      class="relative size-14 text-white drop-shadow-[0_6px_18px_rgba(0,0,0,0.4)]"/>}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONFIGURATOR -->
+    <section id="configurator" class="max-w-6xl mx-auto px-4 mt-10 scroll-mt-24">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-5 mb-8">
+            <div class="flex items-baseline gap-3">
+                <h2 class="text-white text-2xl md:text-3xl font-bold tracking-tight font-sans">{T.buildBrief}</h2>
+                <span data-mode-hint-config class="text-neutral-500 font-sans text-sm">{T.priceUpdates}</span>
+                <span data-mode-hint-skip hidden class="text-neutral-500 font-sans text-sm">{T.skipHint}</span>
+            </div>
+
+            <div role="tablist" aria-label={lang === 'es' ? 'Modo de brief' : 'Brief mode'} class="inline-flex shrink-0 self-start md:self-auto rounded-full border border-neutral-800 bg-neutral-950 p-1 text-[12.5px] font-sans font-medium">
+                <button
+                    type="button"
+                    role="tab"
+                    data-mode="config"
+                    aria-selected="true"
+                    class={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-neutral-400 hover:text-neutral-200 ${theme.tabActive} transition-colors cursor-pointer`}>
+                    {T.tabConfigure}
+                </button>
+                <button
+                    type="button"
+                    role="tab"
+                    data-mode="skip"
+                    aria-selected="false"
+                    class={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-neutral-400 hover:text-neutral-200 ${theme.tabActive} transition-colors cursor-pointer`}>
+                    {T.tabSkip}
+                </button>
+            </div>
+        </div>
+
+        <div data-estimator-root data-service={config.service} data-service-label={config.serviceLabel}>
+            <form
+                id={formId}
+                data-estimator-form
+                data-service={config.service}
+                data-service-label={config.serviceLabel}
+                data-rush-multiplier={RUSH_MULTIPLIER}
+                data-scope-badge-class={theme.scopeBadgeJs}
+                novalidate
+                class="space-y-10">
+                <input type="hidden" name="service" value={config.service} />
+
+                <!-- LIVE BRIEF — floating corner widget -->
+                <div class="fixed z-40 inset-x-3 bottom-3 lg:inset-x-auto lg:left-auto lg:right-6 lg:bottom-6 lg:w-[320px]">
+                    <div class="relative overflow-hidden rounded-2xl bg-neutral-950/95 border border-neutral-800 backdrop-blur-xl shadow-[0_10px_30px_-10px_rgba(0,0,0,0.55)]">
+                        <div aria-hidden="true" class={`absolute top-0 inset-x-0 h-px bg-linear-to-r from-transparent ${theme.briefTopLine} to-transparent pointer-events-none`}></div>
+                        <div aria-hidden="true" class={`absolute top-0 inset-x-0 h-24 bg-linear-to-b ${theme.briefTopGlow} to-transparent pointer-events-none`}></div>
+
+                        <div class="relative p-3 lg:p-5">
+                            <div class="flex items-center gap-3 lg:flex-col lg:items-stretch lg:gap-0">
+                                <div class="flex items-center gap-2.5 min-w-0 lg:order-1">
+                                    <span class={`inline-flex items-center justify-center size-9 rounded-lg ${theme.briefIconBg} ring-1 ${theme.briefIconRing} shrink-0`}>
+                                        {service === 'bedrock'  && <MinecraftWhite class={`size-5 ${theme.briefIconText}`}/>}
+                                        {service === 'unity'    && <Unity          class={`size-5 ${theme.briefIconText}`}/>}
+                                        {service === 'flutter'  && <Flutter        class={`size-5 ${theme.briefIconText}`}/>}
+                                        {service === 'websites' && <AstroIcon      class={`size-5 ${theme.briefIconText}`}/>}
+                                    </span>
+                                    <div class="min-w-0">
+                                        <p class={`${theme.briefLabel} text-[9.5px] tracking-[0.18em] uppercase font-semibold`}>{T.yourProject}</p>
+                                        <p class="text-white text-[13px] font-sans font-bold tracking-tight truncate">{config.serviceLabel}</p>
+                                    </div>
+                                </div>
+
+                                <div data-brief-config-only class={`min-w-0 lg:order-2 lg:mt-4 lg:pt-4 lg:border-t ${theme.briefDivider}`}>
+                                    <p class={`hidden lg:block ${theme.briefLabelDim} text-[10px] font-sans tracking-[0.16em] uppercase font-semibold mb-1.5`}>{T.indicativeRange}</p>
+                                    <p class="text-white font-sans font-bold leading-none tabular-nums tracking-tight">
+                                        <span data-range-min class="text-base lg:text-[32px]">{formatPrice(initialMin)}</span>
+                                        <span class="text-neutral-400 text-sm lg:text-xl font-normal mx-1 lg:mx-1.5">–</span>
+                                        <span data-range-max class="text-sm lg:text-[20px]">{formatPrice(initialMax)}</span>
+                                    </p>
+                                    <p class="hidden lg:block text-neutral-300 text-[11.5px] font-sans mt-2 leading-snug">{T.ivaNote}</p>
+                                </div>
+
+                                <div data-brief-skip-only hidden class={`min-w-0 lg:order-2 lg:mt-4 lg:pt-4 lg:border-t ${theme.briefDivider}`}>
+                                    <p class={`hidden lg:block ${theme.briefLabelDim} text-[10px] font-sans tracking-[0.16em] uppercase font-semibold mb-1.5`}>{T.pricing}</p>
+                                    <p class="text-white text-base lg:text-lg font-sans font-semibold tracking-tight leading-tight">{T.quoteOnReview}</p>
+                                    <p class="hidden lg:block text-neutral-300 text-[11.5px] font-sans mt-2 leading-snug">{T.quoteOnReviewNote}</p>
+                                </div>
+
+                                <dl data-brief-config-only class={`hidden lg:block lg:order-3 lg:mt-4 lg:pt-4 lg:border-t ${theme.briefDivider} space-y-2.5 text-[12px] font-sans`}>
+                                    {config.version && (
+                                        <div class="flex items-baseline justify-between gap-3">
+                                            <dt class={`${theme.briefLabelDim} text-[10px] tracking-[0.14em] uppercase font-semibold shrink-0`}>{T.version}</dt>
+                                            <dd data-cart-version class="text-white font-medium text-right truncate">{config.version.options[0]?.label ?? '—'}</dd>
+                                        </div>
+                                    )}
+                                    <div class="flex items-baseline justify-between gap-3">
+                                        <dt class={`${theme.briefLabelDim} text-[10px] tracking-[0.14em] uppercase font-semibold shrink-0`}>{T.scale}</dt>
+                                        <dd data-cart-scale class="text-white font-medium text-right truncate">—</dd>
+                                    </div>
+                                    <div class="flex items-baseline justify-between gap-3">
+                                        <dt class={`${theme.briefLabelDim} text-[10px] tracking-[0.14em] uppercase font-semibold shrink-0`}>{T.delivery}</dt>
+                                        <dd class="text-white font-medium text-right">
+                                            <span data-cart-timeline>{initialTimeline}</span>
+                                            <span data-rush-tag hidden class="ml-1 inline-block px-1 py-0.5 rounded bg-amber-400/15 text-amber-200 text-[9px] font-semibold uppercase tracking-wider align-middle">{T.rush}</span>
+                                        </dd>
+                                    </div>
+                                    <div>
+                                        <dt class={`${theme.briefLabelDim} text-[10px] tracking-[0.14em] uppercase font-semibold mb-1.5`}>{T.addons}</dt>
+                                        <dd data-cart-scope class="sr-only">{T.noAddons}</dd>
+                                        <div data-cart-scope-badges class="flex flex-wrap gap-1.5">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full bg-neutral-800/80 text-neutral-500 text-[10.5px] font-sans italic">{T.noAddons}</span>
+                                        </div>
+                                    </div>
+                                    {config.publishing && (
+                                        <div>
+                                            <dt class={`${theme.briefLabelDim} text-[10px] tracking-[0.14em] uppercase font-semibold mb-1`}>{T.publishing}</dt>
+                                            <dd data-cart-publishing class="text-neutral-200 text-[11.5px] leading-snug">{T.iPublish}</dd>
+                                        </div>
+                                    )}
+                                </dl>
+
+                                <button
+                                    type="submit"
+                                    data-submit
+                                    class={`shrink-0 lg:w-full lg:order-4 lg:mt-5 inline-flex items-center justify-center gap-1 lg:gap-2 px-4 py-2.5 lg:px-5 lg:py-3 rounded-lg lg:rounded-xl ${theme.ctaBg} ${theme.ctaText} font-sans font-bold text-[13px] lg:text-sm disabled:opacity-60 disabled:cursor-not-allowed transition-colors`}>
+                                    <span data-submit-label>{T.sendBrief}</span>
+                                </button>
+                            </div>
+
+                            <p class="hidden lg:block text-neutral-400 text-[10.5px] font-sans leading-snug mt-3 text-center">
+                                {T.reply48}
+                            </p>
+
+                            <p data-form-message hidden class="text-[12px] font-sans text-center mt-3"></p>
+                            <a data-mailto-fallback hidden href="mailto:contact@joseveiga.dev" class="mt-2 inline-flex items-center justify-center gap-2 px-3 py-1.5 rounded-lg border border-white/15 text-white text-[11px] font-sans hover:bg-white/10 transition-colors">
+                                {T.emailDirect}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FORM STEPS -->
+                <div class="space-y-10 max-w-3xl lg:max-w-none lg:pr-84">
+
+                    <div data-config-steps class="space-y-10">
+
+                    <!-- Step 1: Scale -->
+                    <fieldset>
+                        <div class="flex items-baseline gap-3 mb-1">
+                            <span class={`inline-flex items-center justify-center size-6 rounded-full ${theme.stepNum} text-[11px] font-sans font-bold`}>1</span>
+                            <legend class="text-white text-lg font-sans font-semibold tracking-tight">{T.q1Legend}</legend>
+                        </div>
+                        <p class="ml-9 text-neutral-400 text-[13.5px] font-sans leading-relaxed mb-4">{T.q1Help}</p>
+                        <div class="ml-9 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                            {config.scale.map((opt, idx) => (
+                                <label class="cursor-pointer">
+                                    <input
+                                        type="radio"
+                                        name="scale"
+                                        value={opt.value}
+                                        checked={idx === 0}
+                                        data-min={opt.range[0]}
+                                        data-max={opt.range[1]}
+                                        data-timeline={opt.timeline}
+                                        data-label={opt.label}
+                                        class="sr-only peer"
+                                    />
+                                    <span class={`flex items-center justify-between gap-3 rounded-xl border border-neutral-800 bg-neutral-950 px-4 py-3 text-[14px] font-sans text-neutral-300 hover:border-neutral-700 hover:text-white ${theme.radioActiveSolid} transition-colors select-none`}>
+                                        <span class="font-medium">{opt.label}</span>
+                                        <span class="text-neutral-500 text-[12px] tabular-nums shrink-0">{opt.timeline}</span>
+                                    </span>
+                                </label>
+                            ))}
+                        </div>
+                    </fieldset>
+
+                    <!-- Step 2: Version (only if applicable) -->
+                    {config.version && (
+                        <fieldset>
+                            <div class="flex items-baseline gap-3 mb-1">
+                                <span class={`inline-flex items-center justify-center size-6 rounded-full ${theme.stepNum} text-[11px] font-sans font-bold`}>2</span>
+                                <legend class="text-white text-lg font-sans font-semibold tracking-tight">{config.version.label}</legend>
+                            </div>
+                            <p class="ml-9 text-neutral-400 text-[13.5px] font-sans leading-relaxed mb-4">{T.versionHelp}</p>
+                            <div class="ml-9 max-w-xs">
+                                <select
+                                    name={config.version.name}
+                                    data-version-select
+                                    class={`w-full rounded-xl bg-neutral-950 border border-neutral-800 text-neutral-100 text-[14px] font-sans px-4 py-2.5 ${theme.focusBorder} focus:outline-none transition-colors`}>
+                                    {config.version.options.map((opt) => (
+                                        <option value={opt.value} data-label={opt.label}>{opt.label}</option>
+                                    ))}
+                                </select>
+                            </div>
+                        </fieldset>
+                    )}
+
+                    <!-- Step 3: Add-ons -->
+                    <fieldset>
+                        <div class="flex items-baseline gap-3 mb-1">
+                            <span class={`inline-flex items-center justify-center size-6 rounded-full ${theme.stepNum} text-[11px] font-sans font-bold`}>{config.version ? '3' : '2'}</span>
+                            <legend class="text-white text-lg font-sans font-semibold tracking-tight">{T.addonsLegend}</legend>
+                        </div>
+                        <p class="ml-9 text-neutral-400 text-[13.5px] font-sans leading-relaxed mb-4">{T.addonsHelp}</p>
+                        <div class={`ml-9 grid grid-cols-1 sm:grid-cols-2 ${addonCols} gap-2`}>
+                            {config.toggles.map(toggle => (
+                                <label class="group cursor-pointer">
+                                    <input
+                                        type="checkbox"
+                                        name="toggle"
+                                        value={toggle.value}
+                                        data-min={toggle.range?.[0] ?? ''}
+                                        data-max={toggle.range?.[1] ?? ''}
+                                        data-percent-min={toggle.percent?.[0] ?? ''}
+                                        data-percent-max={toggle.percent?.[1] ?? ''}
+                                        data-months={toggle.months ?? ''}
+                                        data-min-amount={toggle.minAmount ?? ''}
+                                        data-label={toggle.label}
+                                        class="sr-only peer"
+                                    />
+                                    <span class={`flex items-start gap-2.5 rounded-xl border border-neutral-800 bg-neutral-950 px-4 py-3 text-[13.5px] font-sans text-neutral-300 hover:border-neutral-700 hover:text-white ${theme.cardActive} transition-colors select-none`}>
+                                        <span aria-hidden="true" class={`mt-0.5 inline-flex shrink-0 items-center justify-center size-4 rounded border border-neutral-700 ${theme.checkboxBox}`}>
+                                            <svg viewBox="0 0 12 12" fill="none" class={`size-2.5 ${theme.checkSvg} opacity-0 group-has-checked:opacity-100`}><path d="M2 6.5L4.5 9L10 3" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                        </span>
+                                        <span class="leading-snug">{toggle.label}</span>
+                                    </span>
+                                </label>
+                            ))}
+                        </div>
+                    </fieldset>
+
+                    <!-- Step 4: Publishing -->
+                    {config.publishing && (
+                        <fieldset>
+                            <div class="flex items-baseline gap-3 mb-1">
+                                <span class={`inline-flex items-center justify-center size-6 rounded-full ${theme.stepNum} text-[11px] font-sans font-bold`}>{config.version ? '4' : '3'}</span>
+                                <legend class="text-white text-lg font-sans font-semibold tracking-tight">{config.publishing.label}</legend>
+                            </div>
+                            <p class="ml-9 text-neutral-400 text-[13.5px] font-sans leading-relaxed mb-4">{config.publishing.note}</p>
+                            <div class="ml-9 grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                {config.publishing.options.map(opt => (
+                                    <label class="group cursor-pointer">
+                                        <input
+                                            type="checkbox"
+                                            name="publishing"
+                                            value={opt.value}
+                                            data-min={opt.range[0]}
+                                            data-max={opt.range[1]}
+                                            data-label={opt.label}
+                                            class="sr-only peer"
+                                        />
+                                        <span class={`flex items-center gap-2.5 rounded-xl border border-neutral-800 bg-neutral-950 px-4 py-3 text-[13.5px] font-sans text-neutral-300 hover:border-neutral-700 hover:text-white ${theme.cardActive} transition-colors select-none`}>
+                                            <span aria-hidden="true" class={`inline-flex shrink-0 items-center justify-center size-4 rounded border border-neutral-700 ${theme.checkboxBox}`}>
+                                                <svg viewBox="0 0 12 12" fill="none" class={`size-2.5 ${theme.checkSvg} opacity-0 group-has-checked:opacity-100`}><path d="M2 6.5L4.5 9L10 3" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                            </span>
+                                            <span>{opt.label}</span>
+                                        </span>
+                                    </label>
+                                ))}
+                            </div>
+                        </fieldset>
+                    )}
+
+                    <!-- Expedited -->
+                    <fieldset>
+                        <label class="flex items-start gap-3 rounded-xl border border-neutral-800 bg-neutral-950 px-4 py-3 cursor-pointer hover:border-neutral-700">
+                            <input type="checkbox" name="rush" class={`mt-0.5 size-4 ${theme.accentColor}`} />
+                            <span class="text-[13.5px] font-sans text-neutral-300 leading-snug select-none">
+                                <span class="text-white font-medium">{T.expedited} (+{rushPct}%)</span>
+                                <span class="block text-neutral-500 text-[12.5px] mt-0.5">{T.expeditedHelp}</span>
+                            </span>
+                        </label>
+                    </fieldset>
+
+                    </div>
+                    <!-- /Scope steps -->
+
+                    <!-- Your details -->
+                    <fieldset>
+                        <div class="flex items-baseline gap-3 mb-1">
+                            <span class={`inline-flex items-center justify-center size-6 rounded-full ${theme.stepNum} text-[11px] font-sans font-bold`}>{config.version ? (config.publishing ? '5' : '4') : (config.publishing ? '4' : '3')}</span>
+                            <legend class="text-white text-lg font-sans font-semibold tracking-tight">{T.yourDetails}</legend>
+                        </div>
+                        <p class="ml-9 text-neutral-400 text-[13.5px] font-sans leading-relaxed mb-4">{T.yourDetailsHelp}</p>
+
+                        <div class="ml-9 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                            <label class="block">
+                                <span class="text-neutral-300 text-[12.5px] font-sans font-medium block mb-1.5">{T.yourName}</span>
+                                <input type="text" name="name" required minlength="2" placeholder="Marcus Webb" class={`w-full rounded-xl bg-neutral-950 border border-neutral-800 text-neutral-100 text-[14px] font-sans px-4 py-2.5 ${theme.focusBorder} focus:outline-none transition-colors`} />
+                            </label>
+                            <label class="block">
+                                <span class="text-neutral-300 text-[12.5px] font-sans font-medium block mb-1.5">{T.yourEmail}</span>
+                                <input type="email" name="email" required placeholder={T.emailPlaceholder} class={`w-full rounded-xl bg-neutral-950 border border-neutral-800 text-neutral-100 text-[14px] font-sans px-4 py-2.5 ${theme.focusBorder} focus:outline-none transition-colors`} />
+                            </label>
+                            <label class="block">
+                                <span class="text-neutral-300 text-[12.5px] font-sans font-medium block mb-1.5">{T.company} <span class="text-neutral-500 font-normal">{T.optional}</span></span>
+                                <input type="text" name="company-name" placeholder="Webb Realms" class={`w-full rounded-xl bg-neutral-950 border border-neutral-800 text-neutral-100 text-[14px] font-sans px-4 py-2.5 ${theme.focusBorder} focus:outline-none transition-colors`} />
+                            </label>
+                            <label class="block">
+                                <span class="text-neutral-300 text-[12.5px] font-sans font-medium block mb-1.5">{T.deadline} <span class="text-neutral-500 font-normal">{T.optional}</span></span>
+                                <input type="date" name="deadline" class={`w-full rounded-xl bg-neutral-950 border border-neutral-800 text-neutral-100 text-[14px] font-sans px-4 py-2.5 ${theme.focusBorder} focus:outline-none transition-colors scheme-dark`} />
+                            </label>
+                        </div>
+
+                        <label class="ml-9 block mt-3">
+                            <span class="text-neutral-300 text-[12.5px] font-sans font-medium block mb-1.5">{T.tellMe} <span class="text-neutral-500 font-normal">{T.tellMeHint}</span></span>
+                            <textarea name="notes" rows="5" placeholder={T.notesPlaceholder} class={`w-full rounded-xl bg-neutral-950 border border-neutral-800 text-neutral-100 text-[14px] font-sans px-4 py-3 ${theme.focusBorder} focus:outline-none transition-colors resize-y`}></textarea>
+                        </label>
+                    </fieldset>
+
+                    <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" class="absolute -left-2499.75 opacity-0 pointer-events-none" />
+                </div>
+            </form>
+
+            <div data-estimator-success hidden>
+                <div class={`rounded-2xl border ${theme.successBorder} ${theme.successBg} p-10 md:p-14 text-center`}>
+                    <div class={`inline-flex items-center justify-center size-14 rounded-full ${theme.successIconBg} mb-4`}>
+                        <svg viewBox="0 0 24 24" fill="none" class={`size-7 ${theme.successIconText}`}><path d="M5 12.5L10 17.5L20 7.5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </div>
+                    <p class="text-white text-2xl font-sans font-bold tracking-tight mb-2">{T.briefSent}</p>
+                    <p class="text-neutral-300 text-base font-sans max-w-md mx-auto leading-relaxed">
+                        {T.successLine} <span data-success-email class="text-white font-medium">you</span>. {T.successCopy}
+                    </p>
+                    <button type="button" data-reset class="mt-7 inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg border border-neutral-700 text-neutral-200 text-[13px] font-sans hover:bg-neutral-800 transition-colors">
+                        {T.configureAnother}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- WHAT'S INCLUDED -->
+    <section class="max-w-6xl mx-auto px-4 mt-24">
+        <div class="max-w-2xl mb-10">
+            <p class={`${theme.sectionEyebrow} text-xs font-sans tracking-[0.18em] uppercase font-semibold`}>{T.includedEyebrow}</p>
+            <h2 class="mt-3 text-white text-2xl md:text-3xl font-bold tracking-tight font-sans">{T.includedHeading}</h2>
+            <p class="mt-3 text-neutral-400 font-sans leading-relaxed">{T.includedSub}</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {content.included.map((cat) => (
+                <div class={`rounded-2xl border border-neutral-800 bg-neutral-950 p-6 ${theme.cardHoverBorder} transition-colors`}>
+                    <h3 class="text-white text-lg font-sans font-semibold tracking-tight">{cat.title.charAt(0) + cat.title.slice(1).toLowerCase()}</h3>
+                    <ul class="mt-4 space-y-2 text-neutral-300 text-[13px] font-sans">
+                        {cat.bullets.map((b) => (
+                            <li class="flex gap-2">
+                                <span aria-hidden="true" class={`${theme.bulletCheck} mt-0.5 shrink-0`}>✓</span>
+                                <span class="leading-snug">{b}</span>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            ))}
+        </div>
+
+        <div class="mt-4 rounded-2xl border border-neutral-800 bg-neutral-950/60 p-6">
+            <p class="text-neutral-400 text-xs font-sans tracking-[0.18em] uppercase font-semibold mb-3">{T.notIncluded}</p>
+            <ul class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-1.5 text-neutral-400 text-[13px] font-sans">
+                {content.outOfScope.map((i) => (
+                    <li class="flex gap-2"><span aria-hidden="true" class="text-neutral-600 mt-0.5 shrink-0">—</span>{i}</li>
+                ))}
+            </ul>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="max-w-3xl mx-auto px-4 mt-24">
+        <h2 class="text-white text-2xl md:text-3xl font-bold tracking-tight font-sans text-center">{T.commonQuestions}</h2>
+        <div class="mt-10 space-y-3">
+            {faqs.map((f) => (
+                <details class={`group rounded-2xl border border-neutral-800 bg-neutral-950 ${theme.faqOpen} open:bg-neutral-900/40 transition-colors`}>
+                    <summary class="flex items-start justify-between gap-4 cursor-pointer list-none p-5 hover:text-white">
+                        <span class="text-white text-[15px] font-sans font-semibold leading-snug">{f.q}</span>
+                        <span aria-hidden="true" class="mt-1 size-5 shrink-0 inline-flex items-center justify-center rounded-full bg-neutral-800 text-neutral-300 text-base leading-none group-open:rotate-45 transition-transform">+</span>
+                    </summary>
+                    <p class="px-5 pb-5 text-neutral-400 text-[14px] font-sans leading-relaxed">{f.a}</p>
+                </details>
+            ))}
+        </div>
+    </section>
+
+    <p class="max-w-6xl mx-auto px-4 mt-16 text-center">
+        <a href={getRelativeLocaleUrl(lang, "/services")} class={`text-neutral-500 ${theme.crumb} text-sm font-sans transition-colors`}>{T.allServices}</a>
+    </p>
+</main>
+
+<script>
+    import { initAllEstimators } from '../../scripts/estimator';
+    initAllEstimators();
+
+    // Mode toggle: full configurator vs. just contact details, scoped to every form on the page.
+    document.querySelectorAll<HTMLFormElement>('[data-estimator-form]').forEach((form) => {
+        const root = form.closest('section')?.querySelector<HTMLElement>('[role="tablist"]');
+        if (!root) return;
+        const modeTabs = root.querySelectorAll<HTMLButtonElement>('[role="tab"][data-mode]');
+        const configSteps = form.querySelector<HTMLElement>('[data-config-steps]');
+        const scopeRoot = form.closest('section');
+        const hintConfig = scopeRoot?.querySelector<HTMLElement>('[data-mode-hint-config]') ?? null;
+        const hintSkip   = scopeRoot?.querySelector<HTMLElement>('[data-mode-hint-skip]') ?? null;
+        const briefConfigEls = form.querySelectorAll<HTMLElement>('[data-brief-config-only]');
+        const briefSkipEls   = form.querySelectorAll<HTMLElement>('[data-brief-skip-only]');
+
+        if (!configSteps || !modeTabs.length) return;
+
+        const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const FADE_MS = 160;
+
+        const fadeOut = (el: HTMLElement) => {
+            if (reduceMotion) { el.style.display = 'none'; return; }
+            el.style.transition = `opacity ${FADE_MS}ms ease, transform ${FADE_MS}ms ease`;
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(-3px)';
+            setTimeout(() => { el.style.display = 'none'; }, FADE_MS);
+        };
+        const fadeIn = (el: HTMLElement) => {
+            el.style.display = '';
+            if (reduceMotion) { el.style.opacity = ''; el.style.transform = ''; return; }
+            el.style.transition = 'none';
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(3px)';
+            void el.offsetHeight;
+            el.style.transition = `opacity ${FADE_MS}ms ease, transform ${FADE_MS}ms ease`;
+            el.style.opacity = '1';
+            el.style.transform = 'translateY(0)';
+        };
+        const swap = (outEls: NodeListOf<HTMLElement>, inEls: NodeListOf<HTMLElement>) => {
+            outEls.forEach(fadeOut);
+            setTimeout(() => inEls.forEach(fadeIn), reduceMotion ? 0 : FADE_MS);
+        };
+
+        const setMode = (mode: 'config' | 'skip') => {
+            modeTabs.forEach(t => t.setAttribute('aria-selected', t.dataset.mode === mode ? 'true' : 'false'));
+            if (hintConfig) hintConfig.hidden = mode === 'skip';
+            if (hintSkip)   hintSkip.hidden   = mode !== 'skip';
+
+            if (mode === 'skip') {
+                fadeOut(configSteps);
+                setTimeout(() => { configSteps.hidden = true; }, reduceMotion ? 0 : FADE_MS);
+            } else {
+                configSteps.hidden = false;
+                fadeIn(configSteps);
+            }
+
+            if (mode === 'skip') swap(briefConfigEls, briefSkipEls);
+            else                 swap(briefSkipEls, briefConfigEls);
+        };
+        modeTabs.forEach(t => t.addEventListener('click', () => setMode((t.dataset.mode as 'config' | 'skip') ?? 'config')));
+    });
+
+    // Render the add-ons summary as pill badges. Theme class comes from
+    // data-scope-badge-class on the form so we don't hardcode the brand color.
+    document.querySelectorAll<HTMLFormElement>('[data-estimator-form]').forEach((form) => {
+        const scopeText = form.querySelector<HTMLElement>('[data-cart-scope]');
+        const scopeBadges = form.querySelector<HTMLElement>('[data-cart-scope-badges]');
+        const badgeClass = form.dataset.scopeBadgeClass ?? 'bg-emerald-400/12 ring-1 ring-emerald-400/30 text-emerald-200';
+        if (!scopeText || !scopeBadges) return;
+        const noAddons = document.documentElement.lang === 'es' ? 'Sin extras' : 'No add-ons';
+
+        const render = () => {
+            const text = scopeText.textContent?.trim() ?? '';
+            scopeBadges.replaceChildren();
+            if (!text || text === noAddons) {
+                const span = document.createElement('span');
+                span.className = 'inline-flex items-center px-2 py-0.5 rounded-full bg-neutral-800/80 text-neutral-500 text-[10.5px] font-sans italic';
+                span.textContent = noAddons;
+                scopeBadges.appendChild(span);
+                return;
+            }
+            text.split(' · ').forEach(label => {
+                const short = label.split(' — ')[0]?.split(' (')[0]?.trim() ?? label;
+                const span = document.createElement('span');
+                span.className = `inline-flex items-center px-2 py-0.5 rounded-full ${badgeClass} text-[10.5px] font-sans font-medium`;
+                span.textContent = short;
+                scopeBadges.appendChild(span);
+            });
+        };
+        render();
+        new MutationObserver(render).observe(scopeText, { childList: true, characterData: true, subtree: true });
+    });
+</script>

@@ -1,0 +1,231 @@
+---
+import Unity from '../icons/Unity.astro';
+import TypeScript from '../icons/TypeScript.astro';
+import Flutter from '../icons/Flutter.astro';
+import { serviceColors } from '../lib/theme';
+import { getLangFromUrl } from '../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const T = {
+    en: { eyebrow: 'Projects', heading: 'Featured projects and partners.', sub: 'Real work, real partners.', ctaPre: 'Looking for something else? ', ctaLink: 'Tell me about your project →' },
+    es: { eyebrow: 'Proyectos', heading: 'Proyectos y partners destacados.', sub: 'Trabajo real, partners reales.', ctaPre: '¿Buscas otra cosa? ', ctaLink: 'Cuéntame tu proyecto →' },
+}[lang];
+
+const HERO_SIZES: Record<number, string> = {
+    32: 'w-28 md:w-32',
+    44: 'w-36 md:w-44',
+    72: 'w-56 md:w-72',
+    96: 'w-72 md:w-96',
+};
+
+type Project = {
+    company: string;
+    project: string;
+    service?: { en: string; es: string };
+    platform: string;
+    relationship: string;
+    year: string;
+    logo: string;
+    image?: string;
+    type: 'bedrock' | 'unity';
+    link: string;
+    engine?: string;
+    heroImage?: string;
+    heroAsLogo?: boolean;
+    heroSize?: number;
+    desc?: { en: string; es: string };
+};
+
+const FEATURED: Project[] = [
+    {
+        company: 'Jellyworld Games',
+        project: 'My Daily Pets',
+        platform: 'Steam',
+        relationship: 'Studio Role',
+        year: '2022',
+        logo: '/img/jellyworld_logo.webp',
+        type: 'unity',
+        engine: 'Unity',
+        heroImage: '/img/mydailypets.webp',
+        heroAsLogo: true,
+        heroSize: 96,
+        desc: {
+            en: 'Programming and production workflow contributions across the project’s commercial launch.',
+            es: 'Programación y apoyo en producción hasta el lanzamiento comercial del juego.',
+        },
+        link: 'https://store.steampowered.com/app/2223760/My_Daily_Pets/',
+    },
+    {
+        company: 'Jose Veiga',
+        project: 'Idle Ore Generator',
+        platform: 'CurseForge',
+        relationship: 'Solo Project',
+        year: '2026',
+        logo: '/img/curseforge_logo.svg',
+        type: 'bedrock',
+        engine: 'TypeScript',
+        heroImage: '/img/Logo_IdleOreGenerator.webp',
+        heroAsLogo: true,
+        heroSize: 44,
+        desc: {
+            en: 'Generator blocks that produce resources passively, adding an idle progression layer for survival worlds.',
+            es: 'Bloques de generación de recursos, aportando progresión idle a los mundos de supervivencia.',
+        },
+        link: 'https://www.curseforge.com/minecraft-bedrock/addons/idle-ore-generators',
+    },
+];
+
+const MORE: Project[] = [
+    {
+        company: 'Aurrora Studios',
+        project: 'Add-on development',
+        service: { en: 'Bedrock Add-on Development', es: 'Desarrollo de add-ons de Bedrock' },
+        platform: 'Minecraft Marketplace',
+        relationship: 'Client Project',
+        year: '2026 →',
+        logo: '/img/aurrora_logo.svg',
+        type: 'bedrock',
+        link: 'https://aurrora.net/',
+    },
+    {
+        company: 'Pathway Studios',
+        project: '',
+        service: { en: 'Marketplace Co-Publishing', es: 'Co-publicación en Marketplace' },
+        platform: 'Minecraft Marketplace',
+        relationship: 'Marketplace Partner',
+        year: '2026 →',
+        logo: '/img/pathway_logo.webp',
+        type: 'bedrock',
+        link: 'https://www.pathway.studio/',
+    },
+    {
+        company: 'BrainVT',
+        project: 'Mobile app upgrade',
+        service: { en: 'Mobile App Engineering', es: 'Ingeniería de apps móviles' },
+        platform: 'Android',
+        relationship: 'Client Project',
+        year: '2024',
+        logo: '/img/brainvt_logo.webp',
+        type: 'unity',
+        link: 'https://www.brainvt.com/',
+    },
+    {
+        company: 'Jellyworld Games',
+        project: 'Trainpunk Run',
+        service: { en: 'Unity Game Programming', es: 'Programación de juegos Unity' },
+        platform: 'Steam',
+        relationship: 'Studio Role',
+        year: '2021',
+        logo: '/img/jellyworld_logo.webp',
+        image: '/img/trainpunk_run.webp',
+        type: 'unity',
+        link: 'https://store.steampowered.com/app/819470/Trainpunk_Run/',
+    },
+];
+---
+
+<section id="projects" class="relative w-full bg-neutral-950 py-24 border-b border-neutral-800/60 overflow-hidden">
+    <div class="absolute inset-0 opacity-[0.35]" style="background-image: radial-gradient(ellipse at 80% 20%, rgba(56,189,248,0.18), transparent 55%), radial-gradient(ellipse at 10% 90%, rgba(56,189,248,0.08), transparent 50%);"></div>
+    <div class="absolute inset-0" style="background-image: radial-gradient(circle, rgba(255,255,255,0.04) 1px, transparent 1.5px); background-size: 32px 32px;"></div>
+    <div class="relative mx-auto max-w-6xl px-6">
+        <div class="flex items-center gap-2 mb-3 text-sky-400/85">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="size-4">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"/>
+            </svg>
+            <span class="text-[11px] tracking-[0.16em] uppercase font-semibold">{T.eyebrow}</span>
+        </div>
+        <h2 class="text-white text-3xl md:text-[32px] font-bold tracking-tight">{T.heading}</h2>
+        <p class="text-neutral-500 text-sm mt-2 font-sans">{T.sub}</p>
+
+        <!-- featured row -->
+        <div class="mt-12 grid grid-cols-1 lg:grid-cols-2 gap-4">
+            {FEATURED.map((item) => (
+                <a
+                    href={item.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class={`group relative aspect-16/10 rounded-2xl border border-neutral-800 overflow-hidden hover:border-sky-400/40 transition-colors ${serviceColors[item.type]}`}
+                >
+                    {item.type === 'bedrock' ? (
+                        <div class="absolute inset-0 opacity-15" style="background-image: repeating-linear-gradient(0deg, transparent, transparent 31px, rgba(255,255,255,0.18) 31px, rgba(255,255,255,0.18) 32px), repeating-linear-gradient(90deg, transparent, transparent 31px, rgba(255,255,255,0.18) 31px, rgba(255,255,255,0.18) 32px);"></div>
+                    ) : (
+                        <>
+                            <div class="absolute inset-0 opacity-15" style="background-image: radial-gradient(circle, rgba(255,255,255,0.35) 1px, transparent 1.5px); background-size: 24px 24px;"></div>
+                            <div class="absolute inset-0" style="background-image: radial-gradient(ellipse at 50% 20%, rgba(255,255,255,0.10), transparent 55%);"></div>
+                        </>
+                    )}
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <img
+                            src={item.heroImage}
+                            alt={item.project}
+                            loading="lazy"
+                            class={`${item.heroAsLogo ? HERO_SIZES[item.heroSize ?? 44] : 'size-24 md:size-28'} object-contain drop-shadow-2xl group-hover:scale-105 transition-transform duration-700`}
+                        />
+                    </div>
+                    <div class="absolute inset-0 bg-linear-to-t from-neutral-950 via-neutral-950/55 to-neutral-950/15"></div>
+                    <div class="absolute inset-0 p-6 md:p-7 flex flex-col justify-between">
+                        <div class="flex items-center justify-end">
+                            <span class="text-sky-400 text-sm group-hover:translate-x-1 transition-transform">→</span>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2.5 mb-2.5">
+                                <div class="size-10 rounded-lg bg-neutral-950/85 backdrop-blur-sm border border-neutral-800 p-1.5 flex items-center justify-center shrink-0">
+                                    <img src={item.logo} alt={item.company} class="max-w-full max-h-full object-contain"/>
+                                </div>
+                                <div class="min-w-0">
+                                    <div class="text-white font-bold text-sm truncate">{item.company}</div>
+                                    <div class="text-neutral-400 text-[11px] mt-0.5 truncate">{item.platform}{item.year ? ` · ${item.year}` : ''}</div>
+                                </div>
+                            </div>
+                            <h3 class="text-white text-xl md:text-2xl font-bold leading-tight">{item.project}</h3>
+                            <p class="text-neutral-300 text-sm font-sans leading-relaxed mt-2 max-w-md">{item.desc?.[lang]}</p>
+                        </div>
+                    </div>
+                    {item.engine && (
+                        <div class="absolute top-5 left-5 size-8 pointer-events-none drop-shadow-lg">
+                            {item.engine === 'Unity' && <Unity class="size-full"/>}
+                            {item.engine === 'TypeScript' && <TypeScript class="size-full"/>}
+                            {item.engine === 'Flutter' && <Flutter class="size-full"/>}
+                        </div>
+                    )}
+                </a>
+            ))}
+        </div>
+
+        <!-- chip row -->
+        <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            {MORE.map((item) => (
+                <a
+                    href={item.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="group flex items-center gap-3 rounded-xl border border-neutral-800 bg-neutral-900/40 px-4 py-3.5 hover:border-sky-400/40 transition-colors"
+                >
+                    <div class="shrink-0 flex flex-col items-center gap-1">
+                        <div class={`size-11 rounded-lg border border-neutral-800 relative overflow-hidden flex items-center justify-center ${serviceColors[item.type]}`}>
+                            {item.type === 'bedrock' ? (
+                                <div class="absolute inset-0 opacity-15" style="background-image: repeating-linear-gradient(0deg, transparent, transparent 11px, rgba(255,255,255,0.2) 11px, rgba(255,255,255,0.2) 12px), repeating-linear-gradient(90deg, transparent, transparent 11px, rgba(255,255,255,0.2) 11px, rgba(255,255,255,0.2) 12px);"></div>
+                            ) : (
+                                <div class="absolute inset-0 opacity-25" style="background-image: radial-gradient(circle, rgba(255,255,255,0.45) 1px, transparent 1.5px); background-size: 8px 8px;"></div>
+                            )}
+                            <img src={item.image ?? item.logo} alt={item.image ? item.project : item.company} class={`relative ${item.image ? 'size-8' : 'size-6'} object-contain drop-shadow-md`}/>
+                        </div>
+                        <span class="text-neutral-500 text-[10px] font-sans leading-none">{item.year?.replace(' →', '')}</span>
+                    </div>
+                    <div class="min-w-0 flex-1">
+                        <div class="text-[10px] tracking-widest uppercase text-sky-400/85">{item.platform}</div>
+                        <h4 class="text-white text-sm font-bold mt-0.5">{item.company}</h4>
+                        <div class="text-neutral-500 text-[11px] font-sans">{item.service?.[lang] ?? item.project}</div>
+                    </div>
+                    <span class="text-sky-400 text-sm shrink-0 group-hover:translate-x-0.5 transition-transform">→</span>
+                </a>
+            ))}
+        </div>
+
+        <div class="flex justify-center mt-12">
+            <a href="#contact" class="text-neutral-400 text-sm hover:text-white transition-colors">
+                {T.ctaPre}<span class="text-sky-400">{T.ctaLink}</span>
+            </a>
+        </div>
+    </div>
+</section>
