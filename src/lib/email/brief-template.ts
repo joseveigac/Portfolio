@@ -104,8 +104,10 @@ export function renderBriefEmail(model: BriefEmailModel): string {
     const pill = (label: string) =>
         `<span class="epill" style="display:inline-block;background:${t.pillLight.bg};border:1px solid ${t.pillLight.border};color:${t.pillLight.text};font-family:${SANS};font-size:12px;padding:4px 10px;border-radius:999px;margin:0 6px 6px 0;line-height:1.4">${esc(label)}</span>`;
 
+    // Publishing tags can be bare domains (e.g. "Itch.io") that mail clients auto-link.
+    // A word joiner (U+2060) after the dot keeps them plain text with no visible artifact.
     const pillNeutral = (label: string) =>
-        `<span class="epilln" style="display:inline-block;background:transparent;border:1px solid #d4d4d4;color:#525252;font-family:${SANS};font-size:12px;padding:4px 10px;border-radius:6px;margin:0 6px 6px 0;line-height:1.4">${esc(label)}</span>`;
+        `<span class="epilln" style="display:inline-block;background:transparent;border:1px solid #d4d4d4;color:#525252;font-family:${SANS};font-size:12px;padding:4px 10px;border-radius:6px;margin:0 6px 6px 0;line-height:1.4">${esc(label).replace(/\./g, '.&#8288;')}</span>`;
 
     const emptyNote = (text: string) =>
         `<span class="emut" style="color:#737373;font-style:italic;font-family:${SANS};font-size:13px">${text}</span>`;

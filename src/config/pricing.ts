@@ -121,7 +121,7 @@ export const PRICING: Record<ServiceKey, ServiceConfig> = {
             note: "Account fees on you (Steam Direct $100/title, Apple Developer $99/yr, Google Play $25 one-time). I'll help with account setup where I can be added as developer/editor.",
             options: [
                 { value: 'steam', label: 'Steam', range: [40, 100] },
-                { value: 'itchio', label: 'itch.io', range: [30, 60] },
+                { value: 'itchio', label: 'Itch.io', range: [30, 60] },
                 { value: 'google-play', label: 'Google Play', range: [30, 70] },
                 { value: 'app-store', label: 'Apple App Store', range: [40, 90] },
             ],
