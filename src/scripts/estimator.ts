@@ -211,6 +211,9 @@ export function setupEstimator(root: HTMLElement) {
                 mailtoEl!.hidden = true;
                 form!.hidden = true;
                 successEl!.hidden = false;
+                requestAnimationFrame(() => {
+                    successEl!.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                });
                 break;
             case 'error':
                 submitBtn!.disabled = false;

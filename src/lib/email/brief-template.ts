@@ -43,9 +43,9 @@ const COPY = {
     en: {
         subline: 'Project brief',
         estimate: 'Indicative range',
-        delivery: 'Delivery',
+        delivery: 'Estimated delivery',
         expedited: 'Expedited',
-        ivaNote: '+ VAT · fixed quote within 48h',
+        ivaNote: '+ VAT',
         contact: 'Contact',
         configuration: 'Configuration',
         addons: 'Add-ons',
@@ -66,9 +66,9 @@ const COPY = {
     es: {
         subline: 'Brief de proyecto',
         estimate: 'Rango orientativo',
-        delivery: 'Entrega',
+        delivery: 'Entrega estimada',
         expedited: 'Exprés',
-        ivaNote: '+ IVA · presupuesto cerrado en 48 h',
+        ivaNote: '+ IVA',
         contact: 'Contacto',
         configuration: 'Configuración',
         addons: 'Add-ons',
