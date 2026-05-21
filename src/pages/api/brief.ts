@@ -23,6 +23,7 @@ const BriefSchema = z.object({
     website: z.string().optional().default(''),
     version: z.string().max(40).optional().default(''),
     lang: z.enum(['es', 'en']).optional().default('es'),
+    turnstileToken: z.string().min(1).max(2048),
 });
 
 const json = (status: number, body: unknown) =>
@@ -83,6 +84,21 @@ export const POST: APIRoute = async ({ request }) => {
     const data = parsed.data;
 
     if (data.website.trim() !== '') return json(200, { ok: true });
+
+    const turnstileSecret = import.meta.env.TURNSTILE_SECRET_KEY;
+    if (!turnstileSecret) return json(500, { error: 'send_failed' });
+    const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? '';
+    const verify = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({
+            secret: turnstileSecret,
+            response: data.turnstileToken,
+            ...(ip ? { remoteip: ip } : {}),
+        }),
+    });
+    const outcome = (await verify.json().catch(() => null)) as { success?: boolean } | null;
+    if (!outcome?.success) return json(403, { error: 'captcha' });
 
     const copy = COPY[data.lang];
     const serviceKey = data.service as ServiceKey;

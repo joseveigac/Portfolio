@@ -1,3 +1,9 @@
+declare global {
+    interface Window {
+        turnstile?: { reset: (widget?: string | HTMLElement) => void };
+    }
+}
+
 type Mode = 'idle' | 'sending' | 'success' | 'error';
 
 function formatPrice(n: number) {
@@ -16,6 +22,7 @@ export function setupEstimator(root: HTMLElement) {
             errName: 'Please enter your name.', errEmail: 'Please enter a valid email address.',
             errNetwork: 'Network error — check your connection and try again.',
             errInvalid: 'Some fields look invalid. Please review the form and try again.',
+            errCaptcha: 'Please complete the verification and try again.',
             errSendFailed: "Couldn't deliver the email right now. Use the link below to email me directly.",
             errGeneric: "Couldn't send. Try again, or email me directly.",
             mailHi: 'Hi Jose,', mailIntro: (s: string) => `I'd like to discuss a ${s} project.`,
@@ -30,6 +37,7 @@ export function setupEstimator(root: HTMLElement) {
             errName: 'Introduce tu nombre.', errEmail: 'Introduce un email válido.',
             errNetwork: 'Error de red — comprueba tu conexión e inténtalo de nuevo.',
             errInvalid: 'Algunos campos no parecen válidos. Revisa el formulario e inténtalo de nuevo.',
+            errCaptcha: 'Completa la verificación e inténtalo de nuevo.',
             errSendFailed: 'No se pudo enviar el email ahora mismo. Usa el enlace de abajo para escribirme directamente.',
             errGeneric: 'No se pudo enviar. Inténtalo de nuevo o escríbeme directamente.',
             mailHi: 'Hola Jose,', mailIntro: (s: string) => `Me gustaría hablar de un proyecto de ${s}.`,
@@ -255,6 +263,7 @@ export function setupEstimator(root: HTMLElement) {
         const notes = (form!.querySelector<HTMLTextAreaElement>('textarea[name="notes"]')?.value ?? '').trim();
         const companyName = (form!.querySelector<HTMLInputElement>('input[name="company-name"]')?.value ?? '').trim();
         const deadline = (form!.querySelector<HTMLInputElement>('input[name="deadline"]')?.value ?? '').trim();
+        const turnstileToken = form!.querySelector<HTMLInputElement>('[name="cf-turnstile-response"]')?.value ?? '';
 
         const payload = {
             lang,
@@ -270,6 +279,7 @@ export function setupEstimator(root: HTMLElement) {
             notes,
             website: honeypot?.value ?? '',
             version: versionSelect?.value ?? '',
+            turnstileToken,
         };
 
         setMode('sending');
@@ -299,16 +309,20 @@ export function setupEstimator(root: HTMLElement) {
         } catch {}
 
         const message =
-            code === 'invalid' || code === 'bad_json'
-                ? STR.errInvalid
-                : code === 'send_failed'
-                    ? STR.errSendFailed
-                    : STR.errGeneric;
+            code === 'captcha'
+                ? STR.errCaptcha
+                : code === 'invalid' || code === 'bad_json'
+                    ? STR.errInvalid
+                    : code === 'send_failed'
+                        ? STR.errSendFailed
+                        : STR.errGeneric;
+        window.turnstile?.reset();
         setMode('error', message);
     });
 
     resetBtn.addEventListener('click', () => {
         form!.reset();
+        window.turnstile?.reset();
         form!.hidden = false;
         successEl!.hidden = true;
         setMode('idle');

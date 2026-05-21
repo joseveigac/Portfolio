@@ -3,3 +3,9 @@ allowBuilds:
   sharp: true
 minimumReleaseAgeExclude:
   - astro@6.3.6
+overrides:
+  # Security: force vulnerable transitive deps to their patched same-major release.
+  # path-to-regexp <6.3.0 (ReDoS, GHSA-9wv6-86v2-598j) — via @astrojs/vercel.
+  # yaml <2.8.3 (stack overflow, GHSA-48c2-rrv3-qjmp) — via @astrojs/check (dev).
+  path-to-regexp: "^6.3.0"
+  yaml: "^2.8.3"

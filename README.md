@@ -24,15 +24,6 @@ Freelance developer site — one brand, four areas of work: **Minecraft Bedrock 
 - Deployed on [Vercel](https://vercel.com/) (`@astrojs/vercel` adapter)
 - **Bilingual** es/en (Spanish default), both URL-prefixed
 
-Requires Node ≥ 22.12.0. Use `pnpm` (not npm).
-
-```bash
-pnpm install   # install deps
-pnpm dev       # local dev server
-pnpm astro check   # local quality gate (type + diagnostics)
-pnpm build     # production build (see CLAUDE.md for the Windows symlink caveat)
-```
-
 ## Contact
 
 - **Website:** [joseveiga.dev](https://joseveiga.dev)

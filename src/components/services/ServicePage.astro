@@ -676,6 +676,11 @@ const T = {
                         </label>
                     </fieldset>
 
+                    <div class="mt-5 flex justify-center lg:justify-start">
+                        <div class="cf-turnstile" data-sitekey={import.meta.env.PUBLIC_TURNSTILE_SITE_KEY} data-theme="dark" data-language={lang} data-size="flexible"></div>
+                    </div>
+                    <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
                     <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" class="absolute -left-2499.75 opacity-0 pointer-events-none" />
                 </div>
             </form>
