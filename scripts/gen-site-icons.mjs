@@ -82,6 +82,8 @@ const fullBleed = markSvg(0); // iOS/Android apply their own masks
 const png32 = await render(rounded, 32);
 writeFileSync(pub('favicon-32x32.png'), png32);
 writeFileSync(pub('favicon.ico'), pngToIco(png32, 32));
+// Google Search recommends 48x48 (or a multiple) for the result-page favicon.
+writeFileSync(pub('favicon-48x48.png'), await render(rounded, 48));
 writeFileSync(pub('apple-touch-icon.png'), await render(fullBleed, 180));
 writeFileSync(pub('icon-192.png'), await render(fullBleed, 192));
 writeFileSync(pub('icon-512.png'), await render(fullBleed, 512));
