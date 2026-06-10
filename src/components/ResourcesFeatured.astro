@@ -51,11 +51,12 @@ const featured = all
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
                 {featured.map((resource) => (
                     <article class="relative rounded-lg border border-neutral-800 bg-neutral-950/40 overflow-hidden hover:border-neutral-700 transition-colors group cursor-pointer">
-                        <a href={getRelativeLocaleUrl(lang, `/resources/${resource.id.slice(lang.length + 1)}`)} class="absolute inset-0 z-10" aria-label={resource.data.title}></a>
+                        <a href={getRelativeLocaleUrl(lang, `/resources/${resource.id.split('/').slice(1).join('/')}`)} class="absolute inset-0 z-10 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400" aria-label={resource.data.title}></a>
                         <div class="relative overflow-hidden">
                             <img
                                 src={resource.data.image}
-                                alt={resource.data.title}
+                                alt=""
+                                loading="lazy"
                                 class="w-full h-44 object-cover group-hover:scale-105 transition-transform duration-300"
                             />
                             <span class="absolute top-3 left-3 text-xs px-2 py-1 bg-sky-500/90 text-white rounded-md font-medium">

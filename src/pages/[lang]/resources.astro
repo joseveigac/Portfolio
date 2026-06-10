@@ -16,7 +16,7 @@ const dateLocale = lang === 'es' ? 'es-ES' : 'en-US';
 const T = {
 	en: {
 		title: 'Resources - Jose Veiga',
-		description: 'Guides, tutorials and development notes',
+		description: 'Guides, tutorials and development notes on Minecraft Bedrock add-ons, Unity, Flutter and web development — written from real project experience.',
 		heading: 'Resources',
 		sub: 'Guides, tutorials, and development notes to help other developers',
 		preview: 'Preview',
@@ -25,7 +25,7 @@ const T = {
 	},
 	es: {
 		title: 'Recursos - Jose Veiga',
-		description: 'Guías, tutoriales y notas de desarrollo',
+		description: 'Guías, tutoriales y notas de desarrollo sobre add-ons de Minecraft Bedrock, Unity, Flutter y desarrollo web — escritas desde la experiencia en proyectos reales.',
 		heading: 'Recursos',
 		sub: 'Guías, tutoriales y notas de desarrollo para ayudar a otros desarrolladores',
 		preview: 'Vista previa',
@@ -51,11 +51,12 @@ const sortedResources = resources
 		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
 			{sortedResources.map((resource: any) => (
                 <article class="relative border border-neutral-700/50 rounded-lg overflow-hidden bg-neutral-900/40 hover:border-neutral-600 transition-colors group cursor-pointer">
-                    <a href={getRelativeLocaleUrl(lang, `/resources/${resource.id.slice(lang.length + 1)}`)} class="absolute inset-0 z-10"></a>
+                    <a href={getRelativeLocaleUrl(lang, `/resources/${resource.id.split('/').slice(1).join('/')}`)} class="absolute inset-0 z-10 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400" aria-label={resource.data.title}></a>
                     <div class="relative overflow-hidden">
                         <img
                             src={resource.data.image}
-                            alt={resource.data.title}
+                            alt=""
+                            loading="lazy"
                             class="w-full h-44 object-cover group-hover:scale-105 transition-transform duration-300"
                         />
                         <!-- Category badge (izquierda) -->
@@ -78,15 +79,15 @@ const sortedResources = resources
                             <span>·</span>
                             <span>{resource.data.readTime} {T.minRead}</span>
                         </div>
-                        <h3 class="text-lg font-semibold mb-2 group-hover:text-sky-400 transition-colors">{resource.data.title}</h3>
+                        <h3 class="text-white text-lg font-semibold mb-2 group-hover:text-sky-400 transition-colors">{resource.data.title}</h3>
                         <p class="text-sm text-neutral-400 mb-4 line-clamp-2">{resource.data.description}</p>
                         <ul class="flex flex-wrap gap-2 mb-4">
                             {resource.data.tags.slice(0, 3).map((tag: string) => (
                                 <li class="text-xs px-2 py-1 bg-neutral-800 rounded-md text-neutral-300">{tag}</li>
                             ))}
                         </ul>
-                        <div class="relative z-20">
-                            <Button href={getRelativeLocaleUrl(lang, `/resources/${resource.id.slice(lang.length + 1)}`)} variant="ghost" size="sm" rounded="md">
+                        <div class="relative z-20" aria-hidden="true">
+                            <Button href={getRelativeLocaleUrl(lang, `/resources/${resource.id.split('/').slice(1).join('/')}`)} variant="ghost" size="sm" rounded="md" tabindex={-1}>
                                 {T.readMore}
                             </Button>
                         </div>

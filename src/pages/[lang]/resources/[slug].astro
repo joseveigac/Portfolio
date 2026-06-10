@@ -1,5 +1,6 @@
 ---
 import { getCollection, render, type CollectionEntry } from 'astro:content';
+import type { MarkdownHeading } from 'astro';
 import Layout from '../../../layouts/Layout.astro';
 import { difficultyColors, categoryLabels, difficultyLabels } from '../../../lib/theme';
 import { getRelativeLocaleUrl } from 'astro:i18n';
@@ -43,7 +44,7 @@ const T = {
 }[lang];
 
 // Agrupar headings por sección (h2) con sus subsecciones (h3)
-const groupedHeadings = headings.reduce((acc: any[], heading) => {
+const groupedHeadings = headings.reduce((acc: (MarkdownHeading & { children: MarkdownHeading[] })[], heading) => {
 	if (heading.depth === 2) {
 		acc.push({ ...heading, children: [] });
 	} else if (heading.depth === 3 && acc.length > 0) {
@@ -53,12 +54,14 @@ const groupedHeadings = headings.reduce((acc: any[], heading) => {
 }, []);
 ---
 
-<Layout title={`${resource.data.title} - Jose Veiga`} description={resource.data.description}>
+<Layout title={`${resource.data.title} - Jose Veiga`} description={resource.data.description} noindex={resource.data.wip}>
 	<!-- Hero Image (sin nada encima) -->
 	<div class="w-full h-64 md:h-96">
 		<img
 			src={resource.data.image}
-			alt={resource.data.title}
+			alt=""
+			loading="eager"
+			fetchpriority="high"
 			class="w-full h-full object-cover"
 		/>
 	</div>
@@ -157,29 +160,31 @@ const groupedHeadings = headings.reduce((acc: any[], heading) => {
 				<nav class="sticky top-24 bg-neutral-900/40 border border-neutral-700/50 rounded-xl p-5">
 					<h3 class="text-white font-semibold mb-4 text-sm uppercase tracking-wide">{T.sections}</h3>
 					<ul class="space-y-1 text-sm">
-						{groupedHeadings.map((heading: any) => (
-							<li>
+						{groupedHeadings.map((heading) => (
+							<li class="relative">
 								{heading.children.length > 0 ? (
-									<details class="group">
-										<summary class="flex items-center justify-between cursor-pointer text-neutral-400 hover:text-sky-400 transition-colors py-1.5 list-none">
-											<a href={`#${heading.slug}`} class="flex-1">{heading.text}</a>
-											<svg class="size-4 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-												<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-											</svg>
-										</summary>
-										<ul class="ml-4 mt-1 space-y-1 border-l border-neutral-700/50 pl-3">
-											{heading.children.map((child: any) => (
-												<li>
-													<a
-														href={`#${child.slug}`}
-														class="text-neutral-500 hover:text-sky-400 transition-colors block py-1"
-													>
-														{child.text}
-													</a>
-												</li>
-											))}
-										</ul>
-									</details>
+									<>
+										<a href={`#${heading.slug}`} class="block pr-8 py-1.5 text-neutral-400 hover:text-sky-400 transition-colors">{heading.text}</a>
+										<details class="group">
+											<summary class="absolute right-0 top-2 cursor-pointer text-neutral-400 hover:text-sky-400 transition-colors list-none" aria-label={heading.text}>
+												<svg class="size-4 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+													<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+												</svg>
+											</summary>
+											<ul class="ml-4 mt-1 space-y-1 border-l border-neutral-700/50 pl-3">
+												{heading.children.map((child) => (
+													<li>
+														<a
+															href={`#${child.slug}`}
+															class="text-neutral-500 hover:text-sky-400 transition-colors block py-1"
+														>
+															{child.text}
+														</a>
+													</li>
+												))}
+											</ul>
+										</details>
+									</>
 								) : (
 									<a
 										href={`#${heading.slug}`}

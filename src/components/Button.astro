@@ -7,15 +7,17 @@ interface Props {
 	rounded?: 'full' | 'md';
 	download?: boolean | string;
 	class?: string;
+	tabindex?: number;
 }
 
-const { 
-	href, 
-	variant = 'primary', 
+const {
+	href,
+	variant = 'primary',
 	size = 'md',
 	rounded = 'full',
 	download,
-	class: className 
+	class: className,
+	tabindex
 } = Astro.props;
 
 const baseStyles = "inline-flex items-center justify-center gap-2 font-semibold transition-all";
@@ -38,9 +40,10 @@ const roundedStyles = {
 };
 ---
 
-<a 
-	href={href} 
+<a
+	href={href}
 	download={download}
+	tabindex={tabindex}
 	class:list={[baseStyles, variants[variant], sizes[size], roundedStyles[rounded], className]}
 >
 	<slot />

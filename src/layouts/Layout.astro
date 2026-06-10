@@ -9,9 +9,10 @@ import { getLangFromUrl } from '../i18n/utils';
 interface Props {
 	title: string;
 	description: string;
+	noindex?: boolean;
 }
 
-const {title, description} = Astro.props
+const {title, description, noindex = false} = Astro.props
 const lang = getLangFromUrl(Astro.url);
 
 // Path without the locale prefix, for canonical + hreflang alternates.
@@ -21,6 +22,17 @@ const localized = (l: string) => new URL(rest === '/' ? `/${l}/` : `/${l}${rest}
 const canonical = localized(lang);
 const ogLocale = lang === 'es' ? 'es_ES' : 'en_US';
 const ogAlt = lang === 'es' ? 'en_US' : 'es_ES';
+const ogImage = new URL('/img/og-default.png', site).href;
+const personLd = JSON.stringify({
+	'@context': 'https://schema.org',
+	'@type': 'Person',
+	name: 'Jose Veiga',
+	url: site.href,
+	jobTitle: lang === 'es' ? 'Desarrollador freelance' : 'Freelance developer',
+	email: 'mailto:contact@joseveiga.dev',
+	sameAs: ['https://github.com/joseveigac', 'https://www.linkedin.com/in/joseveigac/'],
+	knowsAbout: ['Minecraft Bedrock add-ons', 'Unity', 'Flutter', 'Web development'],
+});
 ---
 
 <!doctype html>
@@ -29,8 +41,12 @@ const ogAlt = lang === 'es' ? 'en_US' : 'es_ES';
 		<meta charset="UTF-8" />
 		<meta name="description" content={description} />
 		<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+		<link rel="icon" href="/favicon.ico" sizes="32x32" />
+		<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
+		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+		<link rel="manifest" href="/site.webmanifest" />
+		<meta name="theme-color" content="#0a0a0a" />
 		<link rel="canonical" href={canonical} />
 		<link rel="alternate" hreflang="es" href={localized('es')} />
 		<link rel="alternate" hreflang="en" href={localized('en')} />
@@ -41,6 +57,17 @@ const ogAlt = lang === 'es' ? 'en_US' : 'es_ES';
 		<meta property="og:title" content={title} />
 		<meta property="og:description" content={description} />
 		<meta property="og:url" content={canonical} />
+		<meta property="og:site_name" content="Jose Veiga" />
+		<meta property="og:image" content={ogImage} />
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
+		<meta property="og:image:alt" content="Jose Veiga — Software that ships" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content={ogImage} />
+		{noindex && <meta name="robots" content="noindex, nofollow" />}
+		<script is:inline type="application/ld+json" set:html={personLd} />
 		<title>{title}</title>
 	</head>
 	<body>
@@ -52,10 +79,6 @@ const ogAlt = lang === 'es' ? 'en_US' : 'es_ES';
 </html>
 
 <style is:global>
-	
-	:root{
-		color-scheme: light dark;
-	}
 
 	html{
 		font-family: 'JetBrains Mono Variable', monospace;

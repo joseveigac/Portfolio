@@ -554,7 +554,7 @@ const T = {
                                 <select
                                     name={config.version.name}
                                     data-version-select
-                                    class={`w-full rounded-xl bg-neutral-950 border border-neutral-800 text-neutral-100 text-[14px] font-sans px-4 py-2.5 ${theme.focusBorder} focus:outline-none transition-colors`}>
+                                    class={`w-full rounded-xl bg-neutral-950 border border-neutral-800 text-neutral-100 text-[14px] font-sans px-4 py-2.5 ${theme.focusBorder} focus:outline-none focus-visible:ring-2 focus-visible:ring-white/25 transition-colors`}>
                                     {config.version.options.map((opt) => (
                                         <option value={opt.value} data-label={opt.label}>{opt.label}</option>
                                     ))}
@@ -654,25 +654,25 @@ const T = {
                         <div class="ml-9 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                             <label class="block">
                                 <span class="text-neutral-300 text-[12.5px] font-sans font-medium block mb-1.5">{T.yourName}</span>
-                                <input type="text" name="name" required minlength="2" placeholder="Marcus Webb" class={`w-full rounded-xl bg-neutral-950 border border-neutral-800 text-neutral-100 text-[14px] font-sans px-4 py-2.5 ${theme.focusBorder} focus:outline-none transition-colors`} />
+                                <input type="text" name="name" required minlength="2" placeholder="Marcus Webb" class={`w-full rounded-xl bg-neutral-950 border border-neutral-800 text-neutral-100 text-[14px] font-sans px-4 py-2.5 ${theme.focusBorder} focus:outline-none focus-visible:ring-2 focus-visible:ring-white/25 transition-colors`} />
                             </label>
                             <label class="block">
                                 <span class="text-neutral-300 text-[12.5px] font-sans font-medium block mb-1.5">{T.yourEmail}</span>
-                                <input type="email" name="email" required placeholder={T.emailPlaceholder} class={`w-full rounded-xl bg-neutral-950 border border-neutral-800 text-neutral-100 text-[14px] font-sans px-4 py-2.5 ${theme.focusBorder} focus:outline-none transition-colors`} />
+                                <input type="email" name="email" required placeholder={T.emailPlaceholder} class={`w-full rounded-xl bg-neutral-950 border border-neutral-800 text-neutral-100 text-[14px] font-sans px-4 py-2.5 ${theme.focusBorder} focus:outline-none focus-visible:ring-2 focus-visible:ring-white/25 transition-colors`} />
                             </label>
                             <label class="block">
                                 <span class="text-neutral-300 text-[12.5px] font-sans font-medium block mb-1.5">{T.company} <span class="text-neutral-500 font-normal">{T.optional}</span></span>
-                                <input type="text" name="company-name" placeholder="Webb Realms" class={`w-full rounded-xl bg-neutral-950 border border-neutral-800 text-neutral-100 text-[14px] font-sans px-4 py-2.5 ${theme.focusBorder} focus:outline-none transition-colors`} />
+                                <input type="text" name="company-name" placeholder="Webb Realms" class={`w-full rounded-xl bg-neutral-950 border border-neutral-800 text-neutral-100 text-[14px] font-sans px-4 py-2.5 ${theme.focusBorder} focus:outline-none focus-visible:ring-2 focus-visible:ring-white/25 transition-colors`} />
                             </label>
                             <label class="block">
                                 <span class="text-neutral-300 text-[12.5px] font-sans font-medium block mb-1.5">{T.deadline} <span class="text-neutral-500 font-normal">{T.optional}</span></span>
-                                <input type="date" name="deadline" class={`w-full rounded-xl bg-neutral-950 border border-neutral-800 text-neutral-100 text-[14px] font-sans px-4 py-2.5 ${theme.focusBorder} focus:outline-none transition-colors scheme-dark`} />
+                                <input type="date" name="deadline" class={`w-full rounded-xl bg-neutral-950 border border-neutral-800 text-neutral-100 text-[14px] font-sans px-4 py-2.5 ${theme.focusBorder} focus:outline-none focus-visible:ring-2 focus-visible:ring-white/25 transition-colors scheme-dark`} />
                             </label>
                         </div>
 
                         <label class="ml-9 block mt-3">
                             <span class="text-neutral-300 text-[12.5px] font-sans font-medium block mb-1.5">{T.tellMe} <span class="text-neutral-500 font-normal">{T.tellMeHint}</span></span>
-                            <textarea name="notes" rows="5" placeholder={T.notesPlaceholder} class={`w-full rounded-xl bg-neutral-950 border border-neutral-800 text-neutral-100 text-[14px] font-sans px-4 py-3 ${theme.focusBorder} focus:outline-none transition-colors resize-y`}></textarea>
+                            <textarea name="notes" rows="5" placeholder={T.notesPlaceholder} class={`w-full rounded-xl bg-neutral-950 border border-neutral-800 text-neutral-100 text-[14px] font-sans px-4 py-3 ${theme.focusBorder} focus:outline-none focus-visible:ring-2 focus-visible:ring-white/25 transition-colors resize-y`}></textarea>
                         </label>
                     </fieldset>
 

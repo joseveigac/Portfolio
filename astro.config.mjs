@@ -12,6 +12,7 @@ export default defineConfig({
   adapter: vercel(),
   integrations: [
     sitemap({
+      filter: (page) => !page.includes('/api/'),
       i18n: {
         defaultLocale: 'es',
         locales: { es: 'es-ES', en: 'en-US' },

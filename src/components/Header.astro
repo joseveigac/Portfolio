@@ -21,22 +21,22 @@ const switchUrl = getRelativeLocaleUrl(other, rest);
             <img class="h-6 md:h-7 w-auto object-contain" src="/img/Logo_dark.svg" alt="JV"/>
         </a>
 
-        <a href={`${home}#projects`} class="p-2 md:px-4 md:py-2 rounded-full hover:bg-white/10 transition-colors flex items-center gap-2" title={t("nav.projects")}>
+        <a href={`${home}#projects`} class="p-2 md:px-4 md:py-2 rounded-full hover:bg-white/10 transition-colors flex items-center gap-2" title={t("nav.projects")} aria-label={t("nav.projects")}>
             <ProjectsIcon class="size-5 md:size-4"/>
             <span class="hidden md:inline text-sm">{t("nav.projects")}</span>
         </a>
 
-        <a href={getRelativeLocaleUrl(lang, "/services")} class="p-2 md:px-4 md:py-2 rounded-full hover:bg-white/10 transition-colors flex items-center gap-2" title={t("nav.services")}>
+        <a href={getRelativeLocaleUrl(lang, "/services")} class="p-2 md:px-4 md:py-2 rounded-full hover:bg-white/10 transition-colors flex items-center gap-2" title={t("nav.services")} aria-label={t("nav.services")}>
             <ExperienceIcon class="size-5 md:size-4"/>
             <span class="hidden md:inline text-sm">{t("nav.services")}</span>
         </a>
 
-        <a href={getRelativeLocaleUrl(lang, "/resources")} class="p-2 md:px-4 md:py-2 rounded-full hover:bg-white/10 transition-colors flex items-center gap-2" title={t("nav.resources")}>
+        <a href={getRelativeLocaleUrl(lang, "/resources")} class="p-2 md:px-4 md:py-2 rounded-full hover:bg-white/10 transition-colors flex items-center gap-2" title={t("nav.resources")} aria-label={t("nav.resources")}>
             <ResourcesIcon class="size-5 md:size-4"/>
             <span class="hidden md:inline text-sm">{t("nav.resources")}</span>
         </a>
 
-        <a href={`${home}#contact`} class="p-2 md:px-5 md:py-2 bg-sky-500 hover:bg-sky-400 rounded-full transition-colors flex items-center gap-2 md:font-medium" title={t("nav.contact")}>
+        <a href={`${home}#contact`} class="p-2 md:px-5 md:py-2 bg-sky-500 hover:bg-sky-400 rounded-full transition-colors flex items-center gap-2 md:font-medium" title={t("nav.contact")} aria-label={t("nav.contact")}>
             <ContactIcon class="size-5 md:size-4"/>
             <span class="hidden md:inline text-sm">{t("nav.contact")}</span>
         </a>

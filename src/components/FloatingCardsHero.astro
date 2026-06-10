@@ -133,6 +133,7 @@ const CARDS = [
                                         <span class:list={['size-1.5 rounded-full', card.dot]}></span>
                                         <span class="text-[10.5px] font-mono text-neutral-400">{card.file}</span>
                                     </div>
+                                    {/* set:html is only safe because card.code is static `as const` data in this file — never feed it from external input */}
                                     <pre class="px-3 py-2.5 font-mono text-[10.5px] leading-[1.65] text-neutral-300 overflow-hidden"><code set:html={card.code}></code></pre>
                                 </div>
                             </div>

@@ -251,7 +251,7 @@ export function setupEstimator(root: HTMLElement) {
 
         const emailInput = form!.querySelector<HTMLInputElement>('input[name="email"]');
         const email = (emailInput?.value ?? '').trim();
-        if (!email || !email.includes('@')) {
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
             emailInput?.focus();
             setMode('error', STR.errEmail);
             return;

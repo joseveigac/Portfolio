@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://joseveiga.dev/sitemap-index.xml

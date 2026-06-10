@@ -1,4 +1,5 @@
 ---
-import Minecraft from './Minecraft.astro';
+// The full-color Minecraft mark lives in public/img/minecraft.svg (svgo-optimized,
+// cached across pages instead of inlined — the original inline SVG was ~100 KB per use).
 ---
-<Minecraft {...Astro.props} style="filter: grayscale(1) brightness(1.5);" />
+<img src="/img/minecraft.svg" alt="" {...Astro.props} style="filter: grayscale(1) brightness(1.5); object-fit: contain;" />
